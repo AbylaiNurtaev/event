@@ -45,7 +45,7 @@ function HomePage() {
                 </div>
             </div>
 
-            <img className={s.image} src="/images/image (1).svg" alt="" />
+            <img className={s.image} src="/images/image (4).svg" alt="" />
 
 
             <div className={s.partners}>

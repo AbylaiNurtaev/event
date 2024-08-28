@@ -1,13 +1,18 @@
 import React from 'react'
 import s from './Header.module.sass'
+import { useLocation, useNavigate } from 'react-router-dom'
 
 function Header() {
+
+    const location = useLocation()
+    const navigate = useNavigate()
+    
   return (
     <div className={s.container}>
         <img src="/images/Logo.svg" alt="logo" className={s.logo} />
         <p className={s.par}>Главная свадебная премия Казахстана</p>
         <div className={s.links}>
-            <p>О премии</p>
+            <p onClick={() => navigate('/about')} style={location && location.pathname == "/about" ? {color: '#f4444a'} : {}}>О премии</p>
             <p>Номинации</p>
             <p>Жюри</p>
             <p>Вопросы и ответы</p>
