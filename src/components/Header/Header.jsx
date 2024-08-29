@@ -13,10 +13,10 @@ function Header() {
         <p className={s.par}>Главная свадебная премия Казахстана</p>
         <div className={s.links}>
             <p onClick={() => navigate('/about')} style={location && location.pathname == "/about" ? {color: '#f4444a'} : {}}>О премии</p>
-            <p>Номинации</p>
-            <p>Жюри</p>
+            <p onClick={() => navigate('/nominations')} style={location && location.pathname == "/nominations" ? {color: '#f4444a'} : {}}>Номинации</p>
+            <p onClick={() => navigate('/joury')} style={location && location.pathname == "/joury" ? {color: '#f4444a'} : {}}>Жюри</p>
             <p>Вопросы и ответы</p>
-            <p>Контакты</p>
+            <p onClick={() => navigate('/contacts')} style={location && location.pathname == "/contacts" ? {color: '#f4444a'} : {}}>Контакты</p>
         </div>
 
         <div className={s.date}>
