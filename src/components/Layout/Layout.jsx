@@ -8,10 +8,13 @@ function Layout() {
   return (
     <div className={s.big}>
       <div className={s.container}>
+        <div className={s.header}>
           <Header></Header>
-          <Outlet></Outlet>
+        </div>
+          <div className={s.outlet}>
+            <Outlet></Outlet><Footer></Footer>
+          </div>
       </div>
-        <Footer></Footer>
     </div>
   )
 }

@@ -1,17 +1,52 @@
 .big
     display: flex
     flex-direction: column
-
     justify-content: center
-    align-items: center
+    align-items: space-between
+    min-height: 100vh
 
-    
     .container
         display: flex
-        flex-direction: row
-
-        justify-content: space-between
-        align-items: flex-start
-
-        width: 100vw
+        flex: 1
         background: #F0EFEC
+
+        .header
+            width: 300px !important
+            height: 100vh
+            top: 0
+            left: 0
+            //   background-color: inherit /* Чтобы фон совпадал с фоном контейнера */
+            // display: none
+
+            
+        .outlet
+            margin: 0 !important
+            width: calc(99vw - 300px) 
+            display: flex
+            flex-direction: column
+
+            justify-content: flex-start
+            align-items: center
+
+
+@media screen and ( max-width:  1000px)
+    .container
+        display: flex
+        flex-direction: column
+
+        justify-content: center
+        align-items: center
+
+        // padding: 17px 16px 16px 16px
+
+        .header
+            height: 62px !important
+            width: 100%
+
+        .outlet
+            width: 100vw !important
+    
+
+
+
+

@@ -57,7 +57,7 @@ function Questions() {
                     questions && questions.map((elem, index) => 
                     <div className={s.questionBlock} onClick={(e) => handleOpenQuestion(e, index)}>
                         <div className={s.question}>
-                            <div>{elem.question}</div>
+                            <div className={s.text}>{elem.question}</div>
                             <img src={opened != index ? "/images/ph_plus-light.svg" : "/images/ph_plus-light (2).svg"} alt="" />
                         </div>
                         <div style={opened == index ? {display: 'flex'} : {display: "none"}} className={s.answer}>{elem.answer}</div>

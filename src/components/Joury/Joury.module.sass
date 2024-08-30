@@ -2,90 +2,146 @@
     padding-top: 120px
     display: flex
     flex-direction: column
-
     justify-content: flex-start
     align-items: flex-start
     background: white
+    width: 80% /* Адаптивная ширина */
+    height: 900px
+    
 
-    width: 1052px
-    padding-left: 80px
+
     .title
         margin: 0
         font-size: 120px
         font-weight: 800
         font-family: Steelfish
-        // width: 100%
-        
         text-align: left
-
-
-        
-        
 
     .par    
         margin-top: 50px
         line-height: 39.6px
         font-size: 22px
-
         font-weight: 400
-        // width: 100%
         font-family: "Inter", system-ui
         text-align: left
 
     .buttons
         margin-top: 40px
-        
+        display: flex
+        justify-content: flex-start
 
         .leftBtn
             transform: rotate(180deg)
             cursor: pointer
+            
 
         .rightBtn
             cursor: pointer
             margin-left: 40px
-
+            
 
     .peoples
         background: white
         display: flex
         flex-direction: row
-
         justify-content: flex-start
         align-items: center
-
         gap: 40px
+        margin-top: 400px
         
         
-        padding-top: 100px
-        padding-bottom: 120px
-
-        
+        position: absolute
         transition: .5s
-        width: 120%
+        width: max-content /* Позволяет блокам занимать нужное пространство */
 
         .block
             display: flex
             flex-direction: column
-
             justify-content: flex-start
             align-items: flex-start
-
             width: 233px
             height: 456px
             cursor: pointer
-
             img
-                width: 233px
+                width: 100%
                 height: 350px
-
                 object-fit: cover
-
             h4
                 font-family: 'Steelfish'
                 font-weight: 800
                 font-size: 35px
                 margin: 16px 0 0 0
                 text-transform: uppercase
-
             p
                 margin: 16px 0 0 0
+
+/* Адаптивность для планшетов и мобильных устройств */
+@media screen and (max-width: 1024px)
+    .joury
+        padding-left: 16px
+        padding-top: 0
+        width: 100vw
+        
+        
+        .title
+            font-size: 80px
+            margin-top: 60px
+            color: #ca252a
+        .par
+            font-size: 18px
+            line-height: 30px
+            margin-top: 40px
+
+        .buttons 
+            z-index: 2
+        .peoples
+            gap: 20px
+            padding-top: 50px
+            padding-bottom: 30px
+            .block
+                width: 180px
+                height: 400px
+                img
+                    height: 300px
+                h4
+                    font-size: 28px
+
+// @media screen and (max-width: 768px)
+//     .joury
+//         padding-left: 20px
+//         .title
+//             font-size: 60px
+//         .par
+//             font-size: 16px
+//             line-height: 26px
+//         .peoples
+//             flex-direction: column
+//             align-items: flex-start
+//             gap: 20px
+//             .block
+//                 width: 100%
+//                 height: auto
+//                 img
+//                     width: 100%
+//                     height: auto
+//                 h4
+//                     font-size: 24px
+
+// @media screen and (max-width: 480px)
+//     .joury
+//         padding-left: 10px
+//         .title
+//             font-size: 40px
+//         .par
+//             font-size: 14px
+//             line-height: 22px
+//         .peoples
+//             gap: 10px
+//             padding-top: 30px
+//             padding-bottom: 30px
+//             .block
+//                 width: 100%
+//                 img
+//                     height: auto
+//                 h4
+//                     font-size: 20px

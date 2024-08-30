@@ -14,12 +14,17 @@ function HomePage() {
             <h1 className={s.title}>ПРЕМИЯ, ФОРМИРУЮЩАЯ</h1>
             <h1 className={s.redTitle}>НОВЫЕ ТРЕНДЫ</h1>
 
-
-            <div className={s.buttons}>
-                <button className={s.right}>УЧАСТВОВАТЬ В ПРЕМИИ - 2024</button>
-                <button className={s.left}>БИЛЕТ НА ФОРУМ</button>
+            <div className={s.mobileLines}>
+                <img src="/images/Frame 121 (4).svg" alt="" />
+                <img src="/images/Frame 120 (2).svg" alt="" />
             </div>
 
+
+            <div className={s.buttons}>
+                <button className={s.right}>УЧАСТВОВАТЬ<br className={s.mobileBR}/> В ПРЕМИИ - 2024</button>
+                <button className={s.left}>БИЛЕТ НА ФОРУМ</button>
+            </div>
+        
             <div className={s.lines}>
                 <img src="/images/Frame 121.svg" alt="" />
                 <img src="/images/Frame 120.svg" alt="" />
@@ -53,7 +58,7 @@ function HomePage() {
                 <p className={s.par}>WEDS благодарит наших партнеров — лидеров свадебной индустрии, за поддержку и вклад в проведение ивента. Вместе мы создаем яркие и значимые события для всего сообщества.</p>
                 <img className={s.row} src="/images/row.svg" alt="" />
             </div>
-            <img className={s.border} src="/images/Line 7.svg" alt="" />
+            
 
             <div className={s.joury}>
                 <Joury></Joury>

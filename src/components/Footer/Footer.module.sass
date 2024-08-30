@@ -5,8 +5,8 @@
     justify-content: space-between
     align-items: center
 
-    width: 1052px
-    margin-left: 290px
+    width: calc(99vw - 480px) 
+    
 
     padding: 50px 90px
     background: black
@@ -27,7 +27,7 @@
         gap: 24px
 
         .top, .bottom
-            font-family: "Montserrat", sans-serif
+            font-family: "Inter", system-ui
             font-weight: 600
             font-size: 14px
             line-height: 180%
@@ -43,3 +43,56 @@
     
     .right
         align-items: flex-end
+
+
+@media screen and ( max-width:  1350px)
+    .container
+        // padding: 20px 40px
+        
+        .left, .right
+            width: 200px
+            .top, .bottom
+                line-height: 100%        
+                white-space: nowrap
+
+        .left
+            .top
+                flex-direction: column
+                p
+                    &:nth-child(2)
+                        display: none
+                        
+
+@media screen and ( max-width:  1000px)
+    .container
+        width: 100vw
+        height: 487px
+        flex-direction: column  
+        padding: 0 16px 50px 16px
+
+        .left, .right
+            width: 358px
+
+        .right
+            height: auto
+            .top
+                display: flex
+                flex-direction: column
+                text-align: right
+                p   
+                    margin-top: 16px
+
+                    &:nth-child(2), &:nth-child(4)
+                        display: none
+            .bottom
+                margin-top: 24px
+                gap: 32px
+
+        .left
+            margin-top: 50px
+
+            .top
+                gap: 20px
+            
+            .bottom
+                margin-top: 24px

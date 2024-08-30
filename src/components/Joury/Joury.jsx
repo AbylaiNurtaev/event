@@ -1,7 +1,32 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import s from './Joury.module.sass';
 
 function Joury() {
+
+    const [isMobile, setIsMobile] = useState(false);
+
+    useEffect(() => {
+      const mediaQuery = window.matchMedia('(max-width: 767px)'); // Определяем мобильные устройства по ширине экрана
+  
+      const handleDeviceChange = (e) => {
+        setIsMobile(e.matches);
+      };
+  
+      // Проверяем начальное состояние
+      setIsMobile(mediaQuery.matches);
+  
+      // Добавляем слушатель для отслеживания изменений
+      mediaQuery.addListener(handleDeviceChange);
+  
+      // Удаляем слушатель при размонтировании компонента
+      return () => {
+        mediaQuery.removeListener(handleDeviceChange);
+      };
+    }, []);
+    console.log(isMobile);
+    
+
+
     const peoples = [
         {
             name: "Арман и Аскар",
@@ -34,15 +59,30 @@ function Joury() {
             img: "/images/jouries/jour-6.svg"   
         },
     ];
-
+    
+    
     const [position, setPosition] = useState(0); // Начальное состояние позиции
 
     const moveToRight = () => {
-        setPosition(-550); // Устанавливаем смещение влево
+        if(isMobile && position >= -550){
+            setPosition(prev => prev -260);
+            console.log(position);
+        }else{
+            setPosition(-750); // Устанавливаем смещение влево
+        }
     };
 
     const moveToLeft = () => {
-        setPosition(0); // Сбрасываем смещение на начальное положение
+        console.log(position);
+        
+        if(isMobile && position <= -260){
+            setPosition((prev) => prev + 260);
+            console.log(position);
+        }
+        else{
+
+            setPosition(0); // Сбрасываем смещение на начальное положение
+        }
     };
 
     return (

@@ -1,5 +1,5 @@
 .container
-    width: 100%
+    width: 90%
     height: 1232px
 
     background: #F0EFEC
@@ -15,8 +15,8 @@
         flex-direction: column
 
         justify-content: center
-        align-items: flex-start
-        width: 1052px
+        align-items: center
+        width: 100%
         // height: 1532px
         gap: 100px
         
@@ -75,3 +75,27 @@
                     padding-bottom: 24px
 
 
+@media screen and ( max-width:  1000px)
+    .container
+        .innerContainer
+            .title
+                font-size: 60px
+                width: 100%
+                text-align: left
+                margin-left: 16px
+
+            .questions
+                margin-bottom: 150px
+                .questionBlock
+                    .question
+                        height: auto
+                        padding-bottom: 16px
+                        margin-top: 24px
+
+                        .text
+                            width: 276px
+
+                    .answer
+                        font-size: 16px
+                        line-height: 180%
+                        margin-top: 40px
