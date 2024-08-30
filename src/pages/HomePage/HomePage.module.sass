@@ -10,6 +10,7 @@
     width: 100%
     
     margin: 0 !important
+    
     .innerContainer
         display: flex
         flex-direction: column
@@ -21,11 +22,14 @@
         height: auto
         // height: 1399px  
         width: 100%
+        
 
         *
             // outline: 1px solid black
         
 
+        .images
+            display: none
 
         .light
             // opacity: 0.4
@@ -102,6 +106,7 @@
                 width: 90%
                 left: 14%
 
+        
 
         .infoBlock
             display: flex
@@ -165,19 +170,39 @@
                 justify-content: flex-start
                 align-items: flex-start
 
+                .images
+                    display: none
+
                 .title
                     font-family: steelfish
                     font-size: 120px
                     font-weight: 800
                     color: black
 
-
+                
                 .date, .date1
                     font-size: 47px
                     font-weight: 800
                     font-family: steelfish
                     margin-top: 100px
                     color: #ca252a
+
+
+                button
+                    width: 376px
+                    height: 70px
+                    border: 2px solid black
+
+                    background: none
+                    font-family: "Inter", system-ui
+
+                    font-size: 18px
+                    font-weight: 800
+                    margin-top: 10px
+                    white-space: nowrap
+                    cursor: pointer
+
+                    z-index: 1
 
                     
                         
@@ -293,7 +318,7 @@
 
                 .right
                     width: 300px
-                    img
+                    .fetil
                         width: 100%
                     .title
                         font-size: 70px
@@ -316,8 +341,13 @@
 
 @media screen and ( max-width:  1000px)
     .container
+        width: 100vw
         .innerContainer
-            padding-bottom: 50px
+            width: 100vw
+
+            
+
+            
             
             .title, .redTitle
                 font-size: 66px
@@ -333,25 +363,30 @@
                 display: none
 
             .mobileLines
-                margin-top: 10px
-                display: flex
-                padding-bottom: 30px
+                margin-top: 20px
+                display: block
                 
                 
                 
                 
-
+            
                 img
-                    position: absolute
-                    width: 110vw
-                    left: -5vw
+                    width: 100vw
+            .images
+                display: flex
+                width: 100vw
+                margin-top: 50px
 
             .buttons    
                 flex-direction: column
+                margin-top: 32px
                 
 
                 .left, .right
                     width: 320px
+
+                .left
+                    color: black
                     
                     
                 .right
@@ -366,17 +401,25 @@
             .infoBlock
                 flex-direction: column
                 gap: 0
-                width: 100vw
+                width: 100%
 
-                justify-content: center
-                align-items: center
+                justify-content: flex-start
+                align-items: flex-start
                 margin-top: 100px
 
+                button
+                    color: black
+                    
+
                 .left, .right
+                    width: calc( 100vw - 32px )
+                    padding-left: 16px
+
 
                     .title
                         font-size: 60px
                         text-align: left
+                        
 
                     .par
                         margin-top: 50px
@@ -385,10 +428,37 @@
                     button
                         width: 286px
 
+                .right
+                    .images
+                        display: flex
+                        flex-direction: row
+                        justify-content: flex-start
+                        align-items: flex-start
+                        width: 100%
+                        
+                        img
+                            &:nth-child(2)
+                                position: absolute
+                                margin-top: -50px
+                                
+
+                    button
+                        width: 376px
+                        margin-left: -9px
+                        margin-top: 16px
+                                
+                               
+                            
+
+                    .fetil
+                        display: none
+
+
             .image
                 width: 100vw
                 height: 309px
                 object-fit: cover
+                margin-top: 100px
 
 
             .partners
@@ -402,7 +472,10 @@
                 .title, .par
                     margin-left: 16px
 
-                .row
-                    width: 200vw
+                .rowDiv
                     overflow-x: scroll
+                    width: 200vw
+                    .row
+                        width: 100%
+                        
                     

@@ -10,13 +10,12 @@ function HomePage() {
   return (
     <div className={s.container}>
         <div className={s.innerContainer}>
-            <img src="/images/white-back.svg" className={s.light} alt="" />
+            {/* <img src="/images/white-back.svg" className={s.light} alt="" /> */}
             <h1 className={s.title}>ПРЕМИЯ, ФОРМИРУЮЩАЯ</h1>
             <h1 className={s.redTitle}>НОВЫЕ ТРЕНДЫ</h1>
 
             <div className={s.mobileLines}>
-                <img src="/images/Frame 121 (4).svg" alt="" />
-                <img src="/images/Frame 120 (2).svg" alt="" />
+                <img src="/images/Снимок экрана 2024-08-30 224829.png" alt="" />
             </div>
 
 
@@ -25,6 +24,7 @@ function HomePage() {
                 <button className={s.left}>БИЛЕТ НА ФОРУМ</button>
             </div>
         
+            <img className={s.images} src="/images/Снимок экрана 2024-08-30 225614.png" alt="" />
             <div className={s.lines}>
                 <img src="/images/Frame 121.svg" alt="" />
                 <img src="/images/Frame 120.svg" alt="" />
@@ -43,10 +43,15 @@ function HomePage() {
                     <div className={s.date}>26 НОЯБРЯ</div>
                     <div className={s.subTitle}>ФОРУМ</div>
                     <p className={s.par}>г. Астана, улица Кабанбай Батыра, 1</p>
-                    <img src="/images/Frame 23.svg" alt="" />
+                    <div className={s.images}>
+                        <img src="/images/Line 4 (1).svg" alt="" />
+                        <img src="/images/—Pngtree—cute gold decoration ribbon_8438236 3 (1).svg" alt="" />
+                    </div>
+                    <img className={s.fetil} src="/images/Frame 23.svg" alt="" />
                     <div className={s.date1}>27 НОЯБРЯ</div>
                     <div className={s.subTitle}>ПРЕМИЯ</div>
                     <p className={s.par}>г. Астана, улица Кабанбай Батыра, 1</p>
+                    <button>КУПИТЬ БИЛЕТ НА ЦЕРЕМОНИЮ</button>
                 </div>
             </div>
 
@@ -56,13 +61,16 @@ function HomePage() {
             <div className={s.partners}>
                 <h1 className={s.title}>ПАРТНЕРЫ</h1>
                 <p className={s.par}>WEDS благодарит наших партнеров — лидеров свадебной индустрии, за поддержку и вклад в проведение ивента. Вместе мы создаем яркие и значимые события для всего сообщества.</p>
-                <img className={s.row} src="/images/row.svg" alt="" />
+                
+
+                {/* <img className={s.row} src="/images/row.svg" alt="" /> */}
+                
             </div>
             
-
+{/* 
             <div className={s.joury}>
                 <Joury></Joury>
-            </div>
+            </div> */}
 
             <Questions></Questions>
         </div>
