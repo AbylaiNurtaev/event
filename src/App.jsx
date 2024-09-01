@@ -6,6 +6,7 @@ import AboutPage from './pages/AboutPage/AboutPage';
 import Nominations from './pages/Nominations/Nominations';
 import JouryPage from './pages/JouryPage/JouryPage';
 import ContactPage from './pages/ContactPage/ContactPage';
+import AuthorizationPage from './pages/AuthorizationPage/AuthorizationPage';
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
           <Route path='/nominations' element={<Nominations/>}></Route>
           <Route path='/joury' element={<JouryPage/>}></Route>
           <Route path='/contacts' element={<ContactPage/>}></Route>
+          <Route path='/login' element={<AuthorizationPage/>}></Route>
         </Route>
       </Routes>
     </div>

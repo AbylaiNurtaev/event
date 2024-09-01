@@ -1,11 +1,17 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import s from './HomePage.module.sass'
 import Joury from '../../components/Joury/Joury'
 import Questions from '../../components/Questions/Questions'
 
 function HomePage() {
 
-    
+        
+    useEffect(() => {
+        window.scroll({
+            top: 0,
+            behavior: "smooth"
+        })
+    }, [])
 
   return (
     <div className={s.container}>
@@ -63,14 +69,17 @@ function HomePage() {
                 <p className={s.par}>WEDS благодарит наших партнеров — лидеров свадебной индустрии, за поддержку и вклад в проведение ивента. Вместе мы создаем яркие и значимые события для всего сообщества.</p>
                 
 
-                {/* <img className={s.row} src="/images/row.svg" alt="" /> */}
+                <img className={s.row} src="/images/row.svg" alt="" />
+                <div className={s.rowDiv}>
+                    <img className={s.mobileRow} src="/images/row.svg" alt="" />
+                </div>
                 
             </div>
             
-{/* 
+
             <div className={s.joury}>
                 <Joury></Joury>
-            </div> */}
+            </div>
 
             <Questions></Questions>
         </div>

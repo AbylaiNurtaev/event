@@ -23,6 +23,8 @@
 
     z-index: 100
 
+
+
     
     .logo
         width: 152.2px
@@ -145,6 +147,138 @@
         width: 100vw
         height: 100%
 
+        // background: #f0efec
+
+        .burgerMenu
+            display: flex
+            flex-direction: column
+
+            justify-content: flex-start
+            align-items: center
+
+            position: absolute
+            width: 100vw
+            height: 120vh
+
+            background: black
+            top: 0
+
+            z-index: 100
+            overflow-y: hidden
+            position: fixed
+
+            .inner
+                overflow-y: hidden
+                width: 80%
+                display: flex
+                flex-direction: column
+
+                justify-content: flex-start
+                align-items: flex-start
+
+                .closeDiv
+                    width: 100%
+                    border-bottom: 1px solid rgba(255, 255, 255, 0.2)
+
+                    .close
+                        width: 30px
+                        margin-top: 40px
+                        padding-bottom: 24px
+
+                .exit
+                    width: 100%
+                    border-bottom: 1px solid rgba(255, 255, 255, 0.2)
+
+                    display: flex
+                    flex-direction: row
+
+                    justify-content: center
+                    align-items: center
+                    gap: 24px
+                    padding: 40px 0 
+
+                    img
+                        width: 20px
+
+                    p
+                        font-family: "Inter", sans-serif
+                        font-weight: 700
+                        font-size: 18px
+                        text-transform: uppercase
+                        color: #fff
+                        width: 144px
+
+
+                .links
+                    padding: 24px 0
+        
+
+                    display: flex
+                    flex-direction: column
+                    justify-content: flex-start
+                    align-items: flex-start
+
+                    border-bottom: 1px solid #ffffff39
+                    gap: 24px
+                    width: 100%
+
+                    p
+                        color: white
+                        cursor: pointer
+                    
+                        font-weight: 800
+                        font-size: 18px
+                                
+                                
+                .date
+                    display: flex
+                    flex-direction: row
+                    gap: 15px
+                    padding: 24px 0
+                    width: 100%
+                    border-bottom: 1px solid #ffffff39
+
+                    .dataText
+                        font-family: steelfish
+                        color: white
+
+                        font-style: normal
+                        font-size: 49px
+                    
+                    div
+                        display: flex
+                        flex-direction: column
+
+                        justify-content: flex-start
+                        align-items: flex-start
+                        gap: 3px
+                        
+
+                        p
+                            font-size: 22px
+                            line-height: 26px
+                            color: white
+
+                        button
+                            width: 119px
+                            height: 23px
+
+                            border: none
+                            font-family: "Inter", system-ui
+
+                            font-weight: 700
+                            font-size: 16px
+
+                            line-height: 14px
+                            padding: 2px
+                            
+
+                            color: black
+                            background: white
+                            white-space: nowrap
+                            cursor: pointer
+
+        
 
         .logo
             width: 114px
@@ -167,3 +301,4 @@
             
             
 
+        

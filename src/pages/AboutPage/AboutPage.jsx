@@ -1,7 +1,8 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import s from './AboutPage.module.sass'
 import { useNavigate } from 'react-router-dom'
 import Questions from '../../components/Questions/Questions'
+import Joury from '../../components/Joury/Joury'
 
 function AboutPage() {
     const rowList = ["все", "Организация свадьбы", "Ведущие", "Программа", "Декор", "Фотография", "Видео", "Стиль", "Локации", "Special", "Национальная культура"]
@@ -126,6 +127,13 @@ function AboutPage() {
     const moveToLeft = () => {
         setPosition(0); // Сбрасываем смещение на начальное положение
     };
+
+    useEffect(() => {
+        window.scroll({
+            top: 0,
+            behavior: "smooth"
+        })
+    }, [])
     return (
         <div className={s.container}>
             <div className={s.crumbs}>
@@ -180,7 +188,8 @@ function AboutPage() {
                         <div className={s.subTitle}>Форум</div>
                         <p>г. Астана, ул. Кабанбай Батыра, 1</p>
                     </div>
-                    <img src="/images/strelka.svg" alt="" />
+                    <img className={s.desktopArrow} src="/images/strelka.svg" alt="" />
+                    <img className={s.mobileStrelka} src="/images/Line 4 (1).svg" alt="" />
                     <div className={s.date} style={{ marginLeft: "56px" }}>
                         <div className={s.title}>27 ноября</div>
                         <div className={s.subTitle}>ПРЕМИЯ</div>
@@ -222,28 +231,8 @@ function AboutPage() {
                     }
                 </div>
 
-                <div className={s.jouryParent}>
-                    <div className={s.joury}>
-                        <h1 className={s.title}>ЖЮРИ</h1>
-                        <img className={s.fetil} src="/images/fetil.svg" alt="" />
-                        <p className={s.par}>Жюри WEDS — признанные эксперты свадебной индустрии. Их профессионализм и независимость гарантируют объективность и высокий уровень премии.</p>
-                        <div className={s.buttons}>
-                            <img className={s.leftBtn} onClick={moveToLeft} style={position === 0 ? { opacity: 0.3 } : {}} src="/images/Frame 2.svg" alt="" />
-                            <img className={s.rightBtn} onClick={moveToRight} style={position !== 0 ? { opacity: 0.3 } : {}} src="/images/Frame 2.svg" alt="" />
-                        </div>
-
-                        <div className={s.peoples} style={{ transform: `translateX(${position}px)` }} id="peoples">
-                            {
-                                peoples.map((elem, index) => (
-                                    <div key={index} className={s.block}>
-                                        <img src={elem.img} alt="" />
-                                        <h4>{elem.name}</h4>
-                                        <p>{elem.par}</p>
-                                    </div>
-                                ))
-                            }
-                        </div>
-                    </div>
+                <div className={s.joury}>
+                <Joury></Joury>
                 </div>
 
 
@@ -279,9 +268,13 @@ function AboutPage() {
                 <h1 className={s.title}>ПАРТНЕРЫ</h1>
                 <p className={s.par}>WEDS благодарит наших партнеров — лидеров свадебной индустрии, за поддержку и вклад в проведение ивента. Вместе мы создаем яркие и значимые события для всего сообщества.</p>
                 <img className={s.row} src="/images/row.svg" alt="" />
+                <div className={s.rowDiv}>
+                    <img className={s.rowMobile} src="/images/row.svg" alt="" />
+                </div>
             </div>
-
+            <div className={s.questions}>
             <Questions></Questions>
+            </div>
 
         </div>
     )

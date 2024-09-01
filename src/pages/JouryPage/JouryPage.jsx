@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import s from './JouryPage.module.sass'
 
@@ -109,6 +109,12 @@ function JouryPage() {
         },
         
     ];
+    useEffect(() => {
+        window.scroll({
+            top: 0,
+            behavior: "smooth"
+        })
+    }, [])
   return (
     <div className={s.container}>
             <div className={s.crumbs}>
@@ -142,8 +148,10 @@ function JouryPage() {
                     ))
                 }
             </div>
-
-            <Questions></Questions>
+            
+            <div className={s.questions}>
+                <Questions></Questions>
+            </div>
     </div>
   )
 }

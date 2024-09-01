@@ -12,6 +12,9 @@
     width: 100%
     
     background: white
+
+    .rowDiv
+        display: none
     p
         font-family: "Inter", system-ui
         font-weight: 600
@@ -108,6 +111,11 @@
                         color: #020204
                         margin-top: 20px
 
+    .questions
+        width: 100%
+        background: #F0EFEC
+        padding-left: 80px
+
 
     .goals
         display: flex
@@ -119,7 +127,7 @@
 
         background: #f0efec
         
-        height: 90s 0px
+        // height: 90s 0px
 
         .title
             font-family: "Steelfish", sans-serif
@@ -152,6 +160,8 @@
             align-items: flex-start
             margin-top: 100px
 
+            .mobileStrelka
+                display: none
             .date
                 display: flex
                 flex-direction: column
@@ -264,14 +274,14 @@
             flex-wrap: wrap
             // width: 1202px
             margin-top: 20px
-            gap: 40px
+            gap: 20px
             padding-bottom: 130px
 
 
             .block
                 border: 1.50px solid #020204
                 padding: 32px
-                width: 474px
+                width: 444px
                 height: 378px
 
                 .title
@@ -311,107 +321,17 @@
                     cursor: pointer
                     margin-top: 32px
 
+    .joury
+        background: white
+        
 
-    .jouryParent
-        width: 120%
-        background: #f0efec
+        display: flex
+        flex-direction: column
+
+        justify-content: flex-start
+        align-items: flex-start
+
         margin-left: -80px
-        padding-left: 80px
-
-        .joury
-            padding-top: 120px
-            display: flex
-            flex-direction: column
-
-            justify-content: flex-start
-            align-items: flex-start
-            background: #f0efec
-
-            width: 1052px
-
-            .title
-                margin: 0
-                font-size: 120px
-                font-weight: 800
-                font-family: Steelfish
-                // width: 100%
-                
-                text-align: left
-
-
-            .fetil
-                position: absolute
-                margin-top: -100px
-                left: 70%
-                
-
-            .par    
-                margin-top: 50px
-                line-height: 39.6px
-                font-size: 22px
-
-                font-weight: 400
-                // width: 100%
-                font-family: "Inter", system-ui
-                text-align: left
-
-            .buttons
-                margin-top: 40px
-                
-
-                .leftBtn
-                    transform: rotate(180deg)
-                    cursor: pointer
-
-                .rightBtn
-                    cursor: pointer
-                    margin-left: 40px
-
-
-            .peoples
-                background: #f0efec
-                display: flex
-                flex-direction: row
-
-                justify-content: flex-start
-                align-items: center
-
-                gap: 40px
-                
-                
-                padding-top: 100px
-                padding-bottom: 120px
-
-                
-                transition: .5s
-                width: 120%
-
-                .block
-                    display: flex
-                    flex-direction: column
-
-                    justify-content: flex-start
-                    align-items: flex-start
-
-                    width: 233px
-                    height: 456px
-                    cursor: pointer
-
-                    img
-                        width: 233px
-                        height: 350px
-
-                        object-fit: cover
-
-                    h4
-                        font-family: 'Steelfish'
-                        font-weight: 800
-                        font-size: 35px
-                        margin: 16px 0 0 0
-                        text-transform: uppercase
-
-                    p
-                        margin: 16px 0 0 0
 
 
     .organizers
@@ -554,4 +474,238 @@
             margin-top: 100px
 
 
-    
+@media screen and ( max-width:  1000px)
+    .container
+        align-items: center
+        p
+            font-size: 16px
+
+        .crumbs
+            display: none
+
+        .joury
+            margin-left: -50px
+
+        .about
+            margin: 20px 0 0 0
+            width: 90%
+
+            h1
+                font-size: 80px
+                text-align: center
+                
+            p
+                text-align: center
+                
+
+        .history    
+            width: 90%
+            padding: 0
+
+            flex-direction: column
+
+            gap: 80px
+            margin-top: 50px
+
+            .left, .right
+                gap: 25px
+                align-items: center
+                h1
+                    font-size: 80px
+                    
+
+                p
+                    width: 100%
+                    text-align: center
+                    
+
+                .blocks
+
+                    width: 100%
+                    gap: 10%
+                    padding-bottom: 50px
+
+                    .block 
+                        width: 100%
+                        margin-top: 20px
+
+                        h1
+                            font-size: 60px
+                            text-align: center
+
+                        p
+                            font-size: 16px
+                            text-align: center
+                            line-height: 140%
+                            width: 100%
+
+        .goals
+            padding: 0
+            align-items: center
+            width: 100%
+
+            .dates
+                .desktopArrow
+                    display: none
+                    
+                .mobileStrelka
+                    display: flex
+
+
+            .title
+                margin-top: 30px
+                font-size: 70px
+
+            .par
+                margin-top: 40px
+                text-align: center
+                width: 95%
+                
+                font-size: 18px
+
+            .schedule
+                margin-top: 40px
+                font-size: 80px
+
+            .dates
+                flex-direction: column
+                margin-top: 20px
+                padding-bottom: 50px
+
+                .date
+                    width: 100%
+                    margin: 0  !important
+                        
+                    
+
+                img
+                    margin: 10px
+        .redBlock
+            padding: 0
+
+            display: flex
+            flex-direction: column
+
+            justify-content: center
+            align-items: center
+
+            width: 100%
+            .title
+                font-size: 50px
+
+            .par
+                margin-top: 20px
+
+                font-size: 18px
+                text-align: center
+
+
+        .joury
+            margin-left: 0
+
+        .criterion
+            padding: 0
+            width: 100%
+
+            justify-content: center
+            align-items: center
+
+            margin-top: 30px
+
+            .title
+                font-size: 70px
+
+            .par
+                font-size: 18px
+                margin-top: 30px
+                width: 95%
+                text-align: center
+
+            .row
+                width: 95%
+                justify-content: flex-start
+                align-items: flex-start
+
+            .blocks
+                flex-direction: column
+                width: 100%
+
+                justify-content: center
+                align-items: center
+
+                .block
+                    width: 90%
+                    padding: 0
+
+                    .title
+                        margin: 15px 0 0 15px
+
+                    .list
+                        width: 100%
+                        margin: 25px 0 0 15px
+
+                    button
+                        margin: 25px 0 0 15px
+                        color: black
+                        border: 1px solid black
+
+        .jouryParent
+            width: 100%
+
+        .organizers
+            width: 100%
+
+            .title
+                margin-top: 70px
+
+            .citation
+                gap: 10px
+                width: calc( 100% - 48px )
+                margin-top: 40px
+                img
+                    width: 20px
+
+                p
+                    width: 80%
+                    
+            .mainPerson
+                width: 90%
+                padding-bottom: 40px
+
+            .persons
+                flex-direction: column
+                width: 100%
+
+                align-items: center
+                gap: 0px
+                padding-bottom: 50px
+
+        .questions
+            width: 100%
+
+            display: grid
+            place-items: center
+            background: #F0EFEC
+            padding: 0
+
+        .partners
+            width: 100%
+            padding: 0
+            align-items: center
+
+            .title
+                margin-top: 50px
+                font-size: 70px
+
+            .par
+                text-align: center
+                width: 95%
+                font-size: 18px
+
+            .row
+                display: none
+
+            .rowDiv
+                display: flex
+                overflow-x: scroll
+                width: 90%

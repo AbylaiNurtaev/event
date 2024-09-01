@@ -1,10 +1,17 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import s from './ContactPage.module.sass'
 import { useNavigate } from 'react-router-dom'
 import Questions from '../../components/Questions/Questions'
 
 function ContactPage() {
     const navigate = useNavigate()
+
+    useEffect(() => {
+        window.scroll({
+            top: 0,
+            behavior: "smooth"
+        })
+    }, [])
 
   return (
     <div className={s.container}>
@@ -40,7 +47,10 @@ function ContactPage() {
             </div>
 
             <img className={s.img} src="/images/image (13).svg" alt="" />
-            <Questions/>
+            <div className={s.questions}>
+
+                <Questions/>
+            </div>
     </div>
                 
   )
