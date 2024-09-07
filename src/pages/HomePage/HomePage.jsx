@@ -5,7 +5,7 @@ import Questions from '../../components/Questions/Questions'
 
 function HomePage() {
 
-        // sda
+        // sdadsads
     useEffect(() => {
         window.scroll({
             top: 0,
