@@ -7,7 +7,11 @@ import Nominations from './pages/Nominations/Nominations';
 import JouryPage from './pages/JouryPage/JouryPage';
 import ContactPage from './pages/ContactPage/ContactPage';
 import AuthorizationPage from './pages/AuthorizationPage/AuthorizationPage';
-
+import CabinetPage from './pages/CabinetPage/CabinetPage';
+import ApplicationPage from './pages/ApplicationPage/ApplicationPage';
+import AdminPage from './pages/AdminPage/AdminPage';
+import PaymentPage from './pages/PaymentPage/PaymentPage';
+import GradingPage from './pages/GradingPage/GradingPage';
 function App() {
   return (
     <div className="App">
@@ -19,7 +23,12 @@ function App() {
           <Route path='/joury' element={<JouryPage/>}></Route>
           <Route path='/contacts' element={<ContactPage/>}></Route>
           <Route path='/login' element={<AuthorizationPage/>}></Route>
+          <Route path='/payment' element={<PaymentPage/>}></Route>
+          <Route path='/grading' element={<GradingPage/>}></Route>
+          <Route path='/application' element={<ApplicationPage/>}></Route>
+          <Route path='/cabinet/:id' element={<CabinetPage/>}></Route>
         </Route>
+        <Route path='/admin' element={<AdminPage/>}></Route>
       </Routes>
     </div>
   );

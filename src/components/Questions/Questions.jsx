@@ -55,7 +55,7 @@ function Questions() {
             <div className={s.questions}>
                 {
                     questions && questions.map((elem, index) => 
-                    <div className={s.questionBlock} onClick={(e) => handleOpenQuestion(e, index)}>
+                    <div key={index} className={s.questionBlock} onClick={(e) => handleOpenQuestion(e, index)}>
                         <div className={s.question}>
                             <div className={s.text}>{elem.question}</div>
                             <img src={opened != index ? "/images/ph_plus-light.svg" : "/images/ph_plus-light (2).svg"} alt="" />
