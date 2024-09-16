@@ -47,7 +47,7 @@ function AuthorizationPage() {
 
         // Блокируем кнопку и запускаем таймер на 60 секунд
         setIsButtonDisabled(true)
-        setTimer(5)
+        setTimer(60)
 
         const interval = setInterval(() => {
             setTimer((prevTimer) => {
