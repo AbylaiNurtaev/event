@@ -14,6 +14,7 @@ function CabinetPage() {
             top: 0,
             behavior: "smooth"
         })
+
         
 
         
@@ -36,7 +37,8 @@ function CabinetPage() {
             setTiktok(data.tiktok || "")
             setEmail(data.email || "")
             setRole(data.role || "")
-            setSrc(data.avatar || "")
+            setAvatarSrc(data.avatar || '/images/male-placeholder-image.jpeg');
+            setApplications(data.applications)
         })
         
 
@@ -56,9 +58,11 @@ function CabinetPage() {
     const [sended, setSended] = useState(false)
     const [role, setRole] = useState("")
 
-    const [srcImg, setSrc] = useState()
+    const [avatarSrc, setAvatarSrc] = useState(''); // URL для аватарки с сервера
+    const [localFile, setLocalFile] = useState(null); // Для загруженного файла
 
-    const [file, setFile] = useState()
+    const [applications, setApplications] = useState()
+    
 
     const handleChange = (e, func) => {
         func(e.target.value)
@@ -110,21 +114,25 @@ function CabinetPage() {
          
     }
 
-    const handleFileUpload = async(e) => {
+    const handleFileUpload = (e) => {
         const file = e.target.files[0];
-        setFile(file)  
-        e.preventDefault()
-
+        setLocalFile(file); // Сохраняем локальный файл для отображения предпросмотра
+    
+        // Отправка файла на сервер
         const formData = new FormData();
-        formData.append("image", file)
-        await axios.post(`/uploadAvatar/${id}`, formData, {headers: {
-            'Content-Type': 'multipart/form-data'
-        }})
-        await axios.post("/auth/getUser", {userId: id})
-        .then((res) => res.data)
-        .then((data) => setSrc(data.avatar))
-    }
-
+        formData.append('image', file);
+        formData.append('type', 'avatar');
+    
+        axios.post(`/uploadFile/${id}`, formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        })
+        .then(() => {
+          // Вы можете добавить логику успешной загрузки
+        })
+        .catch(err => console.log(err.message));
+      };
 
     
   return (
@@ -149,11 +157,18 @@ function CabinetPage() {
                 <div className={s.block}>
                     <p>Фотография <span>*</span></p>
                     <label htmlFor='file-upload'>
-                        <img
-                            src={srcImg ? srcImg : "/images/male-placeholder-image.jpeg"} alt="images"
-                        />
-                    </label>
-                    <input type="file" id='file-upload' onChange={(e) => handleFileUpload(e)} accept='image/*' hidden={true} />   
+                    <img
+              src={localFile ? URL.createObjectURL(localFile) : avatarSrc} // Локальный файл или серверный URL
+              alt="Avatar"
+            />
+          </label>
+          <input
+            type="file"
+            id="file-upload"
+            onChange={handleFileUpload}
+            accept="image/*"
+            hidden={true}
+          />
                 </div>
                 <div className={s.block}>
                     <p>Ваши Имя и Фамилия: <span>*</span> {name.length <= 1 && sended && <span><br/>заполните обязательное поле *</span>}</p>
@@ -168,7 +183,7 @@ function CabinetPage() {
                     <input value={job} type="text"  onChange={(e) => handleChange(e, setJob)}/>
                 </div>
                 <div className={s.block}>
-                    <p>Ваши Email: <span>*</span></p>
+                    <p>Ваш Email: <span>*</span></p>
                     <input type="text" value={email} disabled={true} onChange={(e) => handleChange(e, setEmail)} />
                 </div>
                 <div className={s.block}>
@@ -202,6 +217,18 @@ function CabinetPage() {
                         <input value={tiktok} type="text" onChange={(e) => handleChange(e, setTiktok)} />
                     </div>
                 </div>
+                <div className={s.boldText}>Поданные заявки</div>
+                <div className={s.applications}>
+                    {
+                        applications && applications.map((elem) => 
+                            <div className={s.application}>
+                                <p className={s.nom}>Номинация: {elem.application_data.nomination ? elem.application_data.nomination : ""}</p>
+                                <p className={s.spec}>{elem.application_data.specialization ? elem.application_data.specialization : ""}</p>
+                                <button>Изменить</button>
+                            </div>
+                        )
+                    }
+                </div>
                 <button className={s.saveBtn} onClick={updateSocialInfo}>СОХРАНИТЬ</button>
             </div>
         </div>
@@ -209,6 +236,9 @@ function CabinetPage() {
                 role && role == "joury" && 
             <button className={s.jouryBtn} onClick={() => navigate('/grading')}>Голосование за номинантов</button>
             }
+
+            
+
 
         <div className={s.questions}>
             <Questions></Questions>

@@ -12,6 +12,7 @@ import ApplicationPage from './pages/ApplicationPage/ApplicationPage';
 import AdminPage from './pages/AdminPage/AdminPage';
 import PaymentPage from './pages/PaymentPage/PaymentPage';
 import GradingPage from './pages/GradingPage/GradingPage';
+import AdminApplication from './pages/AdminApplication/AdminApplication';
 function App() {
   return (
     <div className="App">
@@ -29,6 +30,7 @@ function App() {
           <Route path='/cabinet/:id' element={<CabinetPage/>}></Route>
         </Route>
         <Route path='/admin' element={<AdminPage/>}></Route>
+        <Route path='/adminApplication/:id' element={<AdminApplication/>}></Route>
       </Routes>
     </div>
   );

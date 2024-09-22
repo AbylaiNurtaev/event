@@ -1,0 +1,114 @@
+@font-face 
+    font-family: 'steelfish'
+    src: url('../../components/fonts/stelfish/steelfish.otf')
+    
+.container
+    display: flex
+    flex-direction: column
+
+    justify-content: center
+    align-items: center
+    width: 100%
+
+    .crumbs
+        text-align: left
+        margin: 20px  0 0 50px
+        display: flex
+        width: 90%
+        flex-direction: row
+        gap: 16px
+        cursor: pointer
+    
+
+    .innerContainer
+        display: flex
+        flex-direction: column
+
+        justify-content: flex-start
+        align-items: center
+
+        width: 1252px
+        margin-top: 50px
+        
+
+        p    
+            font-family: "Inter", system-ui
+            font-weight: 600
+            font-size: 16px
+            cursor: pointer
+            margin-top: 30px
+
+        input
+            margin-top: 20px
+            width: 300px
+            height: 30px
+
+            border: 1px solid #11111148
+            border-radius: 3px 
+
+            &:focus
+                outline: none
+        .rows
+            display: flex
+            flex-direction: column
+
+            justify-content: flex-start
+            align-items: flex-start
+
+        .row
+
+            display: flex
+            flex-direction: row
+
+            justify-content: center
+            align-items: center
+            gap: 20px
+            height: auto
+            margin-top: 30px
+
+            input
+                width: 30px
+                margin: 0
+            
+            p
+                margin: 0
+
+        .title
+            font-family: steelfish
+            margin-top: 30px
+
+            font-size: 50px
+            font-weight: bolder
+
+        .addBtn
+            width: 240px
+            height: 35px
+
+            background: black
+            color: white
+
+            font-weight: bolder
+            border: none
+
+            margin-top: 30px
+            cursor: pointer
+
+        .saveBtn
+            width: 240px
+            height: 40px
+
+            border: 1px solid black
+            background: none
+
+            color: black
+            font-weight: bolder
+
+            margin-top: 50px
+            cursor: pointer
+
+        .deleteBtn
+            background: none
+            border: none
+            img
+                cursor: pointer
+

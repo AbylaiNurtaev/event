@@ -102,7 +102,7 @@
             align-items: flex-start
 
             flex-wrap: wrap
-            // width: 1202px
+            width: 100%
             margin-top: 20px
             gap: 40px
             padding-bottom: 130px
@@ -111,8 +111,10 @@
             .block
                 border: 1.50px solid #020204
                 padding: 32px
-                width: 444px
-                height: 378px
+                
+                width: 35% !important
+                
+                height: 505px
 
                 .title
                     font-family: "Steelfish", sans-serif
@@ -122,7 +124,7 @@
                     color: #020204
 
                 .list
-                    width: 442px
+                    width: 100%
 
                     display: flex
                     flex-direction: column
@@ -139,6 +141,7 @@
                         font-size: 18px
                         line-height: 180%
                         color: #020204
+                        width: 100%
 
                 button
                     border: 1.50px solid #ca252a
@@ -151,10 +154,154 @@
                     cursor: pointer
                     margin-top: 32px
 
+    .shadow
+        position: fixed
+        top: 0
+        left: 0
+        width: 100%
+        height: 100%
+        background-color: rgba(0, 0, 0, 0.574)
+        z-index: 0
+        
+
+    .popup
+        display: flex
+        z-index: 1
+        flex-direction: column
+
+        justify-content: flex-start
+        align-items: center
+
+        position: fixed
+        top: 10px
+
+
+        width: 1012px
+        height: 884px
+
+        background: white
+
+        padding: 50px
+        left: 350px
+
+        .topMobileSide
+            display: none
+
+        .topSide
+            display: flex
+            flex-direction: row
+
+            width: 100%
+
+            justify-content: space-between
+            align-items: center
+
+            .title
+                font-size: 47px
+
+
+            .right
+                display: flex
+                flex-direction: row
+
+                justify-content: center
+                align-items: center
+
+                button
+                    width: 217px
+                    height: 70px
+                    background: #ca252a !important
+                    font-family: "Montserrat", sans-serif
+                    font-weight: 800
+                    font-size: 18px
+                    color: #fff
+                    border: none
+
+                    cursor: pointer
+                    margin: 0
+                    margin-right: 50px
+                img
+                    cursor: pointer
+
+        .mainSide
+            display: flex
+            flex-direction: column
+
+            justify-content: center
+            align-items: center
+
+            width: 100%
+
+            .title
+                text-transform: uppercase
+                color: #ca252a
+                font-size: 35px
+                width: 100%
+                text-align: left
+                padding-bottom: 24px
+                border-bottom: 1.50px solid rgba(2, 2, 4, 0.1)
+                margin-top: 50px
+
+            .information
+                font-family: "Montserrat", sans-serif
+                font-weight: 500
+                font-size: 18px
+                line-height: 180%
+                color: #020204
+                width: 100%
+
+            .should
+                display: flex
+                flex-direction: row
+
+                justify-content: space-between
+                align-items: center
+
+                margin-top: 40px
+                gap: 32px
+                width: 100%
+
+                .block
+                    padding: 0
+                    display: flex
+                    flex-direction: column
+
+                    justify-content: flex-start
+                    align-items: flex-start
+
+                    gap: 16px
+                    border: none
+                    
+
+                    .bold, .par
+                        font-family: "Montserrat", sans-serif
+                        font-weight: 700
+                        font-size: 18px
+                        color: #020204
+                        width: 100%
+
+                    .par
+                        font-weight: 500
+                        margin-top: 0
+                    
+
+            
+
     .questions
         width: 100%
         background: #F0EFEC
         padding-left: 80px
+
+@media screen and ( max-width:  1530px)
+
+
+.container
+    .criterion
+        .blocks
+            .block
+                width: 40%
+
+    
 
 
 
@@ -215,10 +362,11 @@
 
                 .block
                     width: 90%
-                    padding: 0
+                    padding: 20px
+                    height: auto
 
                     .title
-                        margin: 15px 0 0 15px
+                        margin: 0px 0 0 15px
                         text-align: left
 
                     .list
@@ -228,7 +376,7 @@
                     button
                         margin: 25px 0 0 15px
                         color: black
-                        border: 1px solid black
+                        border: 1px solid #CA252A
 
         .questions
             width: 100%
@@ -237,3 +385,104 @@
             place-items: center
             background: #F0EFEC
             padding: 0
+
+        .popup 
+            width: 90%
+            left: 50%
+            top: 51%
+            transform: translate(-50%, -50%)  // Центрируем по горизонтали и вертикали
+            padding: 20px
+            position: fixed  // Убедитесь, что позиционирование остаётся fixed для модальных окон
+            z-index: 100
+
+            .topSide, .topMobileSide
+                margin-top: 120px
+                .right
+                    justify-content: center
+                    align-items: center
+                    gap: 20px
+
+                    button
+                        color: #fff
+                        border: none
+                        margin: 0
+                        height: 40px
+                        font-size: 16px 
+
+            .mainSide
+                .should
+                    .block
+                        .par
+                            text-align: left
+                            font-size: 14px
+
+
+@media screen and ( max-width:  700px)
+    .container
+
+        .criterion
+            .blocks
+                .block
+                    width: 0% !important
+                
+    
+        .popup
+            width: 85%
+            justify-content: flex-start
+            align-items: center
+            height: 500px
+            overflow-y: scroll
+            overflow-x: hidden
+            border-radius: 10px
+            padding: 10px
+            padding-bottom: 50px
+            
+            .topSide
+                display: none
+
+            .topMobileSide
+                display: flex
+                flex-direction: column
+                width: 100%
+                // height: 200px
+                
+                
+                // position: fixed
+                margin-top: 0px
+                // background: red
+                
+                
+                
+
+                .top
+                    display: flex
+                    flex-direction: row
+                    justify-content: space-between
+                    align-items: center
+                    // position: relative
+
+                    
+
+                    img
+                        width: 40px
+                        margin-right: 10px
+
+                button
+                    border: none !important
+                    background: #ca252a !important
+                    color: white !important
+                    
+                    
+
+                
+
+                    
+            .mainSide
+                
+            
+                .should
+                    flex-direction: column
+                    gap: 30px
+
+                    .block
+                        height: auto

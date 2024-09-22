@@ -25,13 +25,14 @@ function Header() {
         })
     }
 
+
     useEffect(() => {
         axios.post('/auth/getUserByToken')
             .then(res => res.data)
             .then(data => {
                 setUser(data)
     })
-            .catch((err) => console.log(err.message))
+            .catch((err) => {})
     }, [])
 
     return (<>
@@ -46,9 +47,10 @@ function Header() {
                 <p onClick={() => navigate('/contacts')} style={location && location.pathname == "/contacts" ? { color: '#f4444a' } : {}}>Контакты</p>
             </div>
 
-            <div className={s.date} onClick={() => navigate('/application')}>
+            <div className={s.date} onClick={user?.name ? () => navigate('/application') : () => navigate('/login')}>
                 <p className={s.dataText}>26-27</p>
                 <div>
+                    
                     <p>ноября</p>
                     <button>подать заявку</button>
                 </div>

@@ -71,6 +71,7 @@ function AuthorizationPage() {
                 console.log(data)
                 if (data.status == "VERIFIED") {
                     navigate(`/cabinet/${user._id}`)
+                    
                 } else {
                     alert("Неверный код")
                 }

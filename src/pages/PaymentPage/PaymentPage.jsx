@@ -57,7 +57,7 @@ function PaymentPage() {
             <div className={s.packet}>
                 <div className={s.price}>100 000 ТЕНГЕ</div>
                 <div className={s.value}>1 номинация</div>
-                <button onClick={() => payment(10000000)}>ПОПОЛНИТЬ</button>
+                <button onClick={() => payment(1000)}>ПОПОЛНИТЬ</button>
             </div>
             <div className={s.packet}>
                 <div className={s.price}>180 000 ТЕНГЕ</div>
