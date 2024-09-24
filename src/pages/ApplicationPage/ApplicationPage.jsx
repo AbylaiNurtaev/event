@@ -83,6 +83,8 @@ function ApplicationPage() {
         }
     }, [applicationId])
 
+    const[btnDisabled, setBtnDisabled] = useState(false)
+
     useEffect(() => {
         const id = localStorage.getItem('id')
         axios.post('/auth/getBalance', {id})
@@ -90,8 +92,10 @@ function ApplicationPage() {
         .then(data => {
             if(data.message == "success"){
                 setPopup(false)
-            }else{
+                setBtnDisabled(false)
+            }else if(data.message == "no money"){
                 setPopup(true)
+                setBtnDisabled(true)
             }
         })
 
@@ -364,83 +368,88 @@ function ApplicationPage() {
     
     
     const SENDINFORMATION = async () => {
-        const id = localStorage.getItem('id');
-        let imagesCount = []
-        for (let i = 0; i < selectedFiles.length; i++){
-            imagesCount.push(selectedFiles[i].length)
-        }
-        console.log(selectedFiles)
-        if (checkbox) {
-            setDisabled(true)
-            await handleSubmit()
-            await handleSubmitPreview()
-            await handleSubmitDocuments()
-            
-            if(isNew){
-
-                await axios.post('/createApplication', {
-                    application: {
-                        nomination,
-                        specialization,
-                        fullName,
-                        city,
-                        logo,
-                        photo,
-                        website,
-                        phone,
-                        about,
-                        awards,
-                        service,
-                        instagram,
-                        youtube,
-                        tiktok,
-                        vk,
-                        videos,
-                        info,
-                        imagesCount
-                        // portfolio: selectedFiles
-                    }, application_id: `${application_id}`, id: id, isNew
-                })
-                .then((res) => {
-                    alert("Ваша заявка успешно отправлена")
-                    setDisabled(false)
-                    window.location.href = window.location.href
-                })
-            }else{
-                await axios.post('/updateApplication', {
-                    application: {
-                        nomination,
-                        specialization,
-                        fullName,
-                        city,
-                        logo,
-                        photo,
-                        website,
-                        phone,
-                        about,
-                        awards,
-                        service,
-                        instagram,
-                        youtube,
-                        tiktok,
-                        vk,
-                        videos,
-                        info,
-                        imagesCount
-                        // portfolio: selectedFiles
-                    }, application_id: `${application_id}`, id: id, isNew
-                })
-                .then((res) => {
-                    alert("Ваша заявка успешно отправлена")
-                    setDisabled(false)
-                    window.location.href = window.location.href
-                })
+        if(btnDisabled){
+            alert("Пополните баланс")
+        }else{
+            const id = localStorage.getItem('id');
+            let imagesCount = []
+            for (let i = 0; i < selectedFiles.length; i++){
+                imagesCount.push(selectedFiles[i].length)
             }
-            
+            console.log(selectedFiles)
+            if (checkbox) {
+                setDisabled(true)
+                await handleSubmit()
+                await handleSubmitPreview()
+                await handleSubmitDocuments()
+                
+                if(isNew){
+    
+                    await axios.post('/createApplication', {
+                        application: {
+                            nomination,
+                            specialization,
+                            fullName,
+                            city,
+                            logo,
+                            photo,
+                            website,
+                            phone,
+                            about,
+                            awards,
+                            service,
+                            instagram,
+                            youtube,
+                            tiktok,
+                            vk,
+                            videos,
+                            info,
+                            imagesCount
+                            // portfolio: selectedFiles
+                        }, application_id: `${application_id}`, id: id, isNew
+                    })
+                    .then((res) => {
+                        alert("Ваша заявка успешно отправлена")
+                        setDisabled(false)
+                        window.location.href = window.location.href
+                    })
+                }else{
+                    await axios.post('/updateApplication', {
+                        application: {
+                            nomination,
+                            specialization,
+                            fullName,
+                            city,
+                            logo,
+                            photo,
+                            website,
+                            phone,
+                            about,
+                            awards,
+                            service,
+                            instagram,
+                            youtube,
+                            tiktok,
+                            vk,
+                            videos,
+                            info,
+                            imagesCount
+                            // portfolio: selectedFiles
+                        }, application_id: `${application_id}`, id: id, isNew
+                    })
+                    .then((res) => {
+                        alert("Ваша заявка успешно отправлена")
+                        setDisabled(false)
+                        window.location.href = window.location.href
+                    })
+                }
+                
+            }
+            else {
+                alert("Подтвердите своё согласие на публикацию")
+            }
         }
-        else {
-            alert("Подтвердите своё согласие на публикацию")
-        }
+        
     }
     
     const [popUp, setPopup] = useState(false)
@@ -767,7 +776,7 @@ function ApplicationPage() {
 
 
                 <div className={s.btnWrapper}>
-                    <div className={s.sendBtn} onClick={SENDINFORMATION} disabled={disabled} style={disabled ? { backgroundColor: "#B22222", cursor: "default" } : {}}>
+                    <div className={s.sendBtn} onClick={SENDINFORMATION} disabled={disabled && btnDisabled} style={disabled || btnDisabled ? { backgroundColor: "#DCA9A9", cursor: "default" } : {}}>
                         {isNew ? <p>ОТПРАВИТЬ ЗАЯВКУ</p> : <p>СОХРАНИТЬ</p>}
                         {isNew ? <p>- 1 ед. из вашего баланса</p> : null}
                     </div>
