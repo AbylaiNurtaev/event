@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import s from './ApplicationPage.module.sass';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import Questions from '../../components/Questions/Questions';
 import axios from '../../axios'
 import BalancePopup from '../../components/BalancePopup/BalancePopup';
 
 function ApplicationPage() {
     const navigate = useNavigate();
+    const { applicationId } = useParams()
 
     useEffect(() => {
         window.scroll({
@@ -18,18 +19,91 @@ function ApplicationPage() {
             .then((res) => res.data)
             .then(data => {
                 setNominationsSettings(data)
+                console.log("nomination settings", data)
                 const uniqueCategories = [...new Set(data.map(item => item.nomination[0]))];
                 setNominations(uniqueCategories);
             })
 
     }, []);
+    const [isNew, setIsNew] = useState(true)
+
+    useEffect(() => {
+        if(applicationId != 'new'){
+            setPopup(false)
+            setIsNew(false)
+            const userId = localStorage.getItem('id')
+            console.log("dsa", applicationId)
+            axios.post('/auth/getAllInfo', {
+                userId,
+                application_id: applicationId
+            })
+            .then((res) => res.data)
+            .then(data => {
+                console.log("das", data)
+                setLogo(data.user.logo)
+                setPhoto(data.user.avatar)
+                setDocuments(data.documents)
+                setPreviews(data.previews)
+                setVideos(data.application_data.videos)
+
+                const photos = data.portfolio
+                const counts = data.application_data.imagesCount
+                const result = groupPhotos(photos, counts);
+                setSelectedFiles(result)
+
+            })
+            .catch((err) => console.log(err))
+            axios.post('/getApplication', {
+                id: userId,
+                application_id: applicationId
+            })
+            .then(res => res.data)
+            .then(data => {
+                setAbout(data.application_data.about)
+                setSpecialization(data.application_data.specialization)
+                setFullName(data.application_data.fullName)
+                setNomination(data.application_data.nomination)
+                setCity(data.application_data.city)
+                setWebsite(data.application_data.website)
+                setPhone(data.application_data.phone)
+                setService(data.application_data.about)
+                setAwards(data.application_data.awards)
+                setInstagram(data.application_data.instagram)
+                setVk(data.application_data.vk)
+                setYoutube(data.application_data.youtube)
+                
+                setTiktok(data.application_data.tiktok)
+                setInfo(data.application_data.info);
+                setAdditionalFields(data.application_data.info.additionalFields)
+                // setInfo({ ...info, fields: data.application_data.info.fields });
+                // setCheckBox(true)
+                // console.log(data)
+            })
+            .catch((err) => console.log(err))
+        }
+    }, [applicationId])
+
+    useEffect(() => {
+        const id = localStorage.getItem('id')
+        axios.post('/auth/getBalance', {id})
+        .then((res) => res.data)
+        .then(data => {
+            if(data.message == "success"){
+                setPopup(false)
+            }else{
+                setPopup(true)
+            }
+        })
+
+    }, [])
+
 
     const [nominations, setNominations] = useState()
     const [nominationsSettings, setNominationsSettings] = useState()
 
     // Состояния для всех полей формы
     const [nomination, setNomination] = useState('');
-    const [specialization, setSpecialization] = useState('');
+    const [specialization, setSpecialization] = useState('Декоратор');
     const [fullName, setFullName] = useState('');
     const [city, setCity] = useState('');
     const [logo, setLogo] = useState(null);
@@ -53,10 +127,11 @@ function ApplicationPage() {
     const [disabled, setDisabled] = useState(false)
     const [documents, setDocuments] = useState([])
 
+    
     const application_id = Date.now()
-    const [info, setInfo] = useState()
+    const [info, setInfo] = useState(null)
     const [inputIdx, setInputIdx] = useState(1)
-
+    
     const deleteVideo = (indexToRemove) => {
         // Создаем новый массив, исключая элемент с индексом indexToRemove
         const newArray = videos.filter((_, index) => index !== indexToRemove);
@@ -64,36 +139,55 @@ function ApplicationPage() {
         const newArrayPreview = previews.filter((_, index) => index !== indexToRemove);
         setPreviews(newArrayPreview);
     };
-
+    
     const handleChange = (e, setter) => {
         setter(e.target.value);
     };
-
     useEffect(() => {
-        if (nominationsSettings) {
-            const currentNomination = nominationsSettings.find((elem) => elem.nomination[0].toLowerCase() == nomination.toLowerCase())
-            setInfo(currentNomination)
+        if (nominationsSettings && nominationsSettings.length > 0) {
+            console.log('Текущий info:', info);
+    
+            // Проверяем, пустой ли info (null, undefined, пустая строка, пустой массив или объект)
+            if (!info || (Array.isArray(info) && info.length === 0) || (typeof info === 'object' && Object.keys(info).length === 0)) {
+                console.log('Пустой info, устанавливаем данные из nominationsSettings[0]');
+                const currentNomination = nominationsSettings[0]; // Берем первый элемент в списке
+                setInfo(currentNomination);
+            } else {
+                // Если info не пустой, ищем текущую номинацию по значению nomination
+                const currentNomination = nominationsSettings.find((elem) =>
+                    elem.nomination[0].toLowerCase() === nomination.toLowerCase()
+                );
+    
+                if (currentNomination) {
+                    console.log('Устанавливаем найденную номинацию:', currentNomination);
+                    setInfo(currentNomination);
+                } else {
+                    console.warn('Номинация не найдена:', nomination);
+                }
+            }
+        } else {
+            console.warn('nominationsSettings пустой или не загружен');
         }
-    }, [nomination])
-
+    }, [nomination, nominationsSettings, info]);
+    
     const handleChangeVideos = (e, idx) => {
         const value = e.target.value;
         const updatedTitles = [...videos];  // Создаем новый массив
         updatedTitles[idx] = value;  // Обновляем нужный элемент
         setVideos(updatedTitles);  // Обновляем состояние
     }
-
+    
     const handleFileUpload = async (e, setter, type) => {
         setter('/images/loadingGif.gif')
         const id = localStorage.getItem('id');
         if (id) {
             const file = e.target.files[0];
             e.preventDefault();
-
+            
             const formData = new FormData();
             formData.append("image", file);
             formData.append("type", type); // Указываем тип (avatar или logo)
-
+            
             await axios.post(`/uploadFile/${id}`, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
@@ -101,19 +195,19 @@ function ApplicationPage() {
             });
 
             await axios.post("/auth/getUser", { userId: id, type })
-                .then((res) => res.data)
-                .then((data) => {
-                    console.log(data);
-                    setter(type == "avatar" ? data.avatar : data.logo); // Устанавливаем аватар или логотип
-                });
+            .then((res) => res.data)
+            .then((data) => {
+                console.log(data);
+                setter(type == "avatar" ? data.avatar : data.logo); // Устанавливаем аватар или логотип
+            });
         } else {
             alert("Просим вас авторизоваться");
         }
     };
-
-
+    
+    
     const handleFileSelection = (e, id) => {
-
+        
         
         const files = Array.from(e.target.files);
         let index = id
@@ -130,34 +224,34 @@ function ApplicationPage() {
             const isValidType = ['image/jpeg', 'image/png'].includes(file.type); // Только .png и .jpg
             return isValidSize && isValidType;
         });
-    
+        
         // Ограничение на количество файлов
         if (validFiles.length + selectedFiles[index]?.length > 50) {
             setError('Вы не можете загрузить более 50 файлов.');
             return;
         }
-    
+        
         // Обновляем проект с нужным индексом
         setSelectedFiles((prevFiles) => {
             const updatedFiles = [...prevFiles]; // Копируем старый массив проектов
             updatedFiles[index] = [...(updatedFiles[index] || []), ...validFiles]; // Добавляем файлы в нужный проект
             return updatedFiles;
         });
-    
+        
         setError('');
     };
     
     
-
+    
     // Функция для отправки файлов на сервер
     const handleSubmit = async () => {
         const id = localStorage.getItem('id')
-
+        
         if (selectedFiles.length === 0) {
             setError('Пожалуйста, выберите хотя бы один файл.');
             return;
         }
-
+        
         const formData = new FormData();
         
         selectedFiles.forEach((file) => {
@@ -177,11 +271,26 @@ function ApplicationPage() {
             console.error('Ошибка загрузки файлов:', error);
         }
     };
-
-
+    
+    function groupPhotos(photos, counts) {
+        let groupedPhotos = [];
+        let currentIndex = 0;
+      
+        for (let count of counts) {
+          // Извлекаем подмассив фотографий на основе числа в counts
+          let group = photos.slice(currentIndex, currentIndex + count);
+          groupedPhotos.push(group);
+      
+          // Обновляем текущий индекс для следующей группы
+          currentIndex += count;
+        }
+      
+        return groupedPhotos;
+      }
+    
     const handleSubmitDocuments = async () => {
         const id = localStorage.getItem('id')
-
+        
         if (documents.length > 0) {
             const formData = new FormData();
             documents.forEach((file) => formData.append('documents', file)); // Добавляем файлы в FormData
@@ -197,21 +306,21 @@ function ApplicationPage() {
                 console.error('Ошибка загрузки файлов:', error);
             }
         }
-
+        
     };
 
 
 
-
+    
     const handlePreviewSelection = (e) => {
         setPreviews((prevFiles) => [...prevFiles, e.target.files[0]]); // Добавляем новые файлы к списку
     };
-
+    
     // Функция для отправки файлов на сервер
     const handleSubmitPreview = async () => {
-
+        
         const id = localStorage.getItem('id')
-
+        
         const formData = new FormData();
         previews.forEach((file) => formData.append('images', file)); // Добавляем файлы в FormData
         formData.append("application_id", application_id)
@@ -226,34 +335,34 @@ function ApplicationPage() {
             console.error('Ошибка загрузки файлов:', error);
         }
     };
-
+    
     const handleCheckBox = (e) => {
         setCheckBox((prev) => !prev)
     }
-
+    
     const handleDocumentChange = (e) => {
         const selectedFiles = Array.from(e.target.files);
         if (documents.length + selectedFiles.length > 10) {
             alert("Вы можете загрузить не более 10 файлов.");
             return;
         }
-
+        
         setDocuments((prevFiles) => [...prevFiles, ...selectedFiles]);
     };
-
+    
     const handleDocumentRemove = (index) => {
         setDocuments((prevFiles) => prevFiles.filter((_, i) => i !== index));
     };
-
+    
     const [additionalFields, setAdditionalFields] = useState([])
-
+    
     const addAdditionalField = () => {
         setAdditionalFields(prev => [...prev, ''])
         setInputIdx(prev => prev + 1)
     }   
-
-
-
+    
+    
+    
     const SENDINFORMATION = async () => {
         const id = localStorage.getItem('id');
         let imagesCount = []
@@ -266,43 +375,77 @@ function ApplicationPage() {
             await handleSubmit()
             await handleSubmitPreview()
             await handleSubmitDocuments()
+            
+            if(isNew){
 
-
-            await axios.post('/createApplication', {
-                application: {
-                    nomination,
-                    specialization,
-                    fullName,
-                    city,
-                    logo,
-                    photo,
-                    website,
-                    phone,
-                    about,
-                    awards,
-                    service,
-                    instagram,
-                    youtube,
-                    tiktok,
-                    vk,
-                    videos,
-                    info,
-                    imagesCount
-                    // portfolio: selectedFiles
-                }, application_id: `${application_id}`, id: id
-            })
+                await axios.post('/createApplication', {
+                    application: {
+                        nomination,
+                        specialization,
+                        fullName,
+                        city,
+                        logo,
+                        photo,
+                        website,
+                        phone,
+                        about,
+                        awards,
+                        service,
+                        instagram,
+                        youtube,
+                        tiktok,
+                        vk,
+                        videos,
+                        info,
+                        imagesCount
+                        // portfolio: selectedFiles
+                    }, application_id: `${application_id}`, id: id, isNew
+                })
                 .then((res) => {
                     alert("Ваша заявка успешно отправлена")
                     setDisabled(false)
+                    window.location.href = window.location.href
                 })
+            }else{
+                await axios.post('/updateApplication', {
+                    application: {
+                        nomination,
+                        specialization,
+                        fullName,
+                        city,
+                        logo,
+                        photo,
+                        website,
+                        phone,
+                        about,
+                        awards,
+                        service,
+                        instagram,
+                        youtube,
+                        tiktok,
+                        vk,
+                        videos,
+                        info,
+                        imagesCount
+                        // portfolio: selectedFiles
+                    }, application_id: `${application_id}`, id: id, isNew
+                })
+                .then((res) => {
+                    alert("Ваша заявка успешно отправлена")
+                    setDisabled(false)
+                    window.location.href = window.location.href
+                })
+            }
+            
         }
         else {
             alert("Подтвердите своё согласие на публикацию")
         }
     }
-
-    const [popUp, setPopup] = useState(true)
-
+    
+    const [popUp, setPopup] = useState(false)
+    
+    
     const deletePortfolioImage = (projectIndex, fileIndex) => {
         setSelectedFiles((prevFiles) => 
             prevFiles.map((project, idx) => {
@@ -314,6 +457,8 @@ function ApplicationPage() {
             })
         );
     };
+
+    
     
 
     const handleFieldChange = (index, e) => {
@@ -327,15 +472,15 @@ function ApplicationPage() {
     };
 
     const handleAddFieldChange = (index, e) => {
-        const updatedFields = [...info.additionalFields]; // Create a copy of the fields array
-        updatedFields[index] = {
-            ...updatedFields[index], // Spread existing properties
-            value: e.target.value // Update the value property
-        };
-        setInfo({ ...info, additionalFields: updatedFields }); // Update state with the new fields array
-        console.log(info); // Log updated info for debugging
+        setInfo(prevInfo => {
+            const updatedFields = [...prevInfo.additionalFields]; // Create a copy of the fields array
+            updatedFields[index] = {
+                ...updatedFields[index], // Spread existing properties
+                value: e.target.value // Update the value property
+            };
+            return { ...prevInfo, additionalFields: updatedFields }; // Return the updated info object
+        });
     };
-    
     return (
         <div className={s.container}>
             <div className={s.innerContainer}>
@@ -350,13 +495,13 @@ function ApplicationPage() {
 
                 <div className={s.mainInformation}>
                     <div className={s.block}>
-                        <p>Номинация <span>*</span> {false && <span><br />заполните обязательное поле *</span>}</p>
+                        <p>Номинация <span>*</span> {nomination.length == 0 && <span><br />выберите номинацию *</span>}</p>
                         <div className={s.selectWrapper}>
                             {
                                 nominations &&
                                 <select value={nomination} onChange={(e) => handleChange(e, setNomination)}>
                                     {
-                                        nominations.map((elem) =>
+                                        nominations.map((elem, index) =>
                                             <option value={elem}>{elem}</option>
                                         )
                                     }
@@ -368,7 +513,7 @@ function ApplicationPage() {
                         <p>Ваша специализация: <span>*</span> {false && <span><br />заполните обязательное поле *</span>}</p>
                         <div className={s.selectWrapper}>
                             <select value={specialization} onChange={(e) => handleChange(e, setSpecialization)}>
-                                <option value="Декоратор">Декоратор</option>
+                                <option selected value="Декоратор">Декоратор</option>
                                 <option value="Стиль">Стиль</option>
                                 <option value="Узату той года">Узату той года</option>
                                 <option value="Фото года">Фото года</option>
@@ -429,7 +574,7 @@ function ApplicationPage() {
                                 <p>{`${field.key}`}<span> *</span></p> {/* Отображаем содержимое в <p> */}
                                 <input
                                     type="text"
-                                    // value={field} // Значение инпута из массива fields
+                                    // value={field.value} // Значение инпута из массива fields
                                     onChange={(e) => handleFieldChange(index, e)} // Обработчик изменения
                                 />
                             </div>
@@ -488,7 +633,7 @@ function ApplicationPage() {
 
                         return (
                             <div key={index} className={className}>
-                                <img src={URL.createObjectURL(file)} alt="preview" className={s.previewImage} />
+                                <img src={isNew ? URL.createObjectURL(file) : file} alt="preview" className={s.previewImage} />
                                 <img onClick={() => deletePortfolioImage(0, index)} className={s.closeBtn} src="/images/closeBtn.svg" alt="" />
                             </div>
                         );
@@ -513,7 +658,7 @@ function ApplicationPage() {
                     />
                     <ul className={s.fileList}>
                         {documents && documents.map((file, index) => (
-                            <li key={index}>
+                            <li key={index} onClick={() => window.location.href = file}>
                                 <img src="/images/hugeicons_pdf-02.svg" alt="" />
                                 <span>{file.name}</span> <span className={s.size}>{(file.size / (1024 * 1024)).toFixed(2)}MB</span>
                                 <img className={s.closeBtn} onClick={() => handleDocumentRemove(index)} src="/images/ph_plus-light (1).svg" alt="" />
@@ -537,7 +682,7 @@ function ApplicationPage() {
                                 <label className={s.right} htmlFor={'prevInput' + index}>
                                     {
                                         previews[index] ?
-                                            <img src={previews[index] ? URL.createObjectURL(previews[index]) : { display: "none" }} alt="" />
+                                            <img src={previews[index] && isNew ? URL.createObjectURL(previews[index]) : previews[index]} alt="" />
                                             : <>
 
                                                 <p>Превью для видео</p>
@@ -561,7 +706,7 @@ function ApplicationPage() {
                                 <p>{`${field.key}`}<span> *</span></p> {/* Отображаем содержимое в <p> */}
                                 <input
                                     type="text"
-                                    // value={field} // Значение инпута из массива fields
+                                    // value={field.value} // Значение инпута из массива fields
                                     onChange={(e) => handleAddFieldChange(index, e)} // Обработчик изменения
                                 />
                             </div>
@@ -593,8 +738,8 @@ function ApplicationPage() {
                 : s.large; // Последние 3 изображения в каждой строке
 
         return (
-            <div key={fileIndex} className={className}>
-                <img src={URL.createObjectURL(file)} alt="preview" className={s.previewImage} />
+            <div key={fileIndex} className={className} style={{marginTop: '20px'}}>
+                <img src={isNew ? URL.createObjectURL(file) : file} alt="preview" className={s.previewImage} />
                 <img
                     onClick={() => deletePortfolioImage(index+1, fileIndex)} // Передаем и индекс проекта (index), и индекс файла (fileIndex)
                     className={s.closeBtn}
@@ -616,15 +761,15 @@ function ApplicationPage() {
 
 
                 <div className={s.checkboxBlock}>
-                    <input type="checkbox" id='access' onChange={(e) => handleCheckBox(e)} />
+                    <input type="checkbox" id='access' value={checkbox} onChange={(e) => handleCheckBox(e)} />
                     <label htmlFor='access'> Я подтверждаю своё согласие на публикацию предоставленных данных</label>
                 </div>
 
 
                 <div className={s.btnWrapper}>
                     <div className={s.sendBtn} onClick={SENDINFORMATION} disabled={disabled} style={disabled ? { backgroundColor: "#B22222", cursor: "default" } : {}}>
-                        <p>ОТПРАВИТЬ ЗАЯВКУ</p>
-                        <p>- 1 ед. из вашего баланса</p>
+                        {isNew ? <p>ОТПРАВИТЬ ЗАЯВКУ</p> : <p>СОХРАНИТЬ</p>}
+                        {isNew ? <p>- 1 ед. из вашего баланса</p> : null}
                     </div>
                     {
                         disabled && <img style={{ width: "100px" }} src='/images/loadingGif.gif' />

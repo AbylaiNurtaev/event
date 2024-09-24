@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import s from './AuthorizationPage.module.sass'
 import { useNavigate } from 'react-router-dom'
 import Questions from '../../components/Questions/Questions'
@@ -7,6 +7,7 @@ import axios from '../../axios'
 function AuthorizationPage() {
 
     const navigate = useNavigate()
+
     useEffect(() => {
         window.scroll({
             top: 0,
@@ -15,14 +16,15 @@ function AuthorizationPage() {
     }, [])
 
     const [email, setEmail] = useState('')
-    const [isButtonDisabled, setIsButtonDisabled] = useState(false) // состояние для блокировки кнопки
-    const [timer, setTimer] = useState(0) // для отображения таймера
+    const [isButtonDisabled, setIsButtonDisabled] = useState(false)
+    const [timer, setTimer] = useState(0)
     const [user, setUser] = useState()
 
     const [code, setCode] = useState()
     const [isSecond, setIsSecond] = useState(false)
     const [showCodeInput, setShowCodeInput] = useState(false)
 
+    const inputRef = useRef(null)
 
     const handleChangeEmail = (e) => {
         setEmail(e.target.value)
@@ -32,20 +34,22 @@ function AuthorizationPage() {
         setCode(e.target.value)
     }
 
+    useEffect(() => {
+        if (showCodeInput && inputRef.current) {
+            inputRef.current.focus()
+        }
+    }, [showCodeInput]) // Focus input when showCodeInput changes to true
+
     const sendCode = () => {
         setShowCodeInput(true)
-            axios.post('/auth/register', {
-                email
+        axios.post('/auth/register', { email })
+            .then(res => res.data)
+            .then(data => {
+                setUser(data)
             })
-                .then(res => res.data)
-                .then(data => {
-                    setUser(data)
-                })
-                .catch((err) => console.log(err))
-            
+            .catch((err) => console.log(err))
 
-
-        // Блокируем кнопку и запускаем таймер на 60 секунд
+        // Block the button and start a 60-second timer
         setIsButtonDisabled(true)
         setTimer(60)
 
@@ -53,7 +57,7 @@ function AuthorizationPage() {
             setTimer((prevTimer) => {
                 if (prevTimer <= 1) {
                     clearInterval(interval)
-                    setIsButtonDisabled(false) // Разблокируем кнопку через 60 секунд
+                    setIsButtonDisabled(false) // Unblock the button after 60 seconds
                 }
                 return prevTimer - 1
             })
@@ -68,10 +72,9 @@ function AuthorizationPage() {
         })
             .then(res => res.data)
             .then(data => {
-                console.log(data)
-                if (data.status == "VERIFIED") {
+                if (data.status === "VERIFIED") {
                     navigate(`/cabinet/${user._id}`)
-                    
+                    window.location.href = window.location.href;
                 } else {
                     alert("Неверный код")
                 }
@@ -94,7 +97,7 @@ function AuthorizationPage() {
                         type="text"
                         className={s.input}
                         placeholder='example@mail.com'
-                        onChange={(e) => handleChangeEmail(e)}
+                        onChange={handleChangeEmail}
                         value={email}
                     />
 
@@ -103,19 +106,22 @@ function AuthorizationPage() {
                     </button>
 
                     {
-                        showCodeInput && <>
-                            <p className={s.codeText}>Мы отправили вам код на указанную почту. Пожалуйста, введите его ниже, чтобы продолжить.</p>
-                            <div className={s.inputCode}>
-                                <input
-                                    type="text"
-                                    className={s.input}
-                                    placeholder='Введите код из письма'
-                                    onChange={(e) => handleChangeCode(e)}
-                                    style={{ border: "1px solid #020204" }}
-                                />
-                                <button onClick={verifyCode}>ВОЙТИ</button>
-                            </div>
-                        </>
+                        showCodeInput && (
+                            <>
+                                <p className={s.codeText}>Мы отправили вам код на указанную почту. Пожалуйста, введите его ниже, чтобы продолжить.</p>
+                                <div className={s.inputCode}>
+                                    <input
+                                        type="text"
+                                        className={s.input}
+                                        placeholder='Введите код из письма'
+                                        onChange={handleChangeCode}
+                                        style={{ border: "1px solid #020204" }}
+                                        ref={inputRef}
+                                    />
+                                    <button onClick={verifyCode}>ВОЙТИ</button>
+                                </div>
+                            </>
+                        )
                     }
                 </div>
             </div>

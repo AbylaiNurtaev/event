@@ -56,6 +56,7 @@
         align-items: flex-start
 
         padding: 120px 80px
+        
         .title
             font-family: "Steelfish", sans-serif
             font-weight: 800
@@ -99,23 +100,28 @@
             flex-direction: row
 
             justify-content: flex-start
-            align-items: flex-start
+            align-items: stretch
 
             flex-wrap: wrap
             width: 100%
             margin-top: 20px
             gap: 40px
             padding-bottom: 130px
+            
 
 
             .block
+            
                 border: 1.50px solid #020204
                 padding: 32px
                 
                 width: 35% !important
+                // flex: 1
+                // height: 505px
+                display: flex
+                flex-direction: column // Это важно, чтобы содержимое не нарушало структуру
+                flex-grow: 1
                 
-                height: 505px
-
                 .title
                     font-family: "Steelfish", sans-serif
                     font-weight: 800
@@ -177,12 +183,13 @@
 
 
         width: 1012px
-        height: 884px
+        height: 684px
 
         background: white
 
         padding: 50px
         left: 350px
+        overflow: scroll !important
 
         .topMobileSide
             display: none
@@ -249,6 +256,14 @@
                 line-height: 180%
                 color: #020204
                 width: 100%
+
+                .par
+                    font-family: "Montserrat", sans-serif
+                    font-weight: 400
+                    font-size: 18px
+                    line-height: 180%
+                    color: #020204
+                    width: 100%
 
             .should
                 display: flex
@@ -394,6 +409,7 @@
             padding: 20px
             position: fixed  // Убедитесь, что позиционирование остаётся fixed для модальных окон
             z-index: 100
+            
 
             .topSide, .topMobileSide
                 margin-top: 120px
@@ -422,8 +438,15 @@
 
         .criterion
             .blocks
+                width: 90%
                 .block
-                    width: 0% !important
+                    width: 90% !important
+
+                    .title, .list, button
+                        margin-left: 0
+                    
+                        
+                    
                 
     
         .popup
@@ -460,6 +483,7 @@
                     justify-content: space-between
                     align-items: center
                     // position: relative
+                    
 
                     
 
@@ -478,11 +502,15 @@
 
                     
             .mainSide
-                
+                margin-top: 30px
+
+                .information
+                    margin-bottom: 30px
             
                 .should
                     flex-direction: column
                     gap: 30px
+                    margin-top: 20px
 
                     .block
                         height: auto

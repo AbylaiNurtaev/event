@@ -42,7 +42,6 @@ function Nominations() {
         // Фильтрация номинаций по выбранной категории
         if (selectedCategory === 'Все') {
             setFilteredNominations(nominations);
-            console.log(nominations)
         } else {
             setFilteredNominations(nominations.filter(nomination => nomination.category === selectedCategory));
         }
@@ -107,18 +106,18 @@ function Nominations() {
                             {openedPopupIndex === index && (
                                 <div className={s.popup}>
                                     <div className={s.topSide}>
-                                        <div className={s.title}>{elem.title}</div>
+                                        <div className={s.title}>{elem.nomination[0]}</div>
                                         <div className={s.right}>
-                                            <button>ПОДАТЬ ЗАЯВКУ</button>
+                                            <button onClick={() => navigate('/application/new')}>ПОДАТЬ ЗАЯВКУ</button>
                                             <img src="/images/Frame 3.svg" onClick={closePopup} alt="" />
                                         </div>
                                     </div>
                                     <div className={s.topMobileSide}>
                                         <div className={s.top}>
-                                            <div className={s.title}>{elem.title}</div>
+                                            <div className={s.title}>{elem.nomination[0]}</div>
                                             <img src="/images/Frame 3.svg" onClick={closePopup} alt="" />
                                         </div>
-                                        <button>ПОДАТЬ ЗАЯВКУ</button>
+                                        <button onClick={() => navigate('/application/new')}>ПОДАТЬ ЗАЯВКУ</button>
                                     </div>
                                     <div className={s.mainSide}>
                                         <div className={s.title}>Критерии и оценки</div>
@@ -127,6 +126,7 @@ function Nominations() {
                                                 <div>— {item.text} — {item.percentage}</div>
 
                                             )}
+                                            <p className={s.par} style={{marginTop: '40px'}}>{elem.moreText}</p>
                                         </div>
                                         <div className={s.title}>Требования</div>
                                         <div className={s.should}>

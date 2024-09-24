@@ -43,20 +43,22 @@
         .title, .redTitle
             font-weight: 800
             font-family: steelfish
-            font-size: 140px
+            font-size: 571px
+            color: #ca252a
             z-index: 1
             line-height: 105px
             text-align: center
             
             margin: 0
-            margin-top: 100px
+            margin-top: 200px
 
         .redTitle
             color: #ca252a
             margin-top: 54px
 
         .mobileLines
-            display: none
+            // display: none
+            z-index: 10
 
 
         .buttons
@@ -70,6 +72,11 @@
             z-index: 1
             
             margin-top: 72px
+            width: 100%
+            background: #ca252a
+            height: 120px
+            margin-top: -70px
+            z-index: 25
             
             .left, .right
                 width: 231px
@@ -81,18 +88,26 @@
                 font-size: 18px
                 font-weight: 800
 
-                background: none
+                background: white
                 cursor: pointer
-                order: 0
+                
+                border: 1px solid white
+                background: none
+
+                color: white
+
+                
 
             .right
                 width: 372px
                 height: 70px
-                order: 1
 
-                background: black
-                color: white
-                border: 1px solid black
+                
+
+                background: white
+                color: black
+                border: none
+                // border: 1px solid black
                 
                 .mobileBR
                     display: none
@@ -120,7 +135,7 @@
             
             gap: 200px
 
-            margin-top: 300px
+            // margin-top: 300px
         
 
             .left

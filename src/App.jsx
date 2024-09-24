@@ -26,7 +26,7 @@ function App() {
           <Route path='/login' element={<AuthorizationPage/>}></Route>
           <Route path='/payment' element={<PaymentPage/>}></Route>
           <Route path='/grading' element={<GradingPage/>}></Route>
-          <Route path='/application' element={<ApplicationPage/>}></Route>
+          <Route path='/application/:applicationId' element={<ApplicationPage/>}></Route>
           <Route path='/cabinet/:id' element={<CabinetPage/>}></Route>
         </Route>
         <Route path='/admin' element={<AdminPage/>}></Route>

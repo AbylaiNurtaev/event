@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react'
 import s from './PaymentPage.module.sass'
 import Questions from '../../components/Questions/Questions';
+import axios from '../../axios'
 
 function PaymentPage() {
 
@@ -11,12 +12,16 @@ function PaymentPage() {
         })
     }, [])
 
-    const payment = (price) => {
+    const id = localStorage.getItem('id');
+
+
+    const payment = (price, balance) => {
         const script = document.createElement('script');
         script.src = 'https://js.fortebank.com/widget/be_gateway.js';
         script.async = true;
         document.body.appendChild(script);
 
+    
         script.onload = () => {
             const payment = () => {
                 const params = {
@@ -34,20 +39,41 @@ function PaymentPage() {
                         },
                     },
                     closeWidget: function(status) {
-                        console.debug('close widget callback', status);
+                        console.debug('Widget closed with status:', status);
+    
+                        if (status === 'successful') {
+                            axios.post('/auth/payment', {
+                                id,
+                                price: balance
+                            })
+                            .then((res) => res.data)
+                            .then(data => {
+                                if(data){
+                                    window.location.href = window.location.href
+                                }
+                            })
+                            .catch(err => console.log(err))
+                            
+                            // Здесь можно добавить дополнительную логику, например, редирект на другую страницу или уведомление пользователя
+                        } else if (status === 'cancelled') {
+                            console.log('Оплата отменена');
+                        } else {
+                            console.log('Ошибка при оплате или неопределенный статус');
+                        }
                     }
                 };
                 new window.BeGateway(params).createWidget();
             };
-
-            // Trigger payment function when needed
+    
+            // Запускаем функцию оплаты
             payment();
         };
-
+    
         return () => {
             document.body.removeChild(script);
         };
     };
+    
 
   return (
     <div className={s.container}>
@@ -57,22 +83,22 @@ function PaymentPage() {
             <div className={s.packet}>
                 <div className={s.price}>100 000 ТЕНГЕ</div>
                 <div className={s.value}>1 номинация</div>
-                <button onClick={() => payment(1000)}>ПОПОЛНИТЬ</button>
+                <button onClick={() => payment(10000000, 1)}>ПОПОЛНИТЬ</button>
             </div>
             <div className={s.packet}>
                 <div className={s.price}>180 000 ТЕНГЕ</div>
                 <div className={s.value}>2 номинация</div>
-                <button onClick={() => payment(18000000)}>ПОПОЛНИТЬ</button>
+                <button onClick={() => payment(18000000, 2)}>ПОПОЛНИТЬ</button>
             </div>
             <div className={s.packet}>
                 <div className={s.price}>225 000 ТЕНГЕ</div>
                 <div className={s.value}>3 номинация</div>
-                <button onClick={() => payment(22500000)}>ПОПОЛНИТЬ</button>
+                <button onClick={() => payment(22500000, 3)}>ПОПОЛНИТЬ</button>
             </div>
             <div className={s.packet}>
                 <div className={s.price}>320 000 ТЕНГЕ</div>
                 <div className={s.value}>4 номинация</div>
-                <button onClick={() => payment(32000000)}>ПОПОЛНИТЬ</button>
+                <button onClick={() => payment(32000000, 4)}>ПОПОЛНИТЬ</button>
             </div>
 
         </div>

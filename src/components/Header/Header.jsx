@@ -47,7 +47,7 @@ function Header() {
                 <p onClick={() => navigate('/contacts')} style={location && location.pathname == "/contacts" ? { color: '#f4444a' } : {}}>Контакты</p>
             </div>
 
-            <div className={s.date} onClick={user?.name ? () => navigate('/application') : () => navigate('/login')}>
+            <div className={s.date} onClick={user?.name ? () => navigate('/application/new') : () => navigate('/login')}>
                 <p className={s.dataText}>26-27</p>
                 <div>
                     
@@ -60,7 +60,7 @@ function Header() {
                 user?.name ?
                     <div style={{cursor: "pointer"}} className={s.name}>
                         <h5 onClick={() => navigate(`/cabinet/${user._id}`)}>{user.name}</h5>
-                        <p onClick={() => navigate('/payment')}>Баланс: 0 заявок</p>
+                        <p onClick={() => navigate('/payment')}>Баланс: {user && user.balance} заявок</p>
                     </div> :
                     <div className={s.exit} onClick={() => navigate('/login')}>
                         <img src="/images/exit.svg" alt="exit" />
@@ -85,7 +85,7 @@ function Header() {
                             user?.name ?
                                 <div className={s.name}>
                                     <h5 onClick={() => navigate(`/cabinet/${user._id}`)}>{user.name}</h5>
-                                    <p  onClick={() => navigate('/payment')}>Баланс: 0 заявок</p>
+                                    <p  onClick={() => navigate('/payment')}>Баланс: {user && user.balance} заявок</p>
                                 </div> :
                                 <div className={s.exit} onClick={() => navigate('/login')}>
                                     <img src="/images/exit.svg" alt="exit" />
@@ -101,7 +101,7 @@ function Header() {
                             <p onClick={() => { navigate('/contacts'); setBurgerMenu(false) }} style={location && location.pathname == "/contacts" ? { color: '#f4444a' } : {}}>Контакты</p>
                         </div>
 
-                        <div className={s.date} onClick={() => navigate('/application')}>
+                        <div className={s.date} onClick={() => navigate('/application/new')}>
                             <p className={s.dataText}>26-27</p>
                             <div>
                                 <p>ноября</p>

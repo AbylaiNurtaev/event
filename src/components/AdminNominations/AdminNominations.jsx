@@ -10,10 +10,13 @@ function AdminNominations() {
     const [isEditPopupOpen, setIsEditPopupOpen] = useState(false); // Состояние для редактирования
     const [info, setInfo] = useState([{ text: '', percentage: '' }]);
 
-    const navigate = useNavigate()
+    const [moreText, setMoreText] = useState('');
+
+    const navigate = useNavigate();
     const [newNomination, setNewNomination] = useState({
         nomination: '',
         category: '',
+        moreText: '',
         information: []
     });
     const [editNomination, setEditNomination] = useState(null); // Состояние для текущей редактируемой номинации
@@ -32,11 +35,13 @@ function AdminNominations() {
     const closePopup = () => {
         setIsPopupOpen(false);
         setInfo([{ text: '', percentage: '' }]);
+        setMoreText('');
     };
 
     const openEditPopup = (nomination) => {
         setEditNomination(nomination);
         setInfo(nomination.information); // Установить информацию для редактирования
+        setMoreText(nomination.moreText || ''); // Установить дополнительный текст для редактирования
         setIsEditPopupOpen(true);
     };
 
@@ -44,6 +49,7 @@ function AdminNominations() {
         setIsEditPopupOpen(false);
         setEditNomination(null);
         setInfo([{ text: '', percentage: '' }]);
+        setMoreText('');
     };
 
     const handleChange = (e) => {
@@ -76,12 +82,30 @@ function AdminNominations() {
         setInfo(updatedInfo);
     };
 
+    // Обработчик изменения текста для новой номинации
+    const handleChangeText = (e) => {
+        setMoreText(e.target.value);
+        setNewNomination({
+            ...newNomination,
+            moreText: e.target.value // обновляем поле moreText в объекте newNomination
+        });
+    };
+
+    // Обработчик изменения текста для редактируемой номинации
+    const handleEditTextChange = (e) => {
+        setMoreText(e.target.value);
+        setEditNomination({
+            ...editNomination,
+            moreText: e.target.value // обновляем поле moreText в объекте editNomination
+        });
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
             const response = await axios.post('/nom', { ...newNomination, information: info });
             setAllNominations([...allNominations, response.data]);
-            setNewNomination({ nomination: '', category: '', information: [] });
+            setNewNomination({ nomination: '', category: '', moreText: '', information: [] });
             closePopup();
         } catch (error) {
             console.error('Ошибка при добавлении номинации:', error);
@@ -188,10 +212,14 @@ function AdminNominations() {
                                                 required
                                             />
                                         </div>
-                                        <button type="button" className={s.remove} onClick={() => removeInfoField(index)}><img src='/images/54324.png'></img></button>
+                                        <button type="button" className={s.remove} onClick={() => removeInfoField(index)}><img src='/images/54324.png' alt='Удалить' /></button>
                                     </div>
                                 ))}
                                 <button type="button" className={s.add} onClick={addInfoField}>Добавить информацию</button>
+                                <div className={s.addText}>
+                                    <p>Добавить дополнительный текст</p>
+                                    <textarea value={moreText} onChange={handleChangeText}></textarea>
+                                </div>
                             </div>
 
                             <div className={s.buttons}>
@@ -251,14 +279,18 @@ function AdminNominations() {
                                                 required
                                             />
                                         </div>
-                                        <button type="button" className={s.remove} onClick={() => removeInfoField(index)}><img src='/images/54324.png'></img></button>
+                                        <button type="button" className={s.remove} onClick={() => removeInfoField(index)}><img src='/images/54324.png' alt='Удалить' /></button>
                                     </div>
                                 ))}
                                 <button type="button" className={s.add} onClick={addInfoField}>Добавить информацию</button>
+                                <div className={s.addText}>
+                                    <p>Добавить дополнительный текст</p>
+                                    <textarea value={moreText} onChange={handleEditTextChange}></textarea>
+                                </div>
                             </div>
 
                             <div className={s.buttons}>
-                                <button type="submit">Сохранить</button>
+                                <button type="submit">Сохранить изменения</button>
                                 <button type="button" onClick={closeEditPopup}>Отмена</button>
                             </div>
                         </form>

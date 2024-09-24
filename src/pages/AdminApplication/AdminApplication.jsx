@@ -14,20 +14,29 @@ function AdminApplication() {
 
     const [fields, setFields] = useState([]) // Основные поля
     const [additionalFields, setAdditionalFields] = useState([]) // Дополнительные поля
-
     useEffect(() => {
         axios.get('/nom')
             .then((res) => res.data)
-            .then(data => data.find((nomination) => nomination._id == id))
+            .then(data => {
+                console.log("data", data)
+                console.log("id", id)
+                return data.find((nomination) => nomination._id == id)
+        })
             .then(nomination => {
-                setNomination(nomination)
-                setNameTitle(nomination.nameTitle)
-                setMultipleSelection(nomination.multipleSelection)
-                setFields(nomination.fields.map(field => ({ key: field, value: "" }))) // Преобразуем в объекты
-                setAdditionalFields(nomination.additionalFields.map(field => ({ key: field, value: "" }))) // Преобразуем в объекты
-                setCommand(nomination.command)
+                console.log(nomination)
+                if (nomination) { // Проверяем, что nomination не undefined
+                    setNomination(nomination);
+                    setNameTitle(nomination.nameTitle); // Убедимся, что nameTitle существует
+                    setMultipleSelection(nomination.multipleSelection); // Убедимся, что multipleSelection существует
+                    setFields(nomination.fields); // Защита от отсутствия полей
+                    setAdditionalFields(nomination.additionalFields); // Защита от отсутствия дополнительных полей
+                    setCommand(nomination.command); // Защита от отсутствия команды
+                }
             })
-    }, [id])
+            .catch(error => {
+                console.error('Ошибка при загрузке номинации:', error);
+            });
+    }, [id]);
 
     const handleChange = (e, setter) => {
         setter(e.target.value)

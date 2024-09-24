@@ -2,7 +2,9 @@ import React, { useEffect, useState } from 'react'
 import s from './HomePage.module.sass'
 import Joury from '../../components/Joury/Joury'
 import Questions from '../../components/Questions/Questions'
+import { useNavigate } from 'react-router-dom'
 
+import image from '../../Group 21.png'
 function HomePage() {
 
         // sdadsads
@@ -13,28 +15,31 @@ function HomePage() {
         })
     }, [])
 
+    const navigate = useNavigate()
+
   return (
     <div className={s.container}>
         <div className={s.innerContainer}>
             {/* <img src="/images/white-back.svg" className={s.light} alt="" /> */}
-            <h1 className={s.title}>ПРЕМИЯ, ФОРМИРУЮЩАЯ</h1>
-            <h1 className={s.redTitle}>НОВЫЕ ТРЕНДЫ</h1>
+            <h1 className={s.title}>WEDS</h1>
+            
+            {/* <h1 className={s.redTitle}>НОВЫЕ ТРЕНДЫ</h1> */}
 
             <div className={s.mobileLines}>
-                <img src="/images/Снимок экрана 2024-08-30 224829.png" alt="" />
+                <img src="/images/Group 22.svg" alt="" />
             </div>
 
 
             <div className={s.buttons}>
-                <button className={s.right}>УЧАСТВОВАТЬ<br className={s.mobileBR}/> В ПРЕМИИ - 2024</button>
+                <button className={s.right} onClick={() => navigate('/application/new')}>УЧАСТВОВАТЬ<br className={s.mobileBR}/> В ПРЕМИИ - 2024</button>
                 <button className={s.left}>БИЛЕТ НА ФОРУМ</button>
             </div>
         
-            <img className={s.images} src="/images/Снимок экрана 2024-08-30 225614.png" alt="" />
-            <div className={s.lines}>
+            <img className={s.images} src={image} alt="" />
+            {/* <div className={s.lines}>
                 <img src="/images/Frame 121.svg" alt="" />
                 <img src="/images/Frame 120.svg" alt="" />
-            </div>
+            </div> */}
 
 
             <div className={s.infoBlock}>

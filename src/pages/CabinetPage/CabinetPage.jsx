@@ -191,6 +191,7 @@ function CabinetPage() {
                     <div className={s.saveBlock}>
                         <textarea value={about} onChange={(e) => handleChange(e, setAbout)}></textarea>
                         <button className={s.saveBtn} onClick={updateInfo}>СОХРАНИТЬ</button>
+                        <button className={s.exitBtn} onClick={() => {localStorage.clear(); navigate('/'); window.location.reload();}}>Выйти</button>
 
                     </div>
                 </div>
@@ -224,7 +225,7 @@ function CabinetPage() {
                             <div className={s.application}>
                                 <p className={s.nom}>Номинация: {elem.application_data.nomination ? elem.application_data.nomination : ""}</p>
                                 <p className={s.spec}>{elem.application_data.specialization ? elem.application_data.specialization : ""}</p>
-                                <button>Изменить</button>
+                                <button onClick={() => navigate(`/application/${elem.application_id}`)}>Изменить</button>
                             </div>
                         )
                     }
