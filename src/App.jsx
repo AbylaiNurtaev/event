@@ -13,6 +13,7 @@ import AdminPage from './pages/AdminPage/AdminPage';
 import PaymentPage from './pages/PaymentPage/PaymentPage';
 import GradingPage from './pages/GradingPage/GradingPage';
 import AdminApplication from './pages/AdminApplication/AdminApplication';
+import OpenedJoury from './pages/OpenedJoury/OpenedJoury';
 function App() {
   return (
     <div className="App">
@@ -22,6 +23,7 @@ function App() {
           <Route path='/about' element={<AboutPage/>}></Route>
           <Route path='/nominations' element={<Nominations/>}></Route>
           <Route path='/joury' element={<JouryPage/>}></Route>
+          <Route path='/joury/:id' element={<OpenedJoury/>}></Route>
           <Route path='/contacts' element={<ContactPage/>}></Route>
           <Route path='/login' element={<AuthorizationPage/>}></Route>
           <Route path='/payment' element={<PaymentPage/>}></Route>

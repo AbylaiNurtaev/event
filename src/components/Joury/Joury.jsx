@@ -1,16 +1,26 @@
 import React, { useEffect, useState } from 'react';
 import s from './Joury.module.sass';
+import axios from '../../axios'
+import { useNavigate } from 'react-router-dom';
 
 function Joury() {
-    const peoples = [
-        { name: "Арман и Аскар", par: "Elite Wedding Studio", img: "/images/jouries/jour-1.svg" },
-        { name: "Анна Исаева", par: "Shine Bright Events", img: "/images/jouries/jour-2.svg" },
-        { name: "Аяжан и Альмира", par: "Crystal Moments", img: "/images/jouries/jour-3.svg" },
-        { name: "Марат Садыков", par: "Marsa Events", img: "/images/jouries/jour-4.svg" },
-        { name: "Марьям Сыздыкова", par: "Glamour Events", img: "/images/jouries/image (2).svg" },
-        { name: "Весь список жюри", par: "Еще 23", img: "/images/jouries/jour-6.svg" },
-    ];
+    const [peoples, setPeoples] = useState()
     const [isMobile, setIsMobile] = useState(false);
+    const navigate =  useNavigate()
+
+    useEffect(() => {
+        axios.get('/getJouries')
+        .then(res => res.data)
+        .then(data => {
+            setPeoples(data)    
+        })
+        axios.get('/getJouriesWithAvatars')
+            .then(res => res.data)
+            .then(data => {
+                console.log(data)
+                setPeoples(data);
+            })
+    }, [])
 
     useEffect(() => {
       const mediaQuery = window.matchMedia('(max-width: 767px)'); // Определяем мобильные устройства по ширине экрана
@@ -63,15 +73,16 @@ function Joury() {
             </div>
 
             <div className={s.peoples}>
-                {peoples.map((elem, index) => (
+                {peoples && peoples.map((elem, index) => (
                     <div
                         key={index}
                         className={`${s.block} ${index === currentIndex ? s.active : ''}`}
                         style={{ transform: `translateX(${(index - currentIndex) * 66.66}%)` }}
+                        onClick={() => navigate(`/joury/${elem._id}`)}
                     >
-                        <img src={elem.img} alt="" />
+                        <img src={elem.avatarUrl} alt="" />
                         <h4>{elem.name}</h4>
-                        <p>{elem.par}</p>
+                        <p>{elem.nomination}</p>
                     </div>
                 ))}
             </div>

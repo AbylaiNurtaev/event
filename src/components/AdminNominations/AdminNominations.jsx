@@ -30,6 +30,7 @@ function AdminNominations() {
                 setCategories(uniqueCategories);
             });
     }, []);
+    
 
     const openPopup = () => setIsPopupOpen(true);
     const closePopup = () => {
@@ -182,6 +183,12 @@ function AdminNominations() {
                             </div>
                             <div className={s.formGroup}>
                                 <label>Категория</label>
+                                <select name="category" value={newNomination.nomination} onChange={handleChange}>
+                                    {
+                                        categories.map((elem) => <option>{elem}</option>)
+                                        
+                                    }
+                                </select>
                                 <input
                                     type="text"
                                     name="category"
@@ -249,6 +256,12 @@ function AdminNominations() {
                             </div>
                             <div className={s.formGroup}>
                                 <label>Категория</label>
+                                <select name="category" value={editNomination.nomination} onChange={handleEditChange}>
+                                    {
+                                        categories.map((elem) => <option>{elem}</option>)
+                                        
+                                    }
+                                </select>
                                 <input
                                     type="text"
                                     name="category"

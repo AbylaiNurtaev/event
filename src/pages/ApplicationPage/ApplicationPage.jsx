@@ -83,7 +83,7 @@ function ApplicationPage() {
         }
     }, [applicationId])
 
-    const[btnDisabled, setBtnDisabled] = useState(false)
+    const[btnDisabled, setBtnDisabled] = useState(true)
 
     useEffect(() => {
         const id = localStorage.getItem('id')
@@ -93,6 +93,26 @@ function ApplicationPage() {
             if(data.message == "success"){
                 setPopup(false)
                 setBtnDisabled(false)
+                axios.get('/getDeadline')
+        .then((res) => res.data)
+        .then(data => {
+            if (data && data.length > 0) {
+                const today = new Date();
+                const todayFormatted = today.toISOString().split('T')[0]; // "YYYY-MM-DD"
+                const deadlineDate = data[data.length - 1].date;
+                console.log("TRUE болуы керек", deadlineDate < todayFormatted);
+                
+                if (deadlineDate < todayFormatted) {
+                    // alert("Сроки подачи заявки истекли")
+                    setBtnDisabled(true);  // Ставим кнопку неактивной, если дата прошла
+                } else {
+                    setBtnDisabled(false); // Активируем кнопку, если дата в будущем
+                }
+            }
+        })
+        .catch(error => {
+            console.error('Ошибка при получении данных:', error);
+        });
             }else if(data.message == "no money"){
                 setPopup(true)
                 setBtnDisabled(true)
@@ -143,6 +163,8 @@ function ApplicationPage() {
         const newArrayPreview = previews.filter((_, index) => index !== indexToRemove);
         setPreviews(newArrayPreview);
     };
+
+
     
     const handleChange = (e, setter) => {
         setter(e.target.value);
@@ -173,6 +195,8 @@ function ApplicationPage() {
             console.warn('nominationsSettings пустой или не загружен');
         }
     }, [nomination, nominationsSettings, info]);
+
+
     
     const handleChangeVideos = (e, idx) => {
         const value = e.target.value;
@@ -776,15 +800,17 @@ function ApplicationPage() {
 
 
                 <div className={s.btnWrapper}>
-                    <div className={s.sendBtn} onClick={SENDINFORMATION} disabled={disabled && btnDisabled} style={disabled || btnDisabled ? { backgroundColor: "#DCA9A9", cursor: "default" } : {}}>
-                        {isNew ? <p>ОТПРАВИТЬ ЗАЯВКУ</p> : <p>СОХРАНИТЬ</p>}
-                        {isNew ? <p>- 1 ед. из вашего баланса</p> : null}
-                    </div>
-                    {
-                        disabled && <img style={{ width: "100px" }} src='/images/loadingGif.gif' />
-                    }
-
-                </div>
+    <button
+        className={s.sendBtn}
+        onClick={SENDINFORMATION}
+        disabled={disabled || btnDisabled} // Прямое использование свойства "disabled"
+        style={(disabled || btnDisabled) ? { backgroundColor: "#DCA9A9", cursor: "default" } : {}}
+    >
+        {isNew ? <p>ОТПРАВИТЬ ЗАЯВКУ</p> : <p>СОХРАНИТЬ</p>}
+        {isNew ? <p>- 1 ед. из вашего баланса</p> : null}
+    </button>
+    {disabled && <img style={{ width: "100px" }} src='/images/loadingGif.gif' />}
+</div>
 
 
             </div>

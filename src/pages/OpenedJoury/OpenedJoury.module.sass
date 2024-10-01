@@ -1,0 +1,134 @@
+@font-face 
+    font-family: 'steelfish'
+    src: url('../../components/fonts/stelfish/steelfish.otf')
+
+@font-face 
+    font-family: 'gilroy'
+    src: url('../../components/fonts/Gilroy/Gilroy-Regular.ttf')
+    
+    
+.container
+    display: flex
+    flex-direction: column
+
+    justify-content: center
+    align-items: center
+    width: 100%
+
+    .innerContainer
+        display: flex
+        flex-direction: column
+
+        justify-content: center
+        align-items: center
+
+        width: 90%
+
+        .top
+            display: flex
+            flex-direction: row
+
+            justify-content: space-between
+            align-items: center
+
+            padding-bottom: 34px
+            border-bottom: 1.50px solid rgba(2, 2, 4, 0.8)
+            margin-top: 50px
+
+            width: 100%
+
+            .crumbs
+                text-align: left
+                display: flex
+                flex-direction: row
+                gap: 16px
+                
+                cursor: pointer
+
+                p
+                    font-family: "Inter", system-ui
+                    font-weight: 500
+                    font-size: 18px
+                    line-height: 180%
+                    
+                
+                    color: #020204
+
+        .mainSide
+            display: flex
+            flex-direction: row
+
+            justify-content: space-between
+            align-items: center
+
+            width: 100%
+            margin-top: 60px
+
+            .left
+                display: flex
+                flex-direction: column
+
+                justify-content: flex-start
+                align-items: flex-start
+                width: 60%
+                // background: red
+
+                .title
+                    font-family: "Steelfish", sans-serif
+                    font-weight: 800
+                    font-size: 100px
+                    text-transform: uppercase
+                    color: #000
+
+                .nomination
+                    font-family: "Gilroy", sans-serif
+                    font-weight: 500
+                    font-size: 25px
+                    line-height: 160%
+                    color: #020204
+
+                    padding-bottom: 33px
+                    border-bottom: 1.50px solid rgba(2, 2, 4, 0.22)
+
+                .soc, .socialMedia
+                    font-family: "Gilroy", sans-serif
+                    font-weight: 500
+                    font-size: 16px
+                    line-height: 250%
+                    color: rgba(2, 2, 4, 0.4)
+
+                .socialMedia
+                    color: #020204
+                    line-height: 200%
+                    text-decoration: underline
+                    cursor: pointer
+
+                .about
+                    margin-top: 55px
+                    font-family: "Gilroy", sans-serif
+
+            .right
+                width: 35%
+                display: flex
+                flex-direction: column
+                justify-content: flex-start
+                align-items: flex-start
+                img
+                    width: 100%
+
+        .projectsSide
+            display: flex
+
+            flex-direction: column
+
+            justify-content: flex-start
+            align-items: flex-start
+            
+            margin-top: 100px
+            width: 100%
+            .title
+                font-family: "Steelfish", sans-serif
+                font-weight: 800
+                font-size: 120px
+                text-transform: uppercase
+                color: #000

@@ -74,7 +74,10 @@ function AuthorizationPage() {
             .then(data => {
                 if (data.status === "VERIFIED") {
                     navigate(`/cabinet/${user._id}`)
-                    window.location.href = window.location.href;
+                    setTimeout(() => {
+
+                        window.location.href = window.location.href;
+                    }, 1000)
                 } else {
                     alert("Неверный код")
                 }

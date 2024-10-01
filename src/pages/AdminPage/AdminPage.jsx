@@ -3,6 +3,7 @@ import s from './AdminPage.module.sass'
 import axios from '../../axios'
 import AdminNominations from '../../components/AdminNominations/AdminNominations'
 import AddJoury from '../../components/AddJoury/AddJoury'
+import AddDeadline from '../../components/AddDeadline/AddDeadline'
 
 
 
@@ -47,6 +48,9 @@ function AdminPage() {
                     }
                     {
                         header == "Добавить жюри" && <AddJoury/>
+                    }
+                    {
+                        header == "Сроки подачи" && <AddDeadline/>
                     }
                 </div>
             </div>

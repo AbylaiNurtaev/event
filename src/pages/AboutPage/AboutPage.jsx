@@ -3,6 +3,7 @@ import s from './AboutPage.module.sass'
 import { useNavigate } from 'react-router-dom'
 import Questions from '../../components/Questions/Questions'
 import Joury from '../../components/Joury/Joury'
+import axios from '../../axios'
 
 function AboutPage() {
     const rowList = ["все", "Организация свадьбы", "Ведущие", "Программа", "Декор", "Фотография", "Видео", "Стиль", "Локации", "Special", "Национальная культура"]
@@ -134,6 +135,18 @@ function AboutPage() {
             behavior: "smooth"
         })
     }, [])
+
+    const [deadline, setDeadline] = useState("")
+
+    useEffect(() => {
+        axios.get('/getDeadline')
+        .then(res => res.data)
+        .then(data => {
+            
+            setDeadline(data[data.length-1])
+    })
+    }, [])
+    
     return (
         <div className={s.container}>
             <div className={s.crumbs}>
@@ -184,14 +197,20 @@ function AboutPage() {
 
                 <div className={s.dates}>
                     <div className={s.date}>
-                        <div className={s.title}>26 ноября</div>
+                        {
+                            deadline &&
+                        <div className={s.title}>{deadline.deadline} {deadline.month}</div>
+                        }
                         <div className={s.subTitle}>Форум</div>
                         <p>г. Астана, ул. Кабанбай Батыра, 1</p>
                     </div>
                     <img className={s.desktopArrow} src="/images/strelka.svg" alt="" />
                     <img className={s.mobileStrelka} src="/images/Line 4 (1).svg" alt="" />
                     <div className={s.date} style={{ marginLeft: "56px" }}>
-                        <div className={s.title}>27 ноября</div>
+                    {
+                            deadline &&
+                        <div className={s.title}>{deadline.deadline2} {deadline.month}</div>
+                        }
                         <div className={s.subTitle}>ПРЕМИЯ</div>
                         <p>г. Астана, ул. Кабанбай Батыра, 1</p>
                     </div>

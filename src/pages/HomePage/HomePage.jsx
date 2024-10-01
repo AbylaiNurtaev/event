@@ -3,10 +3,30 @@ import s from './HomePage.module.sass'
 import Joury from '../../components/Joury/Joury'
 import Questions from '../../components/Questions/Questions'
 import { useNavigate } from 'react-router-dom'
+import axios from '../../axios'
 
 import image from '../../Group 21.png'
 function HomePage() {
 
+    function isDateValid(selectedDate) {
+        const today = new Date();
+        const maxDate = new Date(today);
+        
+        // Установите максимальную дату (например, 7 дней с сегодняшнего дня)
+        maxDate.setDate(today.getDate() + 7);
+        
+        // Приведем выбранную дату к объекту Date
+        const selected = new Date(selectedDate);
+        
+        // Проверяем, является ли дата валидной
+        if (selected < today || selected > maxDate) {
+          return false; // Дата недействительна
+        }
+      
+        return true; // Дата корректна
+      }
+      
+      
         // sdadsads
     useEffect(() => {
         window.scroll({
@@ -16,6 +36,17 @@ function HomePage() {
     }, [])
 
     const navigate = useNavigate()
+    const [deadline, setDeadline] = useState("")
+
+    useEffect(() => {
+        axios.get('/getDeadline')
+        .then(res => res.data)
+        .then(data => {
+            
+            setDeadline(data[data.length-1])
+    })
+    }, [])
+    
 
   return (
     <div className={s.container}>
@@ -31,7 +62,8 @@ function HomePage() {
 
 
             <div className={s.buttons}>
-                <button className={s.right} onClick={() => navigate('/application/new')}>УЧАСТВОВАТЬ<br className={s.mobileBR}/> В ПРЕМИИ - 2024</button>
+                
+                <button className={s.right} onClick={isDateValid(deadline.date) ? () => navigate('/application/new') : () => alert("Прошли сроки подачи заявок")}>УЧАСТВОВАТЬ<br className={s.mobileBR}/> В ПРЕМИИ - 2024</button>
                 <button className={s.left}>БИЛЕТ НА ФОРУМ</button>
             </div>
         
@@ -51,7 +83,7 @@ function HomePage() {
                 </div>
                 <div className={s.right}>
                     <div className={s.title}>РАСПИСАНИЕ</div>
-                    <div className={s.date}>26 НОЯБРЯ</div>
+                    <div className={s.date}>{deadline.deadline} {deadline.month}</div>
                     <div className={s.subTitle}>ФОРУМ</div>
                     <p className={s.par}>г. Астана, улица Кабанбай Батыра, 1</p>
                     <div className={s.images}>
@@ -59,7 +91,10 @@ function HomePage() {
                         <img src="/images/—Pngtree—cute gold decoration ribbon_8438236 3 (1).svg" alt="" />
                     </div>
                     <img className={s.fetil} src="/images/Frame 23.svg" alt="" />
-                    <div className={s.date1}>27 НОЯБРЯ</div>
+                    {
+                        deadline &&
+                    <div className={s.date1}>{deadline.deadline2} {deadline.month}</div>
+                    }
                     <div className={s.subTitle}>ПРЕМИЯ</div>
                     <p className={s.par}>г. Астана, улица Кабанбай Батыра, 1</p>
                     <button>КУПИТЬ БИЛЕТ НА ЦЕРЕМОНИЮ</button>

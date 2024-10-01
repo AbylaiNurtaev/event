@@ -5,7 +5,7 @@ import axios from '../../axios'
 
 function Header() {
 
-    const location = useLocation()
+
     const navigate = useNavigate()
 
     const [burgerMenu, setBurgerMenu] = useState()
@@ -26,10 +26,33 @@ function Header() {
     }
 
 
+    const id = localStorage.getItem('id')
+
+    const [deadline, setDeadline] = useState("")
+
     useEffect(() => {
+        axios.get('/getDeadline')
+        .then(res => res.data)
+        .then(data => {
+            
+            setDeadline(data[data.length-1])
+            console.log(data[data.length-1])
+    })
+    }, [])
+    
+    // useEffect(() => {
+    //     axios.post('/auth/getUser', {userId: id})
+    //     .then((res) => res.data)
+    //     .then(data => console.log(data, id))
+    // }, [id])
+    const location = useLocation()
+
+    useEffect(() => {
+        // console.log("Запрос")
         axios.post('/auth/getUserByToken')
             .then(res => res.data)
             .then(data => {
+                console.log(data)
                 setUser(data)
     })
             .catch((err) => {})
@@ -48,11 +71,16 @@ function Header() {
             </div>
 
             <div className={s.date} onClick={user?.name ? () => navigate('/application/new') : () => navigate('/login')}>
-                <p className={s.dataText}>26-27</p>
+                {
+                    deadline && 
+                    <p className={s.dataText}>{deadline.deadline}-{deadline.deadline2}</p>
+                }
                 <div>
-                    
-                    <p>ноября</p>
-                    <button>подать заявку</button>
+                    {
+                        deadline &&
+                        <p>{deadline.month}</p>
+                    }
+                    <button >подать заявку</button>
                 </div>
             </div>
 
