@@ -4,6 +4,7 @@ import axios from '../../axios'
 import AdminNominations from '../../components/AdminNominations/AdminNominations'
 import AddJoury from '../../components/AddJoury/AddJoury'
 import AddDeadline from '../../components/AddDeadline/AddDeadline'
+import AllUsers from '../../components/AllUsers/AllUsers'
 
 
 
@@ -40,6 +41,7 @@ function AdminPage() {
                     <p onClick={() => setHeader("Добавить жюри")}>Добавить жюри</p>
                     <p onClick={() => setHeader("Номинации")}>Номинации</p>
                     <p onClick={() => setHeader("Сроки подачи")}>Сроки подачи</p>
+                    <p onClick={() => setHeader("Пользователи")}>Пользователи</p>
                     
                 </div>
                 <div className={s.innerContainer}>
@@ -51,6 +53,9 @@ function AdminPage() {
                     }
                     {
                         header == "Сроки подачи" && <AddDeadline/>
+                    }
+                    {
+                        header == "Пользователи" && <AllUsers/>
                     }
                 </div>
             </div>

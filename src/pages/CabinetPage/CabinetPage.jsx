@@ -86,6 +86,7 @@ function CabinetPage() {
 
     const [isNew, setIsNew] = useState(true)
     const [localPortfolioFiles, setLocalPortfolioFiles] = useState([]);
+    const [newFiles, setNewFiles] = useState([]);
 
 
     const cities = [
@@ -117,10 +118,26 @@ function CabinetPage() {
         func(e.target.value)
     }
 
+    // const [deletingImages, setDeletingImages] = useState([])
     const deletePortfolioImage = (fileIndex) => {
         setSelectedFiles((prevFiles) => 
             prevFiles.filter((_, idx) => idx !== fileIndex) // Убираем файл по индексу
         );
+        axios.post('/deleteImageFromPortfolio', {
+            userId: id,
+            idx: fileIndex
+        })
+        .then((res) => res.data)
+        .then((data) => console.log(data))
+
+        console.log(fileIndex)
+    };
+
+    const deleteNewImages = (fileIndex) => {
+        setLocalPortfolioFiles((prevFiles) => 
+            prevFiles.filter((_, idx) => idx !== fileIndex) // Убираем файл по индексу
+        );
+        // setDeletingImages
     };
 
     const updateInfo = async () => {
@@ -129,7 +146,7 @@ function CabinetPage() {
         if (
             company.length >= 1 &&
             name.length >= 1 &&
-            nomination.length >= 1 &&
+            nomination && nomination.length >= 1 &&
             job.length >= 1 &&
             about.length >= 1
         ) {
@@ -146,13 +163,13 @@ function CabinetPage() {
             formData.append('city', city);
     
             // Добавляем каждый файл в FormData
-            selectedFiles.forEach((file) => {
-                formData.append('portfolio', file); // Здесь используем 'portfolio' как имя поля
+            // selectedFiles.forEach((file, index) => {
+            //     formData.append(`portfolio`, file); 
+            // });
+            newFiles.forEach((file, index) => {
+                formData.append(`portfolio`, file); 
             });
-            
-            localPortfolioFiles.forEach((file) => {
-                formData.append('portfolio', file); // Здесь используем 'portfolio' как имя поля
-            });
+            console.log(newFiles)
     
             try {
                 const response = await axios.post('/auth/updateInfo', formData, {
@@ -235,7 +252,9 @@ function CabinetPage() {
             setError('Вы не можете загрузить более 50 файлов.');
             return;
         }
+
         setLocalPortfolioFiles((prevFiles) => [...prevFiles, ...validFiles.map(file => URL.createObjectURL(file))]); 
+        setNewFiles((prevFiles) => [...prevFiles, ...validFiles]); 
 
         // Обновляем проект с нужным индексом
         // setSelectedFiles((prevFiles) => {
@@ -287,7 +306,7 @@ function CabinetPage() {
                         <input value={name} onChange={(e) => handleChange(e, setName)} type="text" />
                     </div>
                     <div className={s.block}>
-                        <p>Номинация: <span>*</span> {nomination.length <= 1 && sended && <span><br />заполните обязательное поле *</span>}</p>
+                        <p>Номинация: <span>*</span> {nomination && nomination.length <= 1 && sended && <span><br />заполните обязательное поле *</span>}</p>
                         <input value={nomination} type="text" onChange={(e) => handleChange(e, setNomination)} />
                     </div>
                     <div className={s.block}>
@@ -340,47 +359,47 @@ function CabinetPage() {
 
                         </label>
                         <div className={s.previewBlock}>
-                            {localPortfolioFiles && localPortfolioFiles.map((file, index) => {
-                                // Определяем индекс строки
-                                const rowIndex = Math.floor(index / 7);
-                                // Определяем позицию внутри строки
-                                const positionInRow = index % 7;
-
-                                // Логика для определения классов
-                                const className =
+                            <div className={s.newFiles}>
+                                {localPortfolioFiles && localPortfolioFiles.map((file, index) => {
+                                    const rowIndex = Math.floor(index / 7);
+                                    const positionInRow = index % 7;
+                                    
+                                    const className =
                                     positionInRow < 4
-                                        ? s.small // Первые 4 изображения в каждой строке
-                                        : s.large; // Последние 3 изображения в каждой строке
+                                    ? s.small
+                                    : s.large;
+                                    
+                                    return (
+                                        <div key={index} className={className}>
+                                            <img src={isNew ? URL.createObjectURL(file) : file} alt="preview" className={s.previewImage} />
+                                            <img onClick={() => deleteNewImages(index)} className={s.closeBtn} src="/images/closeBtn.svg" alt="" />
+                                        </div>
+                                    );
+                                })}
+                            </div>
 
-                                return (
-                                    <div key={index} className={className}>
-                                        <img src={isNew ? URL.createObjectURL(file) : file} alt="preview" className={s.previewImage} />
-                                        <img onClick={() => deletePortfolioImage(index)} className={s.closeBtn} src="/images/closeBtn.svg" alt="" />
-                                    </div>
-                                );
-                                // 1 - вариант: Создать внутри User поле для жюри куда буду закидываться фотки и сделать гет запрос отдельный в index js
-                                // 2 - вариант: Закидывать портфолио как на апликейшн и пользоваться этими функциями готовыми
-                            })}
-                            {selectedFiles && selectedFiles.map((file, index) => {
-                                // Определяем индекс строки
-                                const rowIndex = Math.floor(index / 7);
-                                // Определяем позицию внутри строки
-                                const positionInRow = index % 7;
+                                {
+                                    selectedFiles && selectedFiles.length >= 1 &&
+                                    <p>Загруженные файлы:</p>
+                                }
+                            <div className={s.oldFiles}>
+                                {selectedFiles && selectedFiles.map((file, index) => {
+                                    const rowIndex = Math.floor(index / 7);
+                                    const positionInRow = index % 7;
+                                    const className =
+                                        positionInRow < 4
+                                            ? s.small
+                                            : s.large;
 
-                                // Логика для определения классов
-                                const className =
-                                    positionInRow < 4
-                                        ? s.small // Первые 4 изображения в каждой строке
-                                        : s.large; // Последние 3 изображения в каждой строке
+                                    return (
+                                        <div key={index} className={className}>
+                                            <img src={isNew ? URL.createObjectURL(file) : file} alt="preview" className={s.previewImage} />
+                                            <img onClick={() => deletePortfolioImage(index)} className={s.closeBtn} src="/images/closeBtn.svg" alt="" />
+                                        </div>
+                                    );
 
-                                return (
-                                    <div key={index} className={className}>
-                                        <img src={isNew ? URL.createObjectURL(file) : file} alt="preview" className={s.previewImage} />
-                                        <img onClick={() => deletePortfolioImage(index)} className={s.closeBtn} src="/images/closeBtn.svg" alt="" />
-                                    </div>
-                                );
-
-                            })}
+                                })}
+                            </div>
                         </div>
                     </div>
                     }

@@ -19,7 +19,6 @@ function ApplicationPage() {
             .then((res) => res.data)
             .then(data => {
                 setNominationsSettings(data)
-                console.log("nomination settings", data)
                 const uniqueCategories = [...new Set(data.map(item => item.nomination[0]))];
                 setNominations(uniqueCategories);
             })
@@ -32,14 +31,12 @@ function ApplicationPage() {
             setPopup(false)
             setIsNew(false)
             const userId = localStorage.getItem('id')
-            console.log("dsa", applicationId)
             axios.post('/auth/getAllInfo', {
                 userId,
                 application_id: applicationId
             })
             .then((res) => res.data)
             .then(data => {
-                console.log("das", data)
                 setLogo(data.user.logo)
                 setPhoto(data.user.avatar)
                 setDocuments(data.documents)
@@ -59,6 +56,7 @@ function ApplicationPage() {
             })
             .then(res => res.data)
             .then(data => {
+                console.log("INFFOO", data.application_data.info)
                 setAbout(data.application_data.about)
                 setSpecialization(data.application_data.specialization)
                 setFullName(data.application_data.fullName)
@@ -75,7 +73,6 @@ function ApplicationPage() {
                 setTiktok(data.application_data.tiktok)
                 setInfo(data.application_data.info);
                 setAdditionalFields(data.application_data.info.additionalFields)
-                // setInfo({ ...info, fields: data.application_data.info.fields });
                 // setCheckBox(true)
                 // console.log(data)
             })
@@ -171,7 +168,6 @@ function ApplicationPage() {
     };
     useEffect(() => {
         if (nominationsSettings && nominationsSettings.length > 0) {
-            console.log('Текущий info:', info);
     
             // Проверяем, пустой ли info (null, undefined, пустая строка, пустой массив или объект)
             if (!info || (Array.isArray(info) && info.length === 0) || (typeof info === 'object' && Object.keys(info).length === 0)) {
@@ -185,7 +181,6 @@ function ApplicationPage() {
                 );
     
                 if (currentNomination) {
-                    console.log('Устанавливаем найденную номинацию:', currentNomination);
                     setInfo(currentNomination);
                 } else {
                     console.warn('Номинация не найдена:', nomination);
@@ -239,7 +234,7 @@ function ApplicationPage() {
         
         const files = Array.from(e.target.files);
         let index = id
-        console.log(id)
+
         if (id !== 0) {
             const str = id;
             const matchedNumber = str.match(/\d+/); // находим число
@@ -287,7 +282,12 @@ function ApplicationPage() {
                 formData.append('images', file[i])
             }
         }); // Добавляем файлы в FormData
-        formData.append("application_id", application_id)
+        if(isNew){
+
+            formData.append("application_id", application_id)
+        }else{
+            formData.append("application_id", applicationId)
+        }
         try {
             const response = await axios.post(`/api/uploadPortfolio/${id}`, formData, {
                 headers: {
@@ -322,7 +322,12 @@ function ApplicationPage() {
         if (documents.length > 0) {
             const formData = new FormData();
             documents.forEach((file) => formData.append('documents', file)); // Добавляем файлы в FormData
-            formData.append("application_id", application_id)
+            if(isNew){
+
+                formData.append("application_id", application_id)
+            }else{
+                formData.append("application_id", applicationId)
+            }
             try {
                 const response = await axios.post(`/api/uploadDocuments/${id}`, formData, {
                     headers: {
@@ -351,7 +356,12 @@ function ApplicationPage() {
         
         const formData = new FormData();
         previews.forEach((file) => formData.append('images', file)); // Добавляем файлы в FormData
-        formData.append("application_id", application_id)
+        if(isNew){
+
+            formData.append("application_id", application_id)
+        }else{
+            formData.append("application_id", applicationId)
+        }
         try {
             const response = await axios.post(`/api/uploadPreview/${id}`, formData, {
                 headers: {
@@ -385,13 +395,15 @@ function ApplicationPage() {
     const [additionalFields, setAdditionalFields] = useState([])
     
     const addAdditionalField = () => {
-        setAdditionalFields(prev => [...prev, ''])
-        setInputIdx(prev => prev + 1)
-    }   
-    
+        setAdditionalFields(prev => [
+            ...prev,
+            { key: `Field ${prev.length + 1}`, value: '' } // Добавляем новый объект с ключом и пустым значением
+        ]);
+    };
     
     
     const SENDINFORMATION = async () => {
+        console.log("ОТПРАВ ИНФО", info)
         if(btnDisabled){
             alert("Пополните баланс")
         }else{
@@ -400,7 +412,6 @@ function ApplicationPage() {
             for (let i = 0; i < selectedFiles.length; i++){
                 imagesCount.push(selectedFiles[i].length)
             }
-            console.log(selectedFiles)
             if (checkbox) {
                 setDisabled(true)
                 await handleSubmit()
@@ -408,7 +419,6 @@ function ApplicationPage() {
                 await handleSubmitDocuments()
                 
                 if(isNew){
-    
                     await axios.post('/createApplication', {
                         application: {
                             nomination,
@@ -435,7 +445,7 @@ function ApplicationPage() {
                     .then((res) => {
                         alert("Ваша заявка успешно отправлена")
                         setDisabled(false)
-                        window.location.href = window.location.href
+                        // window.location.href = window.location.href
                     })
                 }else{
                     await axios.post('/updateApplication', {
@@ -459,10 +469,10 @@ function ApplicationPage() {
                             info,
                             imagesCount
                             // portfolio: selectedFiles
-                        }, application_id: `${application_id}`, id: id, isNew
+                        }, application_id: `${applicationId}`, id: id
                     })
                     .then((res) => {
-                        alert("Ваша заявка успешно отправлена")
+                        alert("Ваша заявка успешно обновлена")
                         setDisabled(false)
                         window.location.href = window.location.href
                     })
@@ -495,25 +505,55 @@ function ApplicationPage() {
     
 
     const handleFieldChange = (index, e) => {
-        const updatedFields = [...info.fields]; // Create a copy of the fields array
+        const updatedFields = [...info.fields];
         updatedFields[index] = {
-            ...updatedFields[index], // Spread existing properties
-            value: e.target.value // Update the value property
+            ...updatedFields[index],
+            value: e.target.value // обновляем значение для конкретного поля
         };
-        setInfo({ ...info, fields: updatedFields }); // Update state with the new fields array
-        console.log(info); // Log updated info for debugging
-    };
-
-    const handleAddFieldChange = (index, e) => {
-        setInfo(prevInfo => {
-            const updatedFields = [...prevInfo.additionalFields]; // Create a copy of the fields array
-            updatedFields[index] = {
-                ...updatedFields[index], // Spread existing properties
-                value: e.target.value // Update the value property
-            };
-            return { ...prevInfo, additionalFields: updatedFields }; // Return the updated info object
+        
+        setInfo({
+            ...info, // сохраняем остальные поля объекта info
+            fields: updatedFields // обновляем массив fields
         });
     };
+
+    const handleAddFieldChange = (outerIndex, innerIndex, e) => {
+        setInfo(prevInfo => {
+            // Проверяем, что у нас есть нужные данные
+            if (!prevInfo || !prevInfo.additionalFields) {
+                console.error('Проблема с данными в info или additionalFields');
+                return prevInfo;
+            }
+    
+            // Обновляем поля в соответствии с переданными индексами
+            const updatedFields = prevInfo.additionalFields.map((fields, i) => {
+                if (i === outerIndex) {
+                    return fields.map((field, j) => {
+                        if (j === innerIndex) {
+                            return {
+                                ...field,
+                                value: e.target.value // Обновляем только нужное поле
+                            };
+                        }
+                        return field; // Возвращаем остальное без изменений
+                    });
+                }
+                return fields; // Возвращаем остальные массивы без изменений
+            });
+    
+            // Возвращаем обновленный объект
+            return {
+                ...prevInfo,
+                additionalFields: updatedFields // Обновляем только additionalFields
+            };
+        });
+    
+        console.log('Updated Info:', info); // Для проверки обновлённого состояния
+    };
+    
+    
+    
+    
     return (
         <div className={s.container}>
             <div className={s.innerContainer}>
@@ -607,7 +647,7 @@ function ApplicationPage() {
                                 <p>{`${field.key}`}<span> *</span></p> {/* Отображаем содержимое в <p> */}
                                 <input
                                     type="text"
-                                    // value={field.value} // Значение инпута из массива fields
+                                    value={field.value || ''} // Значение инпута из массива fields
                                     onChange={(e) => handleFieldChange(index, e)} // Обработчик изменения
                                 />
                             </div>
@@ -732,19 +772,21 @@ function ApplicationPage() {
 
                 {additionalFields && 
                     additionalFields.map((elem, index) => 
-                    <div className={s.additionalFields}>
-                        {
-                        info && info.additionalFields.map((field, index) => (
-                            <div key={index} className={s.block}>
-                                <p>{`${field.key}`}<span> *</span></p> {/* Отображаем содержимое в <p> */}
-                                <input
-                                    type="text"
-                                    // value={field.value} // Значение инпута из массива fields
-                                    onChange={(e) => handleAddFieldChange(index, e)} // Обработчик изменения
-                                />
-                            </div>
-                        ))
-                        }
+                    <div className={s.additionalFields} key={index}>
+{
+    info && info.additionalFields.map((field, idx) => (
+        <div key={`additional-${idx}`} className={s.additionalFields}>
+            <div className={s.block}>
+                <p>{`${field.key}`}<span> *</span></p>
+                <input
+                    type="text"
+                    value={field.value || ''} // Значение инпута
+                    onChange={(e) => handleAddFieldChange(index, idx, e)} // Обработчик изменения
+                />
+            </div>
+        </div>
+    ))
+}
                         <div className={s.block}>
 
                         </div>
