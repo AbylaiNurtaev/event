@@ -39,7 +39,7 @@ function ApplicationPage() {
             .then(data => {
                 setLogo(data.user.logo)
                 setPhoto(data.user.avatar)
-                setDocuments(data.documents)
+                setDocuments(data.documents || [])
                 setPreviews(data.previews)
                 setVideos(data.application_data.videos)
 
@@ -321,7 +321,10 @@ function ApplicationPage() {
         
         if (documents.length > 0) {
             const formData = new FormData();
-            documents.forEach((file) => formData.append('documents', file)); // Добавляем файлы в FormData
+            documents.forEach((file) => 
+                formData.append('documents', file)
+                // formData.append('documentNames', file.name)
+            ); // Добавляем файлы в FormData
             if(isNew){
 
                 formData.append("application_id", application_id)
@@ -333,7 +336,9 @@ function ApplicationPage() {
                     headers: {
                         'Content-Type': 'multipart/form-data',
                     },
-                });
+                })
+                .then(res => res.data)
+                .then((data => console.log("ДОКУМЕНТЫ", data)))
                 console.log('Файлы успешно загружены:', response.data);
             } catch (error) {
                 console.error('Ошибка загрузки файлов:', error);
@@ -355,7 +360,10 @@ function ApplicationPage() {
         const id = localStorage.getItem('id')
         
         const formData = new FormData();
-        previews.forEach((file) => formData.append('images', file)); // Добавляем файлы в FormData
+        if(previews && previews.length >= 1){
+
+            previews.forEach((file) => formData.append('images', file)); // Добавляем файлы в FormData
+        }
         if(isNew){
 
             formData.append("application_id", application_id)
@@ -380,7 +388,7 @@ function ApplicationPage() {
     
     const handleDocumentChange = (e) => {
         const selectedFiles = Array.from(e.target.files);
-        if (documents.length + selectedFiles.length > 10) {
+        if (documents && documents.length + selectedFiles.length > 10) {
             alert("Вы можете загрузить не более 10 файлов.");
             return;
         }
@@ -389,7 +397,14 @@ function ApplicationPage() {
     };
     
     const handleDocumentRemove = (index) => {
+        const id = localStorage.getItem('id')
         setDocuments((prevFiles) => prevFiles.filter((_, i) => i !== index));
+        if(!isNew){
+            axios.delete(`/api/deleteDocument/${id}/${applicationId}/${index}`)
+            .then((res) => res.data)
+            .then(data => console.log(data))
+            .catch((err) => console.log(err))
+        }
     };
     
     const [additionalFields, setAdditionalFields] = useState([])
@@ -731,10 +746,17 @@ function ApplicationPage() {
                     />
                     <ul className={s.fileList}>
                         {documents && documents.map((file, index) => (
-                            <li key={index} onClick={() => window.location.href = file}>
+                            <li key={index}>
                                 <img src="/images/hugeicons_pdf-02.svg" alt="" />
-                                <span>{file.name}</span> <span className={s.size}>{(file.size / (1024 * 1024)).toFixed(2)}MB</span>
-                                <img className={s.closeBtn} onClick={() => handleDocumentRemove(index)} src="/images/ph_plus-light (1).svg" alt="" />
+                                <span >
+            {typeof file === 'string' ? decodeURIComponent(file.split('/').pop().split('?')[0]) : file.name}
+            </span>
+                                {
+                                    isNew ? 
+                                    <span className={s.size}>{(file.size / (1024 * 1024)).toFixed(2)}MB</span> : null
+                                }
+
+                                <img className={s.closeBtn} style={!isNew ? {marginLeft: '30px'}: {} } onClick={() => handleDocumentRemove(index)} src="/images/ph_plus-light (1).svg" alt="" />
                             </li>
                         ))}
                     </ul>
