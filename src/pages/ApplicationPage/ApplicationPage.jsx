@@ -398,11 +398,12 @@ function ApplicationPage() {
     
     const handleDocumentRemove = (index) => {
         const id = localStorage.getItem('id')
+        console.log(id)
         setDocuments((prevFiles) => prevFiles.filter((_, i) => i !== index));
         if(!isNew){
             axios.delete(`/api/deleteDocument/${id}/${applicationId}/${index}`)
             .then((res) => res.data)
-            .then(data => console.log(data))
+            .then(data => console.log("Удаление ", data))
             .catch((err) => console.log(err))
         }
     };
