@@ -23,6 +23,7 @@ function Footer() {
             </div>
 
             <div className={s.bottom}>
+                <button className={s.partnerBtn} onClick={() => window.location.href = 'https://web.whatsapp.com'}>стать партнёром</button>
                 <img src="/images/soc_med/instagram.svg" alt="" />
                 <img src="/images/soc_med/telegram.svg" alt="" />
                 <img src="/images/soc_med/youtube.svg" alt="" />

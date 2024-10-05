@@ -5,6 +5,7 @@ import AdminNominations from '../../components/AdminNominations/AdminNominations
 import AddJoury from '../../components/AddJoury/AddJoury'
 import AddDeadline from '../../components/AddDeadline/AddDeadline'
 import AllUsers from '../../components/AllUsers/AllUsers'
+import Applications from '../../components/Applications/Applications'
 
 
 
@@ -42,6 +43,7 @@ function AdminPage() {
                     <p onClick={() => setHeader("Номинации")}>Номинации</p>
                     <p onClick={() => setHeader("Сроки подачи")}>Сроки подачи</p>
                     <p onClick={() => setHeader("Пользователи")}>Пользователи</p>
+                    <p onClick={() => setHeader("Заявки")}>Заявки</p>
                     
                 </div>
                 <div className={s.innerContainer}>
@@ -56,6 +58,9 @@ function AdminPage() {
                     }
                     {
                         header == "Пользователи" && <AllUsers/>
+                    }
+                    {
+                        header == "Заявки" && <Applications/>
                     }
                 </div>
             </div>

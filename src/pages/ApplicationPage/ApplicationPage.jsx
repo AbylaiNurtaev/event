@@ -8,7 +8,8 @@ import BalancePopup from '../../components/BalancePopup/BalancePopup';
 function ApplicationPage() {
     const navigate = useNavigate();
     const { applicationId } = useParams()
-
+    
+    const [infoCopy, setInfoCopy] = useState()
     useEffect(() => {
         window.scroll({
             top: 0,
@@ -45,6 +46,8 @@ function ApplicationPage() {
 
                 const photos = data.portfolio
                 const counts = data.application_data.imagesCount
+                console.log('counts from useEffect', counts)
+                setImagesCount(counts)
                 const result = groupPhotos(photos, counts);
                 setSelectedFiles(result)
 
@@ -72,6 +75,8 @@ function ApplicationPage() {
                 
                 setTiktok(data.application_data.tiktok)
                 setInfo(data.application_data.info);
+                setInfoCopy(data.application_data.info);
+                
                 setAdditionalFields(data.application_data.info.additionalFields)
                 // setCheckBox(true)
                 // console.log(data)
@@ -79,6 +84,8 @@ function ApplicationPage() {
             .catch((err) => console.log(err))
         }
     }, [applicationId])
+
+    console.log("INFOCOPY", infoCopy)
 
     const[btnDisabled, setBtnDisabled] = useState(true)
 
@@ -140,25 +147,44 @@ function ApplicationPage() {
     const [tiktok, setTiktok] = useState('');
 
     const [selectedFiles, setSelectedFiles] = useState([]);
+    const [selectedNewFiles, setSelectedNewFiles] = useState([]);
     const [error, setError] = useState('');
     const [videos, setVideos] = useState([]);
     const [previews, setPreviews] = useState([])
 
+    const [newVideos, setNewVideos] = useState([]);
+    const [newPreviews, setNewPreviews] = useState([])
+
     const [checkbox, setCheckBox] = useState(false)
     const [disabled, setDisabled] = useState(false)
     const [documents, setDocuments] = useState([])
+    const [imagesCount, setImagesCount] = useState()
 
     
     const application_id = Date.now()
-    const [info, setInfo] = useState(null)
+    const [info, setInfo] = useState()
     const [inputIdx, setInputIdx] = useState(1)
     
     const deleteVideo = (indexToRemove) => {
+        const id = localStorage.getItem('id')
+        axios.delete(`/api/removePreview/${id}/${applicationId}/${indexToRemove}`)
+        .then(res => res.data)
+        .then(data => console.log(data))
+        .catch(err => console.log(err))
+        
         // Создаем новый массив, исключая элемент с индексом indexToRemove
         const newArray = videos.filter((_, index) => index !== indexToRemove);
         setVideos(newArray);
         const newArrayPreview = previews.filter((_, index) => index !== indexToRemove);
         setPreviews(newArrayPreview);
+    };
+
+    const deleteNewVideo = (indexToRemove) => {
+        // Создаем новый массив, исключая элемент с индексом indexToRemove
+        const newArray = newVideos.filter((_, index) => index !== indexToRemove);
+        setNewVideos(newArray);
+        const newArrayPreview = newPreviews.filter((_, index) => index !== indexToRemove);
+        setNewPreviews(newArrayPreview);
     };
 
 
@@ -168,20 +194,22 @@ function ApplicationPage() {
     };
     useEffect(() => {
         if (nominationsSettings && nominationsSettings.length > 0) {
-    
-            // Проверяем, пустой ли info (null, undefined, пустая строка, пустой массив или объект)
-            if (!info || (Array.isArray(info) && info.length === 0) || (typeof info === 'object' && Object.keys(info).length === 0)) {
-                console.log('Пустой info, устанавливаем данные из nominationsSettings[0]');
+            // Проверяем, если info пустой
+            if (!info || Object.keys(info).length === 0) {
                 const currentNomination = nominationsSettings[0]; // Берем первый элемент в списке
-                setInfo(currentNomination);
+                console.log("ТЕКУЩАЯ НОМИНАЦИЯ", currentNomination);
+                
+                setInfo(JSON.parse(JSON.stringify(currentNomination))); // Глубокое копирование
+                setInfoCopy(JSON.parse(JSON.stringify(currentNomination))); // Глубокое копирование
             } else {
                 // Если info не пустой, ищем текущую номинацию по значению nomination
                 const currentNomination = nominationsSettings.find((elem) =>
                     elem.nomination[0].toLowerCase() === nomination.toLowerCase()
                 );
-    
+                
                 if (currentNomination) {
-                    setInfo(currentNomination);
+                    console.log("ТЕКУЩАЯ НОМИНАЦИЯ", currentNomination);
+                    setInfo(JSON.parse(JSON.stringify(currentNomination))); // Глубокое копирование
                 } else {
                     console.warn('Номинация не найдена:', nomination);
                 }
@@ -189,7 +217,8 @@ function ApplicationPage() {
         } else {
             console.warn('nominationsSettings пустой или не загружен');
         }
-    }, [nomination, nominationsSettings, info]);
+    }, [nomination, nominationsSettings]); // Убираем info из зависимостей
+    
 
 
     
@@ -198,6 +227,13 @@ function ApplicationPage() {
         const updatedTitles = [...videos];  // Создаем новый массив
         updatedTitles[idx] = value;  // Обновляем нужный элемент
         setVideos(updatedTitles);  // Обновляем состояние
+    }
+    
+    const handleChangeNewVideos = (e, idx) => {
+        const value = e.target.value;
+        const updatedTitles = [...newVideos];  // Создаем новый массив
+        updatedTitles[idx] = value;  // Обновляем нужный элемент
+        setNewVideos(updatedTitles);  // Обновляем состояние
     }
     
     const handleFileUpload = async (e, setter, type) => {
@@ -227,20 +263,33 @@ function ApplicationPage() {
             alert("Просим вас авторизоваться");
         }
     };
+
+    const handleChangeImageCount = (array, index, imageCount) => {
+        // Если array не является массивом, инициализируем его как пустой массив
+        const updatedArray = Array.isArray(array) ? [...array] : []; 
+        
+        // Если значение по этому индексу уже есть, то добавляем к нему imageCount
+        updatedArray[index] = (updatedArray[index] || 0) + imageCount; 
+    
+        console.log('updatedArray', updatedArray);
+        setImagesCount(updatedArray); // Обновляем состояние массива
+    }
+    
+    
     
     
     const handleFileSelection = (e, id) => {
         
-        
         const files = Array.from(e.target.files);
         let index = id
-
+        
         if (id !== 0) {
             const str = id;
             const matchedNumber = str.match(/\d+/); // находим число
             index = matchedNumber ? parseInt(matchedNumber[0], 10) + 1 : 0; // преобразуем в число и увеличиваем на 1
-            console.log(index); // выводим результат
         }
+        console.log("INDEX", index)
+        handleChangeImageCount(imagesCount, index, files.length)
         // Ограничиваем количество файлов и их размер
         const validFiles = files.filter((file) => {
             const isValidSize = file.size <= 2 * 1024 * 1024; // Размер файла не более 2MB
@@ -255,7 +304,7 @@ function ApplicationPage() {
         }
         
         // Обновляем проект с нужным индексом
-        setSelectedFiles((prevFiles) => {
+        setSelectedNewFiles((prevFiles) => {
             const updatedFiles = [...prevFiles]; // Копируем старый массив проектов
             updatedFiles[index] = [...(updatedFiles[index] || []), ...validFiles]; // Добавляем файлы в нужный проект
             return updatedFiles;
@@ -270,15 +319,15 @@ function ApplicationPage() {
     const handleSubmit = async () => {
         const id = localStorage.getItem('id')
         
-        if (selectedFiles.length === 0) {
+        if (selectedNewFiles.length === 0) {
             setError('Пожалуйста, выберите хотя бы один файл.');
             return;
         }
         
         const formData = new FormData();
         
-        selectedFiles.forEach((file) => {
-            for(let i = 0; i < file.length; i++){
+        selectedNewFiles.forEach((file) => {
+            for(let i = 0; i < file?.length; i++){
                 formData.append('images', file[i])
             }
         }); // Добавляем файлы в FormData
@@ -319,9 +368,9 @@ function ApplicationPage() {
     const handleSubmitDocuments = async () => {
         const id = localStorage.getItem('id')
         
-        if (documents.length > 0) {
+        if (newDocuments.length > 0) {
             const formData = new FormData();
-            documents.forEach((file) => 
+            newDocuments.forEach((file) => 
                 formData.append('documents', file)
                 // formData.append('documentNames', file.name)
             ); // Добавляем файлы в FormData
@@ -351,7 +400,19 @@ function ApplicationPage() {
 
     
     const handlePreviewSelection = (e) => {
-        setPreviews((prevFiles) => [...prevFiles, e.target.files[0]]); // Добавляем новые файлы к списку
+        const newFile = e.target.files[0];
+        setPreviews((prevFiles) => {
+          // Проверяем, является ли prevFiles массивом
+          if (Array.isArray(prevFiles)) {
+            return [...prevFiles, newFile];
+          }
+          // Если по какой-то причине prevFiles не массив, возвращаем новый массив с файлом
+          return [newFile];
+        });
+      };
+
+    const handleNewPreviewSelection = (e) => {
+        setNewPreviews((prevFiles) => [...prevFiles, e.target.files[0]]); // Добавляем новые файлы к списку
     };
     
     // Функция для отправки файлов на сервер
@@ -360,9 +421,9 @@ function ApplicationPage() {
         const id = localStorage.getItem('id')
         
         const formData = new FormData();
-        if(previews && previews.length >= 1){
+        if(newPreviews && newPreviews.length >= 1){
 
-            previews.forEach((file) => formData.append('images', file)); // Добавляем файлы в FormData
+            newPreviews.forEach((file) => formData.append('images', file)); // Добавляем файлы в FormData
         }
         if(isNew){
 
@@ -385,20 +446,18 @@ function ApplicationPage() {
     const handleCheckBox = (e) => {
         setCheckBox((prev) => !prev)
     }
-    
+    const [newDocuments, setNewDocuments] = useState([])
     const handleDocumentChange = (e) => {
         const selectedFiles = Array.from(e.target.files);
         if (documents && documents.length + selectedFiles.length > 10) {
             alert("Вы можете загрузить не более 10 файлов.");
             return;
         }
-        
-        setDocuments((prevFiles) => [...prevFiles, ...selectedFiles]);
+        setNewDocuments((prevFiles) => [...prevFiles, ...selectedFiles]);
     };
     
     const handleDocumentRemove = (index) => {
         const id = localStorage.getItem('id')
-        console.log(id)
         setDocuments((prevFiles) => prevFiles.filter((_, i) => i !== index));
         if(!isNew){
             axios.delete(`/api/deleteDocument/${id}/${applicationId}/${index}`)
@@ -406,6 +465,10 @@ function ApplicationPage() {
             .then(data => console.log("Удаление ", data))
             .catch((err) => console.log(err))
         }
+
+    };
+    const handleNewDocumentRemove = (index) => {
+        setNewDocuments((prevFiles) => prevFiles.filter((_, i) => i !== index));
     };
     
     const [additionalFields, setAdditionalFields] = useState([])
@@ -416,18 +479,18 @@ function ApplicationPage() {
             { key: `Field ${prev.length + 1}`, value: '' } // Добавляем новый объект с ключом и пустым значением
         ]);
     };
+
+
     
     
     const SENDINFORMATION = async () => {
-        console.log("ОТПРАВ ИНФО", info)
+        
         if(btnDisabled){
             alert("Пополните баланс")
         }else{
             const id = localStorage.getItem('id');
-            let imagesCount = []
-            for (let i = 0; i < selectedFiles.length; i++){
-                imagesCount.push(selectedFiles[i].length)
-            }
+            
+            
             if (checkbox) {
                 setDisabled(true)
                 await handleSubmit()
@@ -452,8 +515,8 @@ function ApplicationPage() {
                             youtube,
                             tiktok,
                             vk,
-                            videos,
-                            info,
+                            videos: [...videos, ...newVideos],
+                            info: infoCopy,
                             imagesCount
                             // portfolio: selectedFiles
                         }, application_id: `${application_id}`, id: id, isNew
@@ -481,8 +544,8 @@ function ApplicationPage() {
                             youtube,
                             tiktok,
                             vk,
-                            videos,
-                            info,
+                            videos: [...videos, ...newVideos],
+                            info: infoCopy,
                             imagesCount
                             // portfolio: selectedFiles
                         }, application_id: `${applicationId}`, id: id
@@ -490,7 +553,7 @@ function ApplicationPage() {
                     .then((res) => {
                         alert("Ваша заявка успешно обновлена")
                         setDisabled(false)
-                        window.location.href = window.location.href
+                        // window.location.href = window.location.href
                     })
                 }
                 
@@ -503,10 +566,35 @@ function ApplicationPage() {
     }
     
     const [popUp, setPopup] = useState(false)
+
+    const handleRemoveImage = (array, index) => {
+        const updatedArray = [...array]; // Создаем копию массива
+    
+        // Уменьшаем значение по указанному индексу, если оно больше 0
+        if (updatedArray[index] > 0) {
+            updatedArray[index] = updatedArray[index] - 1;
+        }
+    
+        console.log('updatedArray after removal:', updatedArray);
+        setImagesCount(updatedArray); // Обновляем состояние массива
+    }
+    
     
     
     const deletePortfolioImage = (projectIndex, fileIndex) => {
+        handleRemoveImage(imagesCount, projectIndex)
         setSelectedFiles((prevFiles) => 
+            prevFiles.map((project, idx) => {
+                if (idx === projectIndex) {
+                    // Убираем файл по индексу из проекта
+                    return project.filter((file, fIdx) => fIdx !== fileIndex);
+                }
+                return project; // Оставляем остальные проекты без изменений
+            })
+        );
+    };
+    const deleteNewPortfolioImage = (projectIndex, fileIndex) => {
+        setSelectedNewFiles((prevFiles) => 
             prevFiles.map((project, idx) => {
                 if (idx === projectIndex) {
                     // Убираем файл по индексу из проекта
@@ -520,52 +608,59 @@ function ApplicationPage() {
     
     
 
-    const handleFieldChange = (index, e) => {
-        const updatedFields = [...info.fields];
-        updatedFields[index] = {
-            ...updatedFields[index],
-            value: e.target.value // обновляем значение для конкретного поля
-        };
-        
-        setInfo({
-            ...info, // сохраняем остальные поля объекта info
-            fields: updatedFields // обновляем массив fields
-        });
+const handleFieldChange = (index, e) => {
+    console.log("infoCopy", infoCopy)
+    if (!infoCopy || !infoCopy.fields) {
+        console.error('Поля не найдены в объекте infoCopy');
+        return;
+    }
+
+    const updatedFields = [...infoCopy.fields];
+
+    // Обновляем значение для конкретного поля
+    updatedFields[index] = {
+        ...updatedFields[index],
+        value: e.target.value
     };
 
-    const handleAddFieldChange = (outerIndex, innerIndex, e) => {
-        setInfo(prevInfo => {
-            // Проверяем, что у нас есть нужные данные
-            if (!prevInfo || !prevInfo.additionalFields) {
-                console.error('Проблема с данными в info или additionalFields');
-                return prevInfo;
-            }
-    
-            // Обновляем поля в соответствии с переданными индексами
-            const updatedFields = prevInfo.additionalFields.map((fields, i) => {
-                if (i === outerIndex) {
-                    return fields.map((field, j) => {
-                        if (j === innerIndex) {
-                            return {
-                                ...field,
-                                value: e.target.value // Обновляем только нужное поле
-                            };
-                        }
-                        return field; // Возвращаем остальное без изменений
-                    });
-                }
-                return fields; // Возвращаем остальные массивы без изменений
-            });
-    
-            // Возвращаем обновленный объект
-            return {
-                ...prevInfo,
-                additionalFields: updatedFields // Обновляем только additionalFields
-            };
-        });
-    
-        console.log('Updated Info:', info); // Для проверки обновлённого состояния
-    };
+    // Обновляем состояние с новыми значениями полей
+    setInfoCopy({
+        ...infoCopy,
+        fields: updatedFields
+    });
+};
+
+
+const handleAddFieldChange = (outerIndex, innerIndex, e) => {
+    setInfoCopy(prevInfo => {
+      if (!prevInfo || !prevInfo.additionalFields) {
+        console.error('Проблема с данными в info или additionalFields');
+        return prevInfo;
+      }
+  
+      // Клонируем состояние для безопасного обновления
+      const updatedFields = [...prevInfo.additionalFields];
+  
+      // Клонируем внутренний массив полей, чтобы не мутировать его напрямую
+      const updatedInnerFields = [...updatedFields[outerIndex]];
+  
+      // Обновляем конкретное поле по innerIndex
+      updatedInnerFields[innerIndex] = {
+        ...updatedInnerFields[innerIndex],
+        value: e.target.value // Обновляем только значение
+      };
+  
+      // Присваиваем обновленный внутренний массив на его место
+      updatedFields[outerIndex] = updatedInnerFields;
+  
+      return {
+        ...prevInfo,
+        additionalFields: updatedFields
+      };
+    });
+    // setAdditionalFields
+  };
+  
     
     
     
@@ -657,18 +752,17 @@ function ApplicationPage() {
                         <p>Сервис для клиентов: <span>*</span> {false && <span><br />заполните обязательное поле *</span>}</p>
                         <input type="text" value={service} onChange={(e) => handleChange(e, setService)} />
                     </div>
-                    {
-                        info && info.fields.map((field, index) => (
-                            <div key={index} className={s.block}>
-                                <p>{`${field.key}`}<span> *</span></p> {/* Отображаем содержимое в <p> */}
-                                <input
-                                    type="text"
-                                    value={field.value || ''} // Значение инпута из массива fields
-                                    onChange={(e) => handleFieldChange(index, e)} // Обработчик изменения
-                                />
-                            </div>
-                        ))
-                    }
+                    { info && info.fields && info.fields.map((field, index) => (
+                    <div key={index} className={s.block}>
+                        <p>{`${field.key}`}<span> *</span></p>
+                    <input
+                    type="text"
+                    value={infoCopy.fields && infoCopy.fields[index] ? infoCopy.fields[index].value : ''} // Проверяем, существует ли элемент fields[index]
+                    onChange={(e) => handleFieldChange(index, e)}
+                    />
+                    </div>
+                ))}
+
                 </div>
 
                 <div className={s.boldText}>Социальные сети</div>
@@ -707,6 +801,10 @@ function ApplicationPage() {
 
                 {error && <div className={s.errorMessage}>{error}</div>} {/* Отображение ошибки */}
 
+                {
+                    selectedFiles[0] && selectedFiles[0].length >= 1 &&
+                    <p>Загруженные файлы:</p>
+                }
                 <div className={s.previewBlock}>
                     {selectedFiles[0] && selectedFiles[0].map((file, index) => {
                         // Определяем индекс строки
@@ -722,8 +820,27 @@ function ApplicationPage() {
 
                         return (
                             <div key={index} className={className}>
-                                <img src={isNew ? URL.createObjectURL(file) : file} alt="preview" className={s.previewImage} />
+                                <img src={file} alt="preview" className={s.previewImage} />
                                 <img onClick={() => deletePortfolioImage(0, index)} className={s.closeBtn} src="/images/closeBtn.svg" alt="" />
+                            </div>
+                        );
+                    })}
+                    {selectedNewFiles[0] && selectedNewFiles[0].map((file, index) => {
+                        // Определяем индекс строки
+                        const rowIndex = Math.floor(index / 7);
+                        // Определяем позицию внутри строки
+                        const positionInRow = index % 7;
+
+                        // Логика для определения классов
+                        const className =
+                            positionInRow < 4
+                                ? s.small // Первые 4 изображения в каждой строке
+                                : s.large; // Последние 3 изображения в каждой строке
+
+                        return (
+                            <div key={index} className={className}>
+                                <img src={URL.createObjectURL(file)} alt="preview" className={s.previewImage} />
+                                <img onClick={() => deleteNewPortfolioImage(0, index)} className={s.closeBtn} src="/images/closeBtn.svg" alt="" />
                             </div>
                         );
                     })}
@@ -746,10 +863,14 @@ function ApplicationPage() {
                         style={{ display: "none" }}
                     />
                     <ul className={s.fileList}>
+                        {
+                            documents.length >= 1 &&
+                        <p>Загруженные документы: </p>
+                        }
                         {documents && documents.map((file, index) => (
                             <li key={index}>
                                 <img src="/images/hugeicons_pdf-02.svg" alt="" />
-                                <span >
+                                <span onClick={() => window.location.href = file}>
             {typeof file === 'string' ? decodeURIComponent(file.split('/').pop().split('?')[0]) : file.name}
             </span>
                                 {
@@ -760,25 +881,78 @@ function ApplicationPage() {
                                 <img className={s.closeBtn} style={!isNew ? {marginLeft: '30px'}: {} } onClick={() => handleDocumentRemove(index)} src="/images/ph_plus-light (1).svg" alt="" />
                             </li>
                         ))}
+                        {newDocuments && newDocuments.map((file, index) => (
+                            <li key={index}>
+                                <img src="/images/hugeicons_pdf-02.svg" alt="" />
+                                <span onClick={() => window.location.href = file}>
+            {typeof file === 'string' ? decodeURIComponent(file.split('/').pop().split('?')[0]) : file.name}
+            </span>
+                                {
+                                    isNew ? 
+                                    <span className={s.size}>{(file.size / (1024 * 1024)).toFixed(2)}MB</span> : null
+                                }
+
+                                <img className={s.closeBtn} style={!isNew ? {marginLeft: '30px'}: {} } onClick={() => handleNewDocumentRemove(index)} src="/images/ph_plus-light (1).svg" alt="" />
+                            </li>
+                        ))}
                     </ul>
                 </div>
 
                 <div className={s.videosBlock}>
                     <div className={s.boldText}>Видео</div>
                     {
-                        videos && videos.map((elem, index) =>
+  videos && videos.map((elem, index) =>
+    <div className={s.videoBlock} key={index}>
+      <div className={s.left}>
+        <div className={s.deleteBlock}>
+          <p>Ссылка на видео</p>
+          <p className={s.delete} onClick={() => deleteVideo(index)}>Удалить</p>
+        </div>
+        <input
+          onChange={(e) => { handleChangeVideos(e, index) }}
+          value={videos[index]}
+          type="text"
+          placeholder='Youtube, Vimeo'
+        />
+      </div>
+      <label className={s.right} htmlFor={'prevInput' + index}>
+        {
+          previews?.[index] ? (
+            <img
+              src={isNew ? URL.createObjectURL(previews[index]) : previews[index]}
+              alt=""
+            />
+          ) : (
+            <>
+              <p>Превью для видео</p>
+              <p>Вес не более 2 MB (.png, .jpg)</p>
+            </>
+          )
+        }
+      </label>
+      <input
+        type="file"
+        hidden={true}
+        id={'prevInput' + index}
+        onChange={(e) => handlePreviewSelection(e)}
+      />
+    </div>
+  )
+}
+                    {
+                        newVideos && newVideos.map((elem, index) =>
                             <div className={s.videoBlock} key={index}>
                                 <div className={s.left}>
                                     <div className={s.deleteBlock}>
                                         <p>Ссылка на видео</p>
-                                        <p className={s.delete} onClick={() => deleteVideo(index)}>Удалить</p>
+                                        <p className={s.delete} onClick={() => deleteNewVideo(index)}>Удалить</p>
                                     </div>
-                                    <input onChange={(e) => { handleChangeVideos(e, index) }} value={videos[index]} type="text" placeholder='Youtube, Vimeo' />
+                                    <input onChange={(e) => { handleChangeNewVideos(e, index) }} value={newVideos[index]} type="text" placeholder='Youtube, Vimeo' />
                                 </div>
-                                <label className={s.right} htmlFor={'prevInput' + index}>
+                                <label className={s.right} htmlFor={'prevInput2' + index}>
                                     {
-                                        previews[index] ?
-                                            <img src={previews[index] && isNew ? URL.createObjectURL(previews[index]) : previews[index]} alt="" />
+                                        newPreviews[index] ?
+                                            <img src={URL.createObjectURL(newPreviews[index])} alt="" />
                                             : <>
 
                                                 <p>Превью для видео</p>
@@ -786,33 +960,34 @@ function ApplicationPage() {
                                             </>
                                     }
                                 </label>
-                                <input type="file" hidden={true} id={'prevInput' + index} onChange={(e) => handlePreviewSelection(e)} />
+                                <input type="file" hidden={true} id={'prevInput2' + index} onChange={(e) => handleNewPreviewSelection(e)} />
                             </div>
                         )
                     }
-                    <button className={s.addBtn} onClick={() => setVideos(prev => [...prev, ""])}><img src="/images/ph_plus-light 11.svg" alt="" />Добавить ссылку</button>
+                    <button className={s.addBtn} onClick={() => setNewVideos(prev => [...prev, ""])}><img src="/images/ph_plus-light 11.svg" alt="" />Добавить ссылку</button>
                 </div>
 
                 {additionalFields && 
                     additionalFields.map((elem, index) => 
                     <div className={s.additionalFields} key={index}>
-{
-    info && info.additionalFields.map((field, idx) => (
+
+                        
+                        <h1 className={s.title}>{infoCopy && infoCopy.nameTitle || "Проект"} {index+1}</h1>
+                        {
+    
+    infoCopy && infoCopy.additionalFields.map((field, idx) => (
         <div key={`additional-${idx}`} className={s.additionalFields}>
-            <div className={s.block}>
-                <p>{`${field.key}`}<span> *</span></p>
-                <input
-                    type="text"
-                    value={field.value || ''} // Значение инпута
-                    onChange={(e) => handleAddFieldChange(index, idx, e)} // Обработчик изменения
-                />
-            </div>
+        <div className={s.block}>
+            <p>{`${field[0].key}`}<span> *</span></p>
+            <input
+            type="text"
+            value={field[index]?.value || ''} // Проверяем существование элемента field[0] и выводим его значение
+            onChange={(e) => handleAddFieldChange(idx, index, e)} // Передаем правильный индекс
+            />
+        </div>
         </div>
     ))
-}
-                        <div className={s.block}>
-
-                        </div>
+    }
                         <label className={s.photosBlock} htmlFor={`portfolio${index}`}>
                             <div className={s.boldText}>ФОТОГРАФИИ</div>
                             <input type="file" hidden={true} multiple id={`portfolio${index}`} onChange={(e) => handleFileSelection(e, `portfolio${index}`)} accept=".png, .jpg" />
@@ -822,6 +997,7 @@ function ApplicationPage() {
                             </div>
 
                         </label>
+                        <p>Загруженные фотографии</p>
                         <div className={s.previewBlock}>
     {selectedFiles[index + 1] && selectedFiles[index + 1].map((file, fileIndex) => {
         // Определяем индекс строки
@@ -837,7 +1013,7 @@ function ApplicationPage() {
 
         return (
             <div key={fileIndex} className={className} style={{marginTop: '20px'}}>
-                <img src={isNew ? URL.createObjectURL(file) : file} alt="preview" className={s.previewImage} />
+                <img src={file} alt="preview" className={s.previewImage} />
                 <img
                     onClick={() => deletePortfolioImage(index+1, fileIndex)} // Передаем и индекс проекта (index), и индекс файла (fileIndex)
                     className={s.closeBtn}
@@ -847,9 +1023,39 @@ function ApplicationPage() {
             </div>
         );
     })}
+
+    {selectedNewFiles[index + 1] && selectedNewFiles[index + 1].map((file, fileIndex) => {
+        // Определяем индекс строки
+        const rowIndex = Math.floor(fileIndex / 7);
+        // Определяем позицию внутри строки
+        const positionInRow = fileIndex % 7;
+
+        // Логика для определения классов
+        const className =
+            positionInRow < 4
+                ? s.small // Первые 4 изображения в каждой строке
+                : s.large; // Последние 3 изображения в каждой строке
+
+        return (
+            <div key={fileIndex} className={className} style={{marginTop: '20px'}}>
+                <img src={URL.createObjectURL(file)} alt="preview" className={s.previewImage} />
+                <img
+                    onClick={() => deleteNewPortfolioImage(index+1, fileIndex)} // Передаем и индекс проекта (index), и индекс файла (fileIndex)
+                    className={s.closeBtn}
+                    src="/images/closeBtn.svg"
+                    alt=""
+                />
+            </div>
+        );
+    })}
+   
+    
 </div>
+
                     </div>
+                    
                     )
+                    
                 }
                 {
                     info && info.multipleSelection &&

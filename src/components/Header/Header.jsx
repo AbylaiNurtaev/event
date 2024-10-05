@@ -109,6 +109,7 @@ function Header() {
 
                             <img src="/images/clarity_close-line.svg" onClick={() => setBurgerMenu(false)} alt="" className={s.close} />
                         </div>
+                        
                         {
                             user?.name ?
                                 <div className={s.name}>
@@ -129,7 +130,7 @@ function Header() {
                             <p onClick={() => { navigate('/contacts'); setBurgerMenu(false) }} style={location && location.pathname == "/contacts" ? { color: '#f4444a' } : {}}>Контакты</p>
                         </div>
 
-                        <div className={s.date} onClick={() => navigate('/application/new')}>
+                        <div className={s.date} onClick={() => {alert('Подать заявку можно с компьютера')}}>
                             <p className={s.dataText}>26-27</p>
                             <div>
                                 <p>ноября</p>
