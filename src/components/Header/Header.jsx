@@ -87,10 +87,10 @@ function Header() {
             {
                 user?.name ?
                     <div style={{cursor: "pointer"}} className={s.name}>
-                        <h5 onClick={() => navigate(`/cabinet/${user._id}`)}>{user.name}</h5>
-                        <p onClick={() => navigate('/payment')}>Баланс: {user && user.balance} заявок</p>
+                        <h5 onClick={() => {navigate(`/cabinet/${user._id}`)}}>{user.name}</h5>
+                        <p onClick={() => {navigate('/payment')}}>Баланс: {user && user.balance} заявок</p>
                     </div> :
-                    <div className={s.exit} onClick={() => navigate('/login')}>
+                    <div className={s.exit} onClick={() => {navigate('/login')}}>
                         <img src="/images/exit.svg" alt="exit" />
                         <p>ВОЙТИ</p>
                     </div>
@@ -113,10 +113,10 @@ function Header() {
                         {
                             user?.name ?
                                 <div className={s.name}>
-                                    <h5 onClick={() => navigate(`/cabinet/${user._id}`)}>{user.name}</h5>
-                                    <p  onClick={() => navigate('/payment')}>Баланс: {user && user.balance} заявок</p>
+                                    <h5 onClick={() => {navigate(`/cabinet/${user._id}`); setBurgerMenu(false)}}>{user.name}</h5>
+                                    <p  onClick={() => {navigate('/payment'); setBurgerMenu(false)}}>Баланс: {user && user.balance} заявок</p>
                                 </div> :
-                                <div className={s.exit} onClick={() => navigate('/login')}>
+                                <div className={s.exit} onClick={() => {navigate('/login'); setBurgerMenu(false)}}>
                                     <img src="/images/exit.svg" alt="exit" />
                                     <p>ВОЙТИ</p>
                                 </div>

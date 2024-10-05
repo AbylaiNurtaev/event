@@ -67,7 +67,7 @@ function HomePage() {
                 <button className={s.left}>БИЛЕТ НА ФОРУМ</button>
             </div>
         
-            <img className={s.images} src={image} alt="" />
+            {/* <img className={s.images} src={image} alt="" /> */}
             {/* <div className={s.lines}>
                 <img src="/images/Frame 121.svg" alt="" />
                 <img src="/images/Frame 120.svg" alt="" />
