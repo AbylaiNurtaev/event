@@ -10,6 +10,7 @@ function ApplicationPage() {
     const { applicationId } = useParams()
     
     const [infoCopy, setInfoCopy] = useState()
+    const [countProjects, setCountProjects] = useState([])
     useEffect(() => {
         window.scroll({
             top: 0,
@@ -20,12 +21,15 @@ function ApplicationPage() {
             .then((res) => res.data)
             .then(data => {
                 setNominationsSettings(data)
+                console.log("settings", data)
                 const uniqueCategories = [...new Set(data.map(item => item.nomination[0]))];
                 setNominations(uniqueCategories);
             })
 
     }, []);
     const [isNew, setIsNew] = useState(true)
+
+    
 
     useEffect(() => {
         if(applicationId != 'new'){
@@ -43,6 +47,13 @@ function ApplicationPage() {
                 setDocuments(data.documents || [])
                 setPreviews(data.previews)
                 setVideos(data.application_data.videos)
+                
+                setAdditionalFields([])
+                for(let i = 0; i < data.application_data.countOfProjects; i++){
+                    setCountProjects(prev => [{ key: "key" + i}, ...prev])   
+                    setAdditionalFields(prev => [{ key: "key" + i}, ...prev])   
+                }
+
 
                 const photos = data.portfolio
                 const counts = data.application_data.imagesCount
@@ -59,7 +70,6 @@ function ApplicationPage() {
             })
             .then(res => res.data)
             .then(data => {
-                console.log("INFFOO", data.application_data.info)
                 setAbout(data.application_data.about)
                 setSpecialization(data.application_data.specialization)
                 setFullName(data.application_data.fullName)
@@ -78,14 +88,11 @@ function ApplicationPage() {
                 setInfoCopy(data.application_data.info);
                 
                 setAdditionalFields(data.application_data.info.additionalFields)
-                // setCheckBox(true)
-                // console.log(data)
             })
             .catch((err) => console.log(err))
         }
     }, [applicationId])
 
-    console.log("INFOCOPY", infoCopy)
 
     const[btnDisabled, setBtnDisabled] = useState(true)
 
@@ -197,8 +204,9 @@ function ApplicationPage() {
             // Проверяем, если info пустой
             if (!info || Object.keys(info).length === 0) {
                 const currentNomination = nominationsSettings[0]; // Берем первый элемент в списке
-                console.log("ТЕКУЩАЯ НОМИНАЦИЯ", currentNomination);
+                // console.log("ТЕКУЩАЯ НОМИНАЦИЯ", currentNomination);
                 
+                if(isNew)
                 setInfo(JSON.parse(JSON.stringify(currentNomination))); // Глубокое копирование
                 setInfoCopy(JSON.parse(JSON.stringify(currentNomination))); // Глубокое копирование
             } else {
@@ -209,7 +217,22 @@ function ApplicationPage() {
                 
                 if (currentNomination) {
                     console.log("ТЕКУЩАЯ НОМИНАЦИЯ", currentNomination);
-                    setInfo(JSON.parse(JSON.stringify(currentNomination))); // Глубокое копирование
+                    if(isNew){
+
+                        setInfo(JSON.parse(JSON.stringify(currentNomination))); // Глубокое копирование
+                        setInfoCopy(JSON.parse(JSON.stringify(currentNomination))); // Глубокое копирование
+                    }
+                    // if(applicationId != 'new'){
+                    //     axios.post('/auth/getAllInfo', {
+                    //         userId,
+                    //         application_id: applicationId
+                    //     })
+                    //     .then((res) => res.data)
+                    //     .then(data => {
+
+                    //     })
+                    // }
+
                 } else {
                     console.warn('Номинация не найдена:', nomination);
                 }
@@ -219,7 +242,6 @@ function ApplicationPage() {
         }
     }, [nomination, nominationsSettings]); // Убираем info из зависимостей
     
-
 
     
     const handleChangeVideos = (e, idx) => {
@@ -364,6 +386,15 @@ function ApplicationPage() {
       
         return groupedPhotos;
       }
+
+      const deleteAdditionalInf = (index) => {
+        let infoCopy1 = [...countProjects];
+        infoCopy1.splice(index, 1);
+        // Если необходимо сохранить изменения в original массиве
+        console.log("infoCopy1", infoCopy1)
+        setAdditionalFields(infoCopy1)
+        setCountProjects(infoCopy1)
+      }
     
     const handleSubmitDocuments = async () => {
         const id = localStorage.getItem('id')
@@ -414,6 +445,7 @@ function ApplicationPage() {
     const handleNewPreviewSelection = (e) => {
         setNewPreviews((prevFiles) => [...prevFiles, e.target.files[0]]); // Добавляем новые файлы к списку
     };
+    
     
     // Функция для отправки файлов на сервер
     const handleSubmitPreview = async () => {
@@ -478,8 +510,13 @@ function ApplicationPage() {
             ...prev,
             { key: `Field ${prev.length + 1}`, value: '' } // Добавляем новый объект с ключом и пустым значением
         ]);
+        setCountProjects(prev => [
+            ...prev,
+            { key: `Field ${prev.length + 1}`, value: '' } // Добавляем новый объект с ключом и пустым значением
+        ]);
     };
 
+    console.log(imagesCount)
 
     
     
@@ -517,14 +554,15 @@ function ApplicationPage() {
                             vk,
                             videos: [...videos, ...newVideos],
                             info: infoCopy,
-                            imagesCount
+                            imagesCount,
+                            countOfProjects: additionalFields.length
                             // portfolio: selectedFiles
                         }, application_id: `${application_id}`, id: id, isNew
                     })
                     .then((res) => {
                         alert("Ваша заявка успешно отправлена")
                         setDisabled(false)
-                        // window.location.href = window.location.href
+                        window.location.href = window.location.href
                     })
                 }else{
                     await axios.post('/updateApplication', {
@@ -544,6 +582,7 @@ function ApplicationPage() {
                             youtube,
                             tiktok,
                             vk,
+                            countOfProjects: additionalFields.length,
                             videos: [...videos, ...newVideos],
                             info: infoCopy,
                             imagesCount
@@ -553,7 +592,7 @@ function ApplicationPage() {
                     .then((res) => {
                         alert("Ваша заявка успешно обновлена")
                         setDisabled(false)
-                        // window.location.href = window.location.href
+                        window.location.href = window.location.href
                     })
                 }
                 
@@ -582,7 +621,15 @@ function ApplicationPage() {
     
     
     const deletePortfolioImage = (projectIndex, fileIndex) => {
-        handleRemoveImage(imagesCount, projectIndex)
+        const id = localStorage.getItem('id');
+        
+        // Считаем общий индекс элемента
+        const totalFileIndex = selectedFiles.slice(0, projectIndex).reduce((total, project) => total + project.length, 0) + fileIndex;
+    
+        // Убираем файл по индексу из интерфейса
+        handleRemoveImage(imagesCount, projectIndex);
+    
+        // Обновляем состояние файлов
         setSelectedFiles((prevFiles) => 
             prevFiles.map((project, idx) => {
                 if (idx === projectIndex) {
@@ -592,8 +639,16 @@ function ApplicationPage() {
                 return project; // Оставляем остальные проекты без изменений
             })
         );
+    
+        // Удаляем файл с сервера
+        axios.delete(`/api/deletePortfolio/${id}/${applicationId}/${totalFileIndex}`)
+            .then((res) => res.data)
+            .then(data => console.log("УДАЛЕНИЕ", data))
+            .catch((err) => console.log(err));
     };
+    
     const deleteNewPortfolioImage = (projectIndex, fileIndex) => {
+        handleRemoveImage(imagesCount, projectIndex)
         setSelectedNewFiles((prevFiles) => 
             prevFiles.map((project, idx) => {
                 if (idx === projectIndex) {
@@ -605,11 +660,11 @@ function ApplicationPage() {
         );
     };
 
+    console.log("additionalFields", additionalFields)
     
     
 
 const handleFieldChange = (index, e) => {
-    console.log("infoCopy", infoCopy)
     if (!infoCopy || !infoCopy.fields) {
         console.error('Поля не найдены в объекте infoCopy');
         return;
@@ -631,7 +686,10 @@ const handleFieldChange = (index, e) => {
 };
 
 
+
+console.log("last", infoCopy)
 const handleAddFieldChange = (outerIndex, innerIndex, e) => {
+    
     setInfoCopy(prevInfo => {
       if (!prevInfo || !prevInfo.additionalFields) {
         console.error('Проблема с данными в info или additionalFields');
@@ -683,7 +741,7 @@ const handleAddFieldChange = (outerIndex, innerIndex, e) => {
                         <div className={s.selectWrapper}>
                             {
                                 nominations &&
-                                <select value={nomination} onChange={(e) => handleChange(e, setNomination)}>
+                                <select value={nomination} disabled={isNew ? false : true} onChange={(e) => handleChange(e, setNomination)}>
                                     {
                                         nominations.map((elem, index) =>
                                             <option value={elem}>{elem}</option>
@@ -919,7 +977,7 @@ const handleAddFieldChange = (outerIndex, innerIndex, e) => {
         {
           previews?.[index] ? (
             <img
-              src={isNew ? URL.createObjectURL(previews[index]) : previews[index]}
+              src={previews[index]}
               alt=""
             />
           ) : (
@@ -968,26 +1026,25 @@ const handleAddFieldChange = (outerIndex, innerIndex, e) => {
                 </div>
 
                 {additionalFields && 
-                    additionalFields.map((elem, index) => 
+                    countProjects.map((elem, index) => 
                     <div className={s.additionalFields} key={index}>
-
                         
-                        <h1 className={s.title}>{infoCopy && infoCopy.nameTitle || "Проект"} {index+1}</h1>
+                        <h1 className={s.title}>{infoCopy && infoCopy.nameTitle || "Проект"} {index+1}<div className={s.delete} onClick={() => deleteAdditionalInf(index)}>Удалить</div></h1>
+                        
                         {
-    
-    infoCopy && infoCopy.additionalFields.map((field, idx) => (
-        <div key={`additional-${idx}`} className={s.additionalFields}>
-        <div className={s.block}>
-            <p>{`${field[0].key}`}<span> *</span></p>
-            <input
-            type="text"
-            value={field[index]?.value || ''} // Проверяем существование элемента field[0] и выводим его значение
-            onChange={(e) => handleAddFieldChange(idx, index, e)} // Передаем правильный индекс
-            />
-        </div>
-        </div>
-    ))
-    }
+                        infoCopy && infoCopy.additionalFields.map(( field, idx) => (
+                            <div key={`additional-${idx}`} className={s.additionalFields}>
+                            <div className={s.block}>
+                                <p>{`${field[0].key}`}<span> *</span></p>
+                                <input
+                                type="text"
+                                value={field[index]?.value || ''} // Проверяем существование элемента field[0] и выводим его значение
+                                onChange={(e) => handleAddFieldChange(idx, index, e)} // Передаем правильный индекс
+                                />
+                            </div>
+                            </div>
+                        ))
+                        }
                         <label className={s.photosBlock} htmlFor={`portfolio${index}`}>
                             <div className={s.boldText}>ФОТОГРАФИИ</div>
                             <input type="file" hidden={true} multiple id={`portfolio${index}`} onChange={(e) => handleFileSelection(e, `portfolio${index}`)} accept=".png, .jpg" />

@@ -55,6 +55,8 @@ function AdminApplication() {
         setFields([...fields, { key: '', value: '' }])
     }
 
+    
+
     const handleFieldChange = (index, e) => {
         const updatedFields = [...fields]
         updatedFields[index].key = e.target.value
