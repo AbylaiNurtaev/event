@@ -55,7 +55,7 @@ function AdminApplication() {
         setFields([...fields, { key: '', value: '' }])
     }
 
-    
+
 
     const handleFieldChange = (index, e) => {
         const updatedFields = [...fields]
@@ -160,7 +160,7 @@ function AdminApplication() {
                     </div>
                     {
                         fields.map((field, index) => (
-                            <div key={index} className={s.fieldContainer}>
+                            <div key={index} className={s.fieldContainer} >
                                 <p>Название поля:</p>
                                 <input
                                     type="text"

@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from 'react'
 import s from './Applications.module.sass'
 import axios from '../../axios'
+import { useNavigate } from 'react-router-dom'
 
 
 
 function Applications() {
 
     const [users, setUsers] = useState()
+    const navigate = useNavigate()
 
 
     useEffect(() => {
@@ -29,7 +31,8 @@ function Applications() {
                             <div className={s.container}>
                                 <p>{data?.application_data.nomination}</p>
                                 <p>{data?.application_data.fullName}</p>
-                                <img src={data?.application_data.photo} alt="" />
+                                {/* <img src={data?.application_data.photo} alt="" /> */}
+                                <button onClick={() => navigate(`/applicationChecking/${data?.application_id}/${elem._id}`)}>Посмотреть заявку</button>
                             </div> 
                         ) : null}
                     </div>

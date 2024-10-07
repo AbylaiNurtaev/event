@@ -14,6 +14,7 @@ import PaymentPage from './pages/PaymentPage/PaymentPage';
 import GradingPage from './pages/GradingPage/GradingPage';
 import AdminApplication from './pages/AdminApplication/AdminApplication';
 import OpenedJoury from './pages/OpenedJoury/OpenedJoury';
+import AdminCheckApplication from './pages/AdminCheckApplication/AdminCheckApplication';
 function App() {
   return (
     <div className="App">
@@ -29,6 +30,7 @@ function App() {
           <Route path='/payment' element={<PaymentPage/>}></Route>
           <Route path='/grading' element={<GradingPage/>}></Route>
           <Route path='/application/:applicationId' element={<ApplicationPage/>}></Route>
+          <Route path='/applicationChecking/:applicationId/:id' element={<AdminCheckApplication/>}></Route>
           <Route path='/cabinet/:id' element={<CabinetPage/>}></Route>
         </Route>
         <Route path='/admin' element={<AdminPage/>}></Route>
