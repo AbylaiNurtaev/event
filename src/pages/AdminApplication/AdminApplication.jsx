@@ -22,7 +22,7 @@ function AdminApplication() {
     const [imagesText, setImagesText] = useState()
     const [videosText, setVideosText] = useState()
     const [docsText, setDocsText] = useState()
-
+    const [par, setPar] = useState()
 
 
     useEffect(() => {
@@ -48,6 +48,7 @@ function AdminApplication() {
                     setDocsText(nomination.docsText)
                     setImagesText(nomination.imagesText)
                     setVideosText(nomination.videosText)
+                    setPar(nomination.par)
                 }
             })
             .catch(error => {
@@ -116,7 +117,8 @@ function AdminApplication() {
             docs,
             imagesText,
             videosText,
-            docsText
+            docsText,
+            par
         }
         axios.post(`/nom/modify/${id}`, dataToSave)
             .then((res) => res.data)
@@ -151,6 +153,13 @@ function AdminApplication() {
                             <div>
                                 <p>Изменить заголовок проектов: </p>
                                 <input type="text" value={nameTitle} onChange={(e) => handleChange(e, setNameTitle)} />
+                            </div>
+                        }
+                        {
+                            multipleSelection &&
+                            <div>
+                                <p>Изменить описание проектов: </p>
+                                <textarea type="text" value={par} onChange={(e) => handleChange(e, setPar)} />
                             </div>
                         }
 

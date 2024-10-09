@@ -5,12 +5,19 @@ import { useNavigate } from 'react-router-dom';
 
 function AdminNominations() {
     const [allNominations, setAllNominations] = useState([]);
+    const [newCategory, setNewCategory] = useState('');
     const [categories, setCategories] = useState([]);
     const [isPopupOpen, setIsPopupOpen] = useState(false);
     const [isEditPopupOpen, setIsEditPopupOpen] = useState(false); // Состояние для редактирования
     const [info, setInfo] = useState([{ text: '', percentage: '' }]);
 
     const [moreText, setMoreText] = useState('');
+    const handleAddCategory = () => {
+        if (newCategory && !categories.includes(newCategory)) {
+            setCategories(prevCategories => [...prevCategories, newCategory]); // Добавляем новую категорию в список
+            setNewCategory(''); // Очищаем текстовое поле
+        }
+    };
 
     const navigate = useNavigate();
     const [newNomination, setNewNomination] = useState({
@@ -25,11 +32,16 @@ function AdminNominations() {
         axios.get('/nom')
             .then(res => res.data)
             .then(data => {
-                setAllNominations(data);
-                const uniqueCategories = [...new Set(data.map(item => item.category))];
-                setCategories(uniqueCategories);
-            });
+                setAllNominations(data); // сохраняем все номинации
+                
+                // Извлекаем уникальные категории из данных, разворачивая массивы с помощью flatMap
+                const uniqueCategories = [...new Set(data.flatMap(item => item.category))];
+                
+                setCategories(uniqueCategories); // сохраняем уникальные категории
+            })
+            .catch(err => console.error('Error fetching nominations:', err)); // обработка ошибки
     }, []);
+    
     
 
     const openPopup = () => setIsPopupOpen(true);
@@ -61,11 +73,38 @@ function AdminNominations() {
     };
 
     const handleEditChange = (e) => {
-        setEditNomination({
-            ...editNomination,
-            [e.target.name]: e.target.value,
-        });
+        const { name, value } = e.target;
+        
+        // Если категория выбрана
+        if (e.target.checked) {
+            setEditNomination(prev => ({
+                ...prev,
+                [name]: [...prev[name], value], // Добавляем значение в массив
+            }));
+        } else {
+            setEditNomination(prev => ({
+                ...prev,
+                [name]: prev[name].filter(item => item !== value), // Удаляем значение из массива
+            }));
+        }
     };
+    const handleEditNewChange = (e) => {
+        const { name, value } = e.target;
+        
+        // Если категория выбрана
+        if (e.target.checked) {
+            setNewNomination(prev => ({
+                ...prev,
+                [name]: [...prev[name], value], // Добавляем значение в массив
+            }));
+        } else {
+            setNewNomination(prev => ({
+                ...prev,
+                [name]: prev[name].filter(item => item !== value), // Удаляем значение из массива
+            }));
+        }
+    };
+    
 
     const handleInfoChange = (index, e) => {
         const { name, value } = e.target;
@@ -106,7 +145,7 @@ function AdminNominations() {
         try {
             const response = await axios.post('/nom', { ...newNomination, information: info });
             setAllNominations([...allNominations, response.data]);
-            setNewNomination({ nomination: '', category: '', moreText: '', information: [] });
+            setNewNomination({ nomination: '', category: [''], moreText: '', information: [] });
             closePopup();
         } catch (error) {
             console.error('Ошибка при добавлении номинации:', error);
@@ -138,6 +177,21 @@ function AdminNominations() {
         });
     };
 
+    const handleChangeMultiple = (e) => {
+        const { options } = e.target;
+        const selectedCategories = [];
+        for (let i = 0; i < options.length; i++) {
+            if (options[i].selected) {
+                selectedCategories.push(options[i].value);
+            }
+        }
+        
+        setNewNomination((prevNomination) => ({
+            ...prevNomination,
+            category: selectedCategories, // Обновляем массив выбранных категорий
+        }));
+    };
+
     return (
         <div className={s.container}>
             <div className={s.innerContainer}>
@@ -150,15 +204,15 @@ function AdminNominations() {
                         <div key={index} className={s.categoryBlock}>
                             <h3>{category}</h3>
                             <div className={s.nominationList}>
-                                {allNominations
-                                    .filter(nomination => nomination.category === category)
-                                    .map((nomination, idx) => (
-                                        <div key={idx} className={s.nomination}>
-                                            <p onClick={() => openEditPopup(nomination)}>{nomination.nomination}</p>
-                                            <p onClick={() => navigate(`/adminApplication/${nomination._id}`)}>Управление</p>
-                                            <p onClick={() => deleteNomination(nomination._id)}>Удалить</p>
-                                        </div>
-                                    ))}
+                            {allNominations
+                                .filter(nomination => nomination.category.includes(category)) // проверяем, содержит ли массив категорий выбранную категорию
+                                .map((nomination, idx) => (
+                                    <div key={idx} className={s.nomination}>
+                                        <p onClick={() => openEditPopup(nomination)}>{nomination.nomination}</p>
+                                        <p onClick={() => navigate(`/adminApplication/${nomination._id}`)}>Управление</p>
+                                        <p onClick={() => deleteNomination(nomination._id)}>Удалить</p>
+                                    </div>
+                                ))}
                             </div>
                         </div>
                     ))}
@@ -179,16 +233,34 @@ function AdminNominations() {
                                     value={newNomination.nomination}
                                     onChange={handleChange}
                                     required
+                                    
                                 />
                             </div>
                             <div className={s.formGroup}>
                                 <label>Категория</label>
-                                <select name="category" value={newNomination.nomination} onChange={handleChange}>
-                                    {
-                                        categories.map((elem) => <option>{elem}</option>)
-                                        
-                                    }
-                                </select>
+                                <div>
+                                    {categories.map((elem) => (
+                                        <label key={elem}>
+                                            <input
+                                                type="checkbox"
+                                                name="category"
+                                                value={elem}
+                                                // checked={editNomination.category.includes(elem)} // Проверяем, выбрана ли категория
+                                                onChange={handleEditNewChange}
+                                            />
+                                            {elem}
+                                        </label>
+                                    ))}
+                                </div>
+                                <div>
+                <input
+                    type="text"
+                    value={newCategory}
+                    onChange={(e) => setNewCategory(e.target.value)} // Обновляем состояние для новой категории
+                    placeholder="Введите новую категорию"
+                />
+                <button onClick={handleAddCategory}>Добавить категорию</button>
+            </div>
                                 <input
                                     type="text"
                                     name="category"
@@ -252,23 +324,34 @@ function AdminNominations() {
                                     value={editNomination.nomination}
                                     onChange={handleEditChange}
                                     required
+                                    
                                 />
                             </div>
                             <div className={s.formGroup}>
                                 <label>Категория</label>
-                                <select name="category" value={editNomination.nomination} onChange={handleEditChange}>
-                                    {
-                                        categories.map((elem) => <option>{elem}</option>)
-                                        
-                                    }
-                                </select>
-                                <input
-                                    type="text"
-                                    name="category"
-                                    value={editNomination.category}
-                                    onChange={handleEditChange}
-                                    required
-                                />
+                                <div>
+                                    {categories.map((elem) => (
+                                        <label key={elem}>
+                                            <input
+                                                type="checkbox"
+                                                name="category"
+                                                value={elem}
+                                                checked={editNomination.category.includes(elem)} // Проверяем, выбрана ли категория
+                                                onChange={handleEditChange}
+                                            />
+                                            {elem}
+                                        </label>
+                                    ))}
+                                </div>
+                                <div>
+                <input
+                    type="text"
+                    value={newCategory}
+                    onChange={(e) => setNewCategory(e.target.value)} // Обновляем состояние для новой категории
+                    placeholder="Введите новую категорию"
+                />
+                <button onClick={handleAddCategory}>Добавить категорию</button>
+            </div>
                             </div>
                             <div className={s.formGroup}>
                                 <label>Информация</label>

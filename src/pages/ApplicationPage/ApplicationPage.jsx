@@ -560,7 +560,7 @@ function ApplicationPage() {
                             website,
                             phone,
                             awards,
-                            service,
+                            service: "",
                             instagram,
                             youtube,
                             tiktok,
@@ -589,7 +589,7 @@ function ApplicationPage() {
                             website,
                             phone,
                             awards,
-                            service,
+                            service: "",
                             instagram,
                             youtube,
                             tiktok,
@@ -820,10 +820,10 @@ function ApplicationPage() {
                         <p>Награды и достижения: <span>*</span> {false && <span><br />заполните обязательное поле *</span>}</p>
                         <input type="text" value={awards} onChange={(e) => handleChange(e, setAwards)} />
                     </div>
-                    <div className={s.block}>
+                    {/* <div className={s.block}>
                         <p>Сервис для клиентов: <span>*</span> {false && <span><br />заполните обязательное поле *</span>}</p>
                         <input type="text" value={service} onChange={(e) => handleChange(e, setService)} />
-                    </div>
+                    </div> */}
                     {info && info.fields && info.fields.map((field, index) => (
                         <div key={index} className={s.block}>
                             <p>{`${field.key}`}<span> *</span></p>
@@ -1070,6 +1070,7 @@ infoCopy.videos == true &&
                         <div className={s.additionalFields} key={index}>
 
                             <h1 className={s.title}>{infoCopy && infoCopy.nameTitle || "Проект"} {index + 1}<div className={s.delete} onClick={() => deleteAdditionalInf(index)}>Удалить</div></h1>
+                            <p className={s.parText} style={{marginTop: '20px'}}>{infoCopy && infoCopy.par}Описание ваших проектов</p>
 
                             {
                                 infoCopy && infoCopy.additionalFields.map((field, idx) => (

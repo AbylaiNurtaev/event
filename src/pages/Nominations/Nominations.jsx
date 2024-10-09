@@ -25,9 +25,10 @@ function Nominations() {
                 const data = res.data;
                 
                 // Извлечение уникальных категорий из полученных данных
-                const uniqueCategories = [...new Set(data.map(item => item.category))];
-                
-                setCategories(prev => [...prev, ...uniqueCategories]); // добавляем категории в стейт
+                const uniqueCategories = [...new Set(data.flatMap(item => item.category))];
+
+                // Обновляем состояние с уникальными категориями
+                setCategories(prev => [...new Set([...prev, ...uniqueCategories])]);
                 setNominations(data); // сохраняем все номинации
                 setFilteredNominations(data); // отображаем все номинации по умолчанию
             });
@@ -43,7 +44,7 @@ function Nominations() {
         if (selectedCategory === 'Все') {
             setFilteredNominations(nominations);
         } else {
-            setFilteredNominations(nominations.filter(nomination => nomination.category === selectedCategory));
+            setFilteredNominations(nominations.filter(nomination => nomination.category.includes(selectedCategory)));
         }
     }, [selectedCategory, nominations]);
     
