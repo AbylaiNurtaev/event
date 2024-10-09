@@ -6,75 +6,8 @@ import Joury from '../../components/Joury/Joury'
 import axios from '../../axios'
 
 function AboutPage() {
-    const rowList = ["все", "Организация свадьбы", "Ведущие", "Программа", "Декор", "Фотография", "Видео", "Стиль", "Локации", "Special", "Национальная культура"]
     const navigate = useNavigate()
-    const blockList = [
-        {
-            title: 'Ведущие',
-            list: ["Актуальность", "Профессиональные качества", "Уровень мероприятий", "Личный бренд"]
-        },
-        {
-            title: 'Фотографы',
-            list: ["Актуальность", "Профессиональные качества", "Уровень мероприятий", "Личный бренд"]
-        },
-        {
-            title: 'Видеографы',
-            list: ["Актуальность", "Профессиональные качества", "Уровень мероприятий", "Личный бренд"]
-        },
-        {
-            title: 'Стилисты',
-            list: ["Актуальность", "Профессиональные качества", "Уровень мероприятий", "Личный бренд"]
-        },
-        {
-            title: 'Декораторы',
-            list: ["Актуальность", "Профессиональные качества", "Уровень мероприятий", "Личный бренд"]
-        },
-        {
-            title: 'Диджеи',
-            list: ["Актуальность", "Профессиональные качества", "Уровень мероприятий", "Личный бренд"]
-        },
-        {
-            title: 'Кавер-группы',
-            list: ["Актуальность", "Профессиональные качества", "Уровень мероприятий", "Личный бренд"]
-        },
-        {
-            title: 'Площадки',
-            list: ["Актуальность", "Профессиональные качества", "Уровень мероприятий", "Личный бренд"]
-        },
-    ]
 
-    const peoples = [
-        {
-            name: "Арман и Аскар",
-            par: "Elite Wedding Studio",
-            img: "/images/jouries/jour-1.svg"
-        },
-        {
-            name: "Анна Исаева",
-            par: "Shine Bright Events",
-            img: "/images/jouries/jour-2.svg"
-        },
-        {
-            name: "Аяжан и Альмира",
-            par: "Crystal Moments",
-            img: "/images/jouries/jour-3.svg"
-        },
-        {
-            name: "Марат Садыков",
-            par: "Marsa Events",
-            img: "/images/jouries/jour-4.svg"
-        },
-        {
-            name: "Марьям Сыздыкова",
-            par: "Glamour Events",
-            img: "/images/jouries/image (2).svg"
-        },
-        {
-            name: "Весь список жюри",
-            par: "Еще 23",
-            img: "/images/jouries/jour-6.svg"
-        },
-    ];
 
     const persons = [
         {
@@ -88,32 +21,32 @@ function AboutPage() {
             par: "Руководитель по работе с партнерами"
         },
         {
-            name: "Айгерим Сулейменова",
+            name: "Данияр Ахметов",
             img: '/images/organizators/image (7).svg',
             par: "PR-менеджер"
         },
         {
-            name: "Айгерим Сулейменова",
+            name: "Жанна Бекжанова",
             img: '/images/organizators/image (8).svg',
             par: "Дизайнер и арт-директор"
         },
         {
-            name: "Айгерим Сулейменова",
+            name: "Ермек Байжанов",
             img: '/images/organizators/image (9).svg',
             par: "Технический директор"
         },
         {
-            name: "Айгерим Сулейменова",
+            name: "Гаухар Тургунова",
             img: '/images/organizators/image (10).svg',
             par: "Менеджер по работе с клиентами"
         },
         {
-            name: "Айгерим Сулейменова",
+            name: "Алия Искакова",
             img: '/images/organizators/image (11).svg',
             par: "Специалист по маркетингу"
         },
         {
-            name: "Айгерим Сулейменова",
+            name: "Руслан Алимов",
             img: '/images/organizators/image (12).svg',
             par: "Куратор программы ивента"
         },
@@ -137,12 +70,30 @@ function AboutPage() {
     }, [])
 
     const [deadline, setDeadline] = useState("")
+    function formatDate(dateString) {
+        // Создаем объект Date из строки
+        const date = new Date(dateString);
+    
+        // Массив с названиями месяцев
+        const months = [
+            'января', 'февраля', 'марта', 'апреля', 'мая', 'июня',
+            'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря'
+        ];
+    
+        // Извлекаем день и месяц
+        const day = date.getDate(); // Число дня
+        const month = months[date.getMonth()]; // Название месяца
+    
+        // Формируем строку "2 ноября"
+        return `${day} ${month}`;
+    }
+    
 
     useEffect(() => {
         axios.get('/getDeadline')
         .then(res => res.data)
         .then(data => {
-            
+            setFrmDate(formatDate(data[data.length-1].date))
             setDeadline(data[data.length-1])
     })
     }, [])
@@ -153,7 +104,7 @@ function AboutPage() {
     const [nominations, setNominations] = useState([]); // стейт для всех номинаций
     const [filteredNominations, setFilteredNominations] = useState([]); // стейт для отфильтрованных номинаций
     const [selectedCategory, setSelectedCategory] = useState('Все'); // выбранная категория
-
+    const [frmDate, setFrmDate] = useState('')
 
     useEffect(() => {
         window.scroll({
@@ -277,6 +228,15 @@ function AboutPage() {
                     </div>
                 </div>
 
+                <div className={s.dates}>
+                    <div className={s.date}>
+
+                        <div className={s.title}>{frmDate ? frmDate : " "}</div>
+                        <div className={s.subTitle}>Крайние сроки подачи заявок</div>
+                    </div>
+                </div>
+                
+
 
             </div>
 
@@ -293,7 +253,7 @@ function AboutPage() {
             </div>
 
             <div className={s.criterion}>
-                <div className={s.title}>КРИТЕРИЙ</div>
+                <div className={s.title}>КРИТЕРИИ</div>
                 <p className={s.par}>Критерии для участия в премии WEDS помогают нам объективно оценить достижения и уровень профессионализма в свадебной индустрии. Они разработаны, чтобы подчеркнуть ключевые качества и достижения, которые отличают лучших специалистов и компании. Эти критерии позволяют нам не только выбрать победителей, но и продемонстрировать высокие стандарты, к которым стремится вся индустрия.</p>
                 <div className={s.row}>
                     {categories && categories.map((category) => (
@@ -380,7 +340,7 @@ function AboutPage() {
                     <div className={s.mainPerson}>
                         <img src="/images/kanat.svg" alt="" />
                         <h5>КАНАТ АЯГАНОВ</h5>
-                        <p>Организатор премии WEDS</p>
+                        <p>Команда WEDS — это люди, влюблённые в своё дело. Мы создаём события, которые вдохновляют, и развиваем индустрию, в основе которой лежит доверие.                        </p>
                     </div>
                     <div className={s.persons}>
                     {   

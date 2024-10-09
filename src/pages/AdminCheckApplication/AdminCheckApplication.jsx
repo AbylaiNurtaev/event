@@ -543,7 +543,7 @@ function AdminCheckApplication() {
                             photo,
                             website,
                             phone,
-                            about,
+                            // about,
                             awards,
                             service,
                             instagram,
@@ -573,7 +573,7 @@ function AdminCheckApplication() {
                             photo,
                             website,
                             phone,
-                            about,
+                            // about,
                             awards,
                             service,
                             instagram,
@@ -795,10 +795,10 @@ const handleAddFieldChange = (outerIndex, innerIndex, e) => {
                         <p>Номер телефона: <span>*</span> {false && <span><br />заполните обязательное поле *</span>}</p>
                         <input type="text" disabled={true} value={phone} onChange={(e) => handleChange(e, setPhone)} />
                     </div>
-                    <div className={s.block}>
+                    {/* <div className={s.block}>
                         <p>о салоне/мастере: <span>*</span> {false && <span><br />заполните обязательное поле *</span>}</p>
                         <input type="text" disabled={true} value={about} onChange={(e) => handleChange(e, setAbout)} />
-                    </div>
+                    </div> */}
                     <div className={s.block}>
                         <p>Награды и достижения: <span>*</span> {false && <span><br />заполните обязательное поле *</span>}</p>
                         <input type="text"  disabled={true} value={awards} onChange={(e) => handleChange(e, setAwards)} />

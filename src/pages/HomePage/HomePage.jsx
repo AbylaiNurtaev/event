@@ -57,13 +57,13 @@ function HomePage() {
             {/* <h1 className={s.redTitle}>НОВЫЕ ТРЕНДЫ</h1> */}
 
             <div className={s.mobileLines}>
-                <img src="/images/Group 22.svg" alt="" />
+                <img src="/images/tg_image_3801372427.png" alt="" loading="lazy" />
             </div>
 
 
             <div className={s.buttons}>
                 
-                <button className={s.right} onClick={isDateValid(deadline.date) ? () => navigate('/application/new') : () => alert("Прошли сроки подачи заявок")}>УЧАСТВОВАТЬ<br className={s.mobileBR}/> В ПРЕМИИ - 2024</button>
+                <button className={s.right} onClick={() => navigate('/application/new')}>УЧАСТВОВАТЬ<br className={s.mobileBR}/> В ПРЕМИИ - 2024</button>
                 <button className={s.left}>БИЛЕТ НА ФОРУМ</button>
             </div>
         

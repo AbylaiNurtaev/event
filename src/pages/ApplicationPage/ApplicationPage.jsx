@@ -545,7 +545,6 @@ function ApplicationPage() {
                             photo,
                             website,
                             phone,
-                            about,
                             awards,
                             service,
                             instagram,
@@ -575,7 +574,6 @@ function ApplicationPage() {
                             photo,
                             website,
                             phone,
-                            about,
                             awards,
                             service,
                             instagram,
@@ -756,11 +754,15 @@ const handleAddFieldChange = (outerIndex, innerIndex, e) => {
                         <div className={s.selectWrapper}>
                             <select value={specialization} onChange={(e) => handleChange(e, setSpecialization)}>
                                 <option selected value="Декоратор">Декоратор</option>
-                                <option value="Стиль">Стиль</option>
-                                <option value="Узату той года">Узату той года</option>
-                                <option value="Фото года">Фото года</option>
-                                <option value="Стиль">Свадебный фотограф года</option>
-                                <option value="Локации">Локации</option>
+                                <option value="Артист">Артист</option>
+                                <option value="Ведущий">Ведущий</option>
+                                <option value="Видеограф">Видеограф</option>
+                                <option value="Визажист">Визажист</option>
+                                <option value="Организатор">Организатор</option>
+                                <option value="Площадка (Ресторан)">Площадка (Ресторан)</option>
+                                <option value="Свадебный салон">Свадебный салон</option>
+                                <option value="Стилист">Стилист</option>
+                                <option value="Фотограф">Фотограф</option>
                             </select>
                         </div>
                     </div>
@@ -791,17 +793,17 @@ const handleAddFieldChange = (outerIndex, innerIndex, e) => {
                         <input type="file" id='photo-upload' accept='image/*' hidden={true} onChange={(e) => handleFileUpload(e, setPhoto, 'avatar')} />
                     </div>
                     <div className={s.block}>
-                        <p>Сайт: <span>*</span> {false && <span><br />заполните обязательное поле *</span>}</p>
+                        <p>Сайт: (не обязательно) {false && <span><br />заполните обязательное поле *</span>}</p>
                         <input type="text" value={website} onChange={(e) => handleChange(e, setWebsite)} />
                     </div>
                     <div className={s.block}>
                         <p>Номер телефона: <span>*</span> {false && <span><br />заполните обязательное поле *</span>}</p>
                         <input type="text" value={phone} onChange={(e) => handleChange(e, setPhone)} />
                     </div>
-                    <div className={s.block}>
+                    {/* <div className={s.block}>
                         <p>о салоне/мастере: <span>*</span> {false && <span><br />заполните обязательное поле *</span>}</p>
                         <input type="text" value={about} onChange={(e) => handleChange(e, setAbout)} />
-                    </div>
+                    </div> */}
                     <div className={s.block}>
                         <p>Награды и достижения: <span>*</span> {false && <span><br />заполните обязательное поле *</span>}</p>
                         <input type="text" value={awards} onChange={(e) => handleChange(e, setAwards)} />

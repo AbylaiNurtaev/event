@@ -46,7 +46,7 @@ function ContactPage() {
                 </div>
             </div>
 
-            <img className={s.img} src="/images/image (13).svg" alt="" />
+            <img className={s.img} src="/images/image (13).svg" alt="" loading='lazy' />
             <div className={s.questions}>
 
                 <Questions/>
