@@ -28,22 +28,22 @@ function ContactPage() {
                 <div className={s.left}>
                     <div className={s.gray}>WEDS</div>
                     <div className={s.title}>АДРЕС</div>
-                    <p>г. Астана, улица Кабанбай Батыра, 1</p>
+                    <p>​г. Астана, улица Гейдара Алиева, 14</p>
                 </div>
                 <div className={s.middle}>
                     <div className={s.gray}>Редакция</div>
-                    <div className={s.title}>СОФИЯ ПЕТРОВИЧ</div>
-                    <p>+7-700-100-50-50</p>
-                    <p>info@weds.kz</p>
-                    <p>@sofia_p</p>
+                    <div className={s.title}>Weds Astana</div>
+                    <p>+7 707 070 1904</p>
+                    <p>weds.astana@gmail.com </p>
+                    <p>@wedsastana</p>
                 </div>
-                <div className={s.right}>
+                {/* <div className={s.right}>
                     <div className={s.gray}>Реклама и спецпроекты</div>
                     <div className={s.title}>Марк Носач</div>
                     <p>+7-700-200-60-50</p>
                     <p>mark@weds.kz</p>
                     <p>@mark</p>
-                </div>
+                </div> */}
             </div>
 
             <img className={s.img} src="/images/image (13).svg" alt="" loading='lazy' />

@@ -57,7 +57,7 @@ function HomePage() {
             {/* <h1 className={s.redTitle}>НОВЫЕ ТРЕНДЫ</h1> */}
 
             <div className={s.mobileLines}>
-                <img src="/images/tg_image_3801372427.png" alt="" loading="lazy" />
+                <img style={{width: "100%"}} src="/images/IMG.png" alt="" loading="lazy" />
             </div>
 
 

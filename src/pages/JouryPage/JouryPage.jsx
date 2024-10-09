@@ -33,13 +33,13 @@ function JouryPage() {
             <div className={s.about}>
                 <h1>Жюри премии</h1>
                 <div className={s.selectBlock}>
-                <h3>КАТЕГОРИЯ: </h3>
-                <select>
+                {/* <h3>КАТЕГОРИЯ: </h3>
+                {/* <select>
                     <option value="Декораторы">ДЕКОРАТОРЫ</option>
                     <option value="Декораторы">ДЕКОРАТОРЫ</option>
                     <option value="Декораторы">ДЕКОРАТОРЫ</option>
                     <option value="Декораторы">ДЕКОРАТОРЫ</option>
-                </select>
+                </select> */} 
 
                 </div>
                 <p className={s.par}>Жюри WEDS — признанные эксперты свадебной индустрии. Их профессионализм и независимость гарантируют объективность и высокий уровень премии.</p>
