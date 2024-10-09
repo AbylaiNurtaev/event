@@ -403,9 +403,60 @@
             flex-direction: column
 
             justify-content: center
-            align-items: center
+            align-items: flex-start
 
             width: 100%
+
+
+            .peoples
+                
+                background: white
+                display: flex
+                flex-direction: row
+
+                justify-content: flex-start
+                align-items: flex-start
+
+                flex-wrap: nowrap
+
+                gap: 5px
+
+                
+                transition: .5s
+                width: 100%
+                overflow-x: scroll
+                margin-top: 10px
+                padding-bottom: 20px
+
+                .block
+                    display: flex
+                    flex-direction: column
+
+                    justify-content: flex-start
+                    align-items: flex-start
+
+                    width: 233px
+                    height: 456px
+                    cursor: pointer
+                    border: none
+                    margin: 0
+                    padding: 0
+
+                    img
+                        width: 233px
+                        height: 350px
+
+                        object-fit: cover
+
+                    h4
+                        font-family: 'Steelfish'
+                        font-weight: 800
+                        font-size: 35px
+                        margin: 16px 0 0 0
+                        text-transform: uppercase
+
+                    p
+                        margin: 16px 0 0 0
 
             .title
                 text-transform: uppercase
@@ -968,15 +1019,9 @@
                     
             .mainSide
                 margin-top: 30px
+                
+
+
 
                 .information
                     margin-bottom: 30px
-            
-                .should
-                    flex-direction: column
-                    gap: 30px
-                    margin-top: 20px
-
-                    .block
-                        height: auto
-    

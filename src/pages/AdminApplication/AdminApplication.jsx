@@ -14,6 +14,17 @@ function AdminApplication() {
 
     const [fields, setFields] = useState([]) // Основные поля
     const [additionalFields, setAdditionalFields] = useState([]) // Дополнительные поля
+
+
+    const [images, setImages] = useState()
+    const [videos, setVideos] = useState()
+    const [docs, setDocs] = useState()
+    const [imagesText, setImagesText] = useState()
+    const [videosText, setVideosText] = useState()
+    const [docsText, setDocsText] = useState()
+
+
+
     useEffect(() => {
         axios.get('/nom')
             .then((res) => res.data)
@@ -30,7 +41,13 @@ function AdminApplication() {
                     setMultipleSelection(nomination.multipleSelection); // Убедимся, что multipleSelection существует
                     setFields(nomination.fields); // Защита от отсутствия полей
                     setAdditionalFields(nomination.additionalFields); // Защита от отсутствия дополнительных полей
-                    setCommand(nomination.command); // Защита от отсутствия команды
+                    setCommand(false); // Защита от отсутствия команды
+                    setImages(nomination.images)
+                    setVideos(nomination.videos)
+                    setDocs(nomination.docs)
+                    setDocsText(nomination.docsText)
+                    setImagesText(nomination.imagesText)
+                    setVideosText(nomination.videosText)
                 }
             })
             .catch(error => {
@@ -42,9 +59,12 @@ function AdminApplication() {
         setter(e.target.value)
     }
 
-    const handleChangeSelect = () => {
-        setMultipleSelection((prev) => !prev)
+
+    const handleChangeCheckBox = (e, setter) => {
+        setter(prev => !prev)
     }
+
+    
 
     const handleChangeCommand = () => {
         setCommand(prev => !prev)
@@ -90,7 +110,13 @@ function AdminApplication() {
             multipleSelection,
             command,
             fields: fields,
-            additionalFields: additionalFields
+            additionalFields: additionalFields,
+            images,
+            videos,
+            docs,
+            imagesText,
+            videosText,
+            docsText
         }
         axios.post(`/nom/modify/${id}`, dataToSave)
             .then((res) => res.data)
@@ -114,9 +140,11 @@ function AdminApplication() {
                 nomination &&
                 <div className={s.innerContainer}>
                     <div className={s.rows}>
-                        <div className={s.row}>
-                            <input type="checkbox" checked={multipleSelection} onChange={handleChangeSelect} />
                             <p>Возможность добавлять несколько проектов: </p>
+                        <div className={s.row}>
+                            <button style={multipleSelection == false || multipleSelection == "false" ? {background: "#066419"} : {}} onClick={() => setMultipleSelection(false)}>Отключить</button>
+                            <button style={multipleSelection == 'one' || multipleSelection == "one" ? {background: "#066419"} : {}} onClick={() => setMultipleSelection('one')}>1 проект</button>
+                            <button style={multipleSelection == true || multipleSelection == "true" ? {background: "#066419"} : {}} onClick={() => setMultipleSelection(true)}>Несколько проектов</button>
                         </div>
                         {
                             multipleSelection &&
@@ -137,7 +165,7 @@ function AdminApplication() {
                                     <p>Название дополнительного поля:</p>
                                     <input
                                         type="text"
-                                        value={field.key} // Используем field.key
+                                        value={field[0].key} // Используем field.key
                                         onChange={(e) => handleAdditionalFieldChange(index, e)}
                                     />
                                     <button className={s.deleteBtn} onClick={() => removeAdditionalField(index)}>
@@ -154,10 +182,6 @@ function AdminApplication() {
                     </div>
                     <div className={s.title}>Основные поля</div>
 
-                    <div className={s.row}>
-                        <input type="checkbox" checked={command} onChange={handleChangeCommand} />
-                        <p>Командный проект</p>
-                    </div>
                     {
                         fields.map((field, index) => (
                             <div key={index} className={s.fieldContainer} >
@@ -173,7 +197,35 @@ function AdminApplication() {
                             </div>
                         ))
                     }
+                    
                     <button className={s.addBtn} onClick={addField}>Добавить поле</button>
+                    <div className={s.rows}>
+                        <div className={s.row}>
+                            <input type="checkbox" checked={images} onChange={(e) => handleChangeCheckBox(e, setImages)}/>
+                            <p>Изображения</p>
+                        </div>
+                            {
+                                images && 
+                                <textarea className={s.textInput} type="text" placeholder='Пояснение к изображениям' value={imagesText} onChange={(e) => handleChange(e, setImagesText)} />
+                            }
+                        <div className={s.row}>
+                            <input type="checkbox" checked={docs}  onChange={(e) => handleChangeCheckBox(e, setDocs)}/>
+                            <p>Документы</p>
+                        </div>
+                            {
+                                docs && 
+                                <textarea className={s.textInput} type="text" placeholder='Пояснение к документам' value={docsText} onChange={(e) => handleChange(e, setDocsText)} />
+                            }
+                        <div className={s.row}>
+
+                            <input type="checkbox" checked={videos}  onChange={(e) => handleChangeCheckBox(e, setVideos)}/>
+                            <p>Видео</p>
+                        </div>
+                            {
+                                videos && 
+                                <textarea className={s.textInput} type="text" placeholder='Пояснение к документам' value={videosText} onChange={(e) => handleChange(e, setVideosText)} />
+                            }
+                    </div>
 
                     {/* Раздел для дополнительных полей */}
 

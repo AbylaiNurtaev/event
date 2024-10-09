@@ -46,10 +46,33 @@ function Nominations() {
             setFilteredNominations(nominations.filter(nomination => nomination.category === selectedCategory));
         }
     }, [selectedCategory, nominations]);
+    
+    const [peoples, setPeoples] = useState()
+    useEffect(() => {
+        axios.get('/getJouriesWithAvatars')
+            .then(res => res.data)
+            .then(data => {
+                if (data) {
+                    setPeoples(data);
+                }
+            });
+    }, [])
 
     const [openedPopupIndex, setOpenedPopupIndex] = useState(null);
+    
+    const [jouries, setCurrentJouries] = useState()
 
-    const togglePopup = (index) => {
+    const filteringJouries = (currentNomination) => {
+        let jouries = peoples
+        .filter(elem => elem.acceptedNominations
+          .some(nomination => nomination.toLowerCase().includes(currentNomination.toLowerCase()))
+        );
+        setCurrentJouries(jouries)
+      
+        console.log("Подходящие жюри",jouries)
+    }
+    const togglePopup = (index, nomination) => {
+        filteringJouries(nomination[0])
         document.body.style.overflowY = "hidden";
         if (openedPopupIndex === index) {
             setOpenedPopupIndex(null); // закрыть, если тот же элемент
@@ -101,7 +124,7 @@ function Nominations() {
                                     <p key={i} className={s.par1}>- {elem.text}</p>
                                 ))}
                             </div>
-                            <button onClick={() => togglePopup(index)}>ПОДРОБНЕЕ</button>
+                            <button onClick={() => togglePopup(index, elem.nomination)}>ПОДРОБНЕЕ</button>
                             {openedPopupIndex === index && <div className={s.shadow}></div>}
                             {openedPopupIndex === index && (
                                 <div className={s.popup}>
@@ -128,19 +151,24 @@ function Nominations() {
                                             )}
                                             <p className={s.par} style={{marginTop: '40px'}}>{elem.moreText}</p>
                                         </div>
-                                        <div className={s.title}>Требования</div>
-                                        <div className={s.should}>
-                                            <div className={s.block}>
-                                                <div className={s.bold}>Анкета</div>
-                                                <div className={s.par}>О себе, опыт, агентства, заказчики. Рекомендуем заполнять все поля анкеты, но если оставить поле незаполненным - оно просто не будет отображаться на странице.</div>
-                                            </div>
-                                            <div className={s.block}>
-                                                <div className={s.bold}>Портфолио</div>
-                                                <div className={s.par}>Рекомендуем загрузить до 30 фотографий. Выбирайте актуальные и качественные кадры, личные имиджевые фотосессии, отчеты с мероприятий, в которых вы принимали участие.</div>
-                                            </div>
-                                            <div className={s.block}>
-                                                <div className={s.bold}>Промо-ролик</div>
-                                                <div className={s.par}>Видео в котором можно узнать о вас, оценить ваш уровень мастерства, подачу и личный бренд. Рекомендуем загружать ролик не более 3х минут</div>
+                                        {
+                                            jouries && jouries.length >= 1 &&
+                                            <div className={s.title}>Оценивающие жюри</div>
+                                        }
+                                        <div className={s.peoples} id="peoples">
+                                            <div className={s.peoples}>
+                                                {jouries && jouries.map((elem, index) => (
+                                                    <div
+                                                        key={index}
+                                                        className={s.block}
+                                                        // style={{ transform: `translateX(${(index - currentIndex) * 66.66}%)` }}
+                                                        onClick={() => navigate(`/joury/${elem._id}`)}
+                                                    >
+                                                        <img src={elem.avatarUrl} alt="" />
+                                                        <h4>{elem.name}</h4>
+                                                        <p>{elem.nomination}</p>
+                                                    </div>
+                                                ))}
                                             </div>
                                         </div>
                                     </div>

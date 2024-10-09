@@ -9,15 +9,14 @@ function Joury() {
     const navigate =  useNavigate()
 
     useEffect(() => {
-        axios.get('/getJouries')
-        .then(res => res.data)
-        .then(data => {
-            setPeoples(data)    
-        })
+        // axios.get('/getJouries')
+        // .then(res => res.data)
+        // .then(data => {
+        //     setPeoples(data)    
+        // })
         axios.get('/getJouriesWithAvatars')
             .then(res => res.data)
             .then(data => {
-                console.log(data)
                 setPeoples(data);
             })
     }, [])
@@ -45,7 +44,6 @@ function Joury() {
 
     const moveToRight = () => {
         if(isMobile){
-
             setCurrentIndex(prevIndex => (prevIndex + 1) % peoples.length);
         }
         else{
