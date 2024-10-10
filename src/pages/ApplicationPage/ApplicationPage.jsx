@@ -747,7 +747,7 @@ function ApplicationPage() {
 
                 <div className={s.mainInformation}>
                     <div className={s.block}>
-                        <p>Номинация <span>*</span> {nomination.length == 0 && <span><br />выберите номинацию *</span>}</p>
+                        <p>Номинация <span></span> {nomination.length == 0 && <span><br />выберите номинацию </span>}</p>
                         <div className={s.selectWrapper}>
                         {
                         nominations &&
@@ -766,7 +766,7 @@ function ApplicationPage() {
                         </div>
                     </div>
                     <div className={s.block}>
-                        <p>Ваша специализация: <span>*</span> {false && <span><br />заполните обязательное поле *</span>}</p>
+                        <p>Ваша специализация: <span></span> {false && <span><br />заполните обязательное поле </span>}</p>
                         <div className={s.selectWrapper}>
                             <select value={specialization} onChange={(e) => handleChange(e, setSpecialization)}>
                                 <option selected value="Декоратор">Декоратор</option>
@@ -788,16 +788,16 @@ function ApplicationPage() {
                         
                         
                         <div className={s.block}>
-                            <p>Ваши Имя и Фамилия: <span>*</span> {false && <span><br />заполните обязательное поле *</span>}</p>
+                            <p>Ваши Имя и Фамилия: <span></span> {false && <span><br />заполните обязательное поле </span>}</p>
                             <input type="text" value={fullName} onChange={(e) => handleChange(e, setFullName)} />
                         </div>
                     
                     <div className={s.block}>
-                        <p>Город: <span>*</span> {false && <span><br />заполните обязательное поле *</span>}</p>
+                        <p>Город: <span></span> {false && <span><br />заполните обязательное поле </span>}</p>
                         <input type="text" value={city} onChange={(e) => handleChange(e, setCity)} />
                     </div>
                     <div className={s.block}>
-                        <p>Логотип: <span>*</span> {false && <span><br />заполните обязательное поле *</span>}</p>
+                        <p>Логотип: <span></span> {false && <span><br />заполните обязательное поле *</span>}</p>
                         <label htmlFor='logo-upload'>
                             <img
                                 src={logo ? logo : "/images/male-placeholder-image.jpeg"} alt="images"
@@ -806,7 +806,7 @@ function ApplicationPage() {
                         <input type="file" id='logo-upload' accept='image/*' hidden={true} onChange={(e) => handleFileUpload(e, setLogo, 'logo')} />
                     </div>
                     <div className={s.block}>
-                        <p>Ваше фото: <span>*</span> {false && <span><br />заполните обязательное поле *</span>}</p>
+                        <p>Ваше фото: <span></span> {false && <span><br />заполните обязательное поле *</span>}</p>
                         <label htmlFor='photo-upload'>
                             <img
                                 src={photo ? photo : "/images/male-placeholder-image.jpeg"} alt="images"
@@ -819,7 +819,7 @@ function ApplicationPage() {
                         <input type="text" value={website} onChange={(e) => handleChange(e, setWebsite)} />
                     </div>
                     <div className={s.block}>
-                        <p>Номер телефона: <span>*</span> {false && <span><br />заполните обязательное поле *</span>}</p>
+                        <p>Номер телефона: <span></span> {false && <span><br />заполните обязательное поле *</span>}</p>
                         <input type="text" value={phone} onChange={(e) => handleChange(e, setPhone)} />
                     </div>
                     {/* <div className={s.block}>
@@ -827,7 +827,7 @@ function ApplicationPage() {
                         <input type="text" value={about} onChange={(e) => handleChange(e, setAbout)} />
                         </div> */}
                     <div className={s.block}>
-                        <p>Награды и достижения: <span>*</span> {false && <span><br />заполните обязательное поле *</span>}</p>
+                        <p>Награды и достижения: <span></span> {false && <span><br />заполните обязательное поле *</span>}</p>
                         <input type="text" value={awards} onChange={(e) => handleChange(e, setAwards)} />
                     </div>
                     {/* <div className={s.block}>
@@ -839,7 +839,7 @@ function ApplicationPage() {
     }
                     {info && info.fields && info.fields.map((field, index) => (
                         <div key={index} className={s.block}>
-                            <p>{`${field.key}`}<span> *</span></p>
+                            <p>{`${field.key}`}<span> </span></p>
                             <input
                                 type="text"
                                 value={infoCopy.fields && infoCopy.fields[index] ? infoCopy.fields[index].value : ''} // Проверяем, существует ли элемент fields[index]
