@@ -99,7 +99,7 @@ function Nominations() {
                 <p>В разделе "Номинации" мы отмечаем выдающиеся достижения в различных категориях ивентов. Эти номинации помогают выделить лучших специалистов и подчеркнуть их вклад в развитие индустрии.</p>
             </div>
             <div className={s.criterion}>
-                <div className={s.title}>КРИТЕРИЙ</div>
+                <div className={s.title}>КРИТЕРИИ</div>
                 <p className={s.par}>Критерии для участия в премии WEDS помогают нам объективно оценить достижения и уровень профессионализма в свадебной индустрии...</p>
                 
                 {/* Отображение категорий */}
@@ -118,11 +118,11 @@ function Nominations() {
                 {/* Отображение номинаций */}
                 <div className={s.blocks}>
                     {filteredNominations && filteredNominations.map((elem, index) => (
-                        <div key={elem._id} className={s.block}>
+                        <div key={elem._id} className={s.block} >
                             <h4 className={s.title}>{elem.nomination}</h4>
                             <div className={s.list}>
                                 {elem.information && elem.information.map((elem, i) => (
-                                    <p key={i} className={s.par1}>- {elem.text}</p>
+                                    <p key={i}  style={{cursor: 'auto'}} className={s.par1}>- {elem.text}</p>
                                 ))}
                             </div>
                             <button onClick={() => togglePopup(index, elem.nomination)}>ПОДРОБНЕЕ</button>

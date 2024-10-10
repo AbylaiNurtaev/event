@@ -80,7 +80,7 @@ function Joury() {
                     >
                         <img src={elem.avatarUrl} alt="" />
                         <h4>{elem.name}</h4>
-                        <p>{elem.nomination}</p>
+                        <p>{elem.specialization}</p>
                     </div>
                 ))}
             </div>

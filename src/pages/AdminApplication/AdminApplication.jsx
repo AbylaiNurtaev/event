@@ -91,12 +91,12 @@ function AdminApplication() {
 
     // Логика для дополнительных полей
     const addAdditionalField = () => {
-        setAdditionalFields([...additionalFields, { key: '', value: '' }])
+        setAdditionalFields([...additionalFields, [{ key: '', value: '' }]])
     }
 
     const handleAdditionalFieldChange = (index, e) => {
         const updatedFields = [...additionalFields]
-        updatedFields[index].key = e.target.value
+        updatedFields[index][0].key = e.target.value
         setAdditionalFields(updatedFields)
     }
 
@@ -168,7 +168,7 @@ function AdminApplication() {
                             <div className={s.title}>Дополнительные поля</div>
                         }
                         {
-                            multipleSelection &&
+                            multipleSelection && additionalFields &&
                             additionalFields.map((field, index) => (
                                 <div key={index} className={s.fieldContainer}>
                                     <p>Название дополнительного поля:</p>

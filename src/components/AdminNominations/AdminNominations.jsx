@@ -88,6 +88,20 @@ function AdminNominations() {
             }));
         }
     };
+
+
+    const handleEditChangeInput = (e) => {
+        const { name, value, type, checked } = e.target;
+    
+        setEditNomination(prev => ({
+            ...prev,
+            [name]: type === 'checkbox' ? 
+                (checked ? [...prev[name], value] : prev[name].filter(item => item !== value)) : 
+                value // обновляем текстовое поле
+        }));
+    };
+
+
     const handleEditNewChange = (e) => {
         const { name, value } = e.target;
         
@@ -322,7 +336,7 @@ function AdminNominations() {
                                     type="text"
                                     name="nomination"
                                     value={editNomination.nomination}
-                                    onChange={handleEditChange}
+                                    onChange={handleEditChangeInput}
                                     required
                                     
                                 />

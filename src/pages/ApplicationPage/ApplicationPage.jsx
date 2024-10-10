@@ -736,9 +736,9 @@ function ApplicationPage() {
     return (
         <div className={s.container}>
             <div className={s.innerContainer}>
-                <div className={s.crumbs}>
+                <div className={s.crumbs} onClick={() => navigate(-1)}>
                     <img src="/images/fluent_arrow-up-28-filled.svg" alt="" />
-                    <p onClick={() => navigate('/')}>Вернуться назад</p>
+                    <p>Вернуться назад</p>
                 </div>
 
                 <div className={s.title}>Заявка на участие</div>
@@ -749,16 +749,20 @@ function ApplicationPage() {
                     <div className={s.block}>
                         <p>Номинация <span>*</span> {nomination.length == 0 && <span><br />выберите номинацию *</span>}</p>
                         <div className={s.selectWrapper}>
+                        {
+                        nominations &&
+                        <select value={nomination} disabled={isNew ? false : true} onChange={(e) => handleChange(e, setNomination)}>
+                            <option value="" disabled selected>Выберите вашу номинацию</option>
                             {
-                                nominations &&
-                                <select value={nomination} disabled={isNew ? false : true} onChange={(e) => handleChange(e, setNomination)}>
-                                    {
-                                        nominations.map((elem, index) =>
-                                            <option value={elem}>{elem}</option>
-                                        )
-                                    }
-                                </select>
+                                [...nominations]
+                                    .sort((a, b) => a.localeCompare(b)) // Сортировка по алфавиту
+                                    .map((elem, index) => (
+                                        <option key={index} value={elem}>{elem}</option>
+                                    ))
                             }
+                        </select>
+                    }
+
                         </div>
                     </div>
                     <div className={s.block}>
@@ -778,10 +782,16 @@ function ApplicationPage() {
                             </select>
                         </div>
                     </div>
-                    <div className={s.block}>
-                        <p>Ваши Имя и Фамилия: <span>*</span> {false && <span><br />заполните обязательное поле *</span>}</p>
-                        <input type="text" value={fullName} onChange={(e) => handleChange(e, setFullName)} />
-                    </div>
+                    { infoCopy && infoCopy.nomination[0] &&
+                        infoCopy.nomination[0] != 'Творческий проект года (съемка)' &&
+                        <>
+                        
+                        
+                        <div className={s.block}>
+                            <p>Ваши Имя и Фамилия: <span>*</span> {false && <span><br />заполните обязательное поле *</span>}</p>
+                            <input type="text" value={fullName} onChange={(e) => handleChange(e, setFullName)} />
+                        </div>
+                    
                     <div className={s.block}>
                         <p>Город: <span>*</span> {false && <span><br />заполните обязательное поле *</span>}</p>
                         <input type="text" value={city} onChange={(e) => handleChange(e, setCity)} />
@@ -815,7 +825,7 @@ function ApplicationPage() {
                     {/* <div className={s.block}>
                         <p>о салоне/мастере: <span>*</span> {false && <span><br />заполните обязательное поле *</span>}</p>
                         <input type="text" value={about} onChange={(e) => handleChange(e, setAbout)} />
-                    </div> */}
+                        </div> */}
                     <div className={s.block}>
                         <p>Награды и достижения: <span>*</span> {false && <span><br />заполните обязательное поле *</span>}</p>
                         <input type="text" value={awards} onChange={(e) => handleChange(e, setAwards)} />
@@ -823,7 +833,10 @@ function ApplicationPage() {
                     {/* <div className={s.block}>
                         <p>Сервис для клиентов: <span>*</span> {false && <span><br />заполните обязательное поле *</span>}</p>
                         <input type="text" value={service} onChange={(e) => handleChange(e, setService)} />
-                    </div> */}
+                        </div> */}
+
+                        </>
+    }
                     {info && info.fields && info.fields.map((field, index) => (
                         <div key={index} className={s.block}>
                             <p>{`${field.key}`}<span> *</span></p>

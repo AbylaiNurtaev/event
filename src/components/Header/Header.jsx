@@ -95,6 +95,9 @@ function Header() {
                         <p>ВОЙТИ</p>
                     </div>
             }
+            <button className={s.viewBtn}>
+                СТАТЬ ЗРИТЕЛЕМ
+            </button>
         </div>
 
         <div className={s.mobileContainer}>
@@ -137,7 +140,9 @@ function Header() {
                                 <button>подать заявку</button>
                             </div>
                         </div>
-
+                        <button className={s.viewBtn}>
+                СТАТЬ ЗРИТЕЛЕМ
+                    </button>
 
 
                     </div>

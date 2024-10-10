@@ -52,7 +52,7 @@ function JouryPage() {
                         <div key={index} className={s.block} onClick={() => navigate(`/joury/${elem._id}`)}>
                             <img src={elem.avatarUrl} alt="" />
                             <h4>{elem.name}</h4>
-                            <p>{elem.nomination}</p>
+                            <p>{elem.specialization}</p>
                         </div>
                     ))
                 }

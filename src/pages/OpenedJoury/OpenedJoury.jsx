@@ -35,7 +35,7 @@ function OpenedJoury() {
                     <div className={s.mainSide}>
                         <div className={s.left}>
                             <div className={s.title}>{user.name}</div>
-                            <div className={s.nomination}>{user.nomination}</div>
+                            {/* <div className={s.nomination}>{user.nomination}</div> */}
                             <p className={s.soc}>Соцсети:</p>
                             {user.instagram && (
                                 <p className={s.socialMedia} onClick={() => window.location.href = user.instagram}>Instagram</p>
@@ -59,7 +59,11 @@ function OpenedJoury() {
 
                 {user && (
                     <div className={s.projectsSide}>
-                        <div className={s.title}>ПРОЕКТЫ</div>
+                        {
+                            user.portfolio && user.portfolio.length >= 1 &&
+                            
+                            <div className={s.title}>ПРОЕКТЫ</div>
+                        }
                         <div className={s.projects}>
                             {!showAllPhotos && user.portfolio && user.portfolio.slice(0, 4).map((elem, index) => (
                                 <div key={index} className={s.projectImageWrapper}>

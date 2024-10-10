@@ -37,6 +37,7 @@ function CabinetPage() {
                 setInstagram(data.instagram || "")
                 setVk(data.vk || "")
                 setYoutube(data.youtube || "")
+                setSpecialization(data.specialization || "")
                 setTiktok(data.tiktok || "")
                 setEmail(data.email || "")
                 setRole(data.role || "")
@@ -71,6 +72,7 @@ function CabinetPage() {
     const [instagram, setInstagram] = useState("")
     const [vk, setVk] = useState("")
     const [youtube, setYoutube] = useState("")
+    const [specialization, setSpecialization] = useState('')
     const [tiktok, setTiktok] = useState("")
 
     const [sended, setSended] = useState(false)
@@ -160,6 +162,9 @@ function CabinetPage() {
             formData.append('about', about);
             formData.append('phone', phone);
             formData.append('sait', sait);
+            if(role && role == "joury"){
+                formData.append('specialization', specialization);
+            }
             formData.append('city', city);
     
             // Добавляем каждый файл в FormData
@@ -309,6 +314,25 @@ function CabinetPage() {
                         <p>Номинация: <span>*</span> {nomination && nomination.length <= 1 && sended && <span><br />заполните обязательное поле *</span>}</p>
                         <input value={nomination} type="text" onChange={(e) => handleChange(e, setNomination)} />
                     </div>
+                    {
+                        role && role == "joury" &&
+
+                    <div className={s.block}>
+                        <p>Специализация: <span>*</span></p>
+                        <select value={specialization} onChange={(e) => handleChange(e, setSpecialization)}>
+                                <option selected value="Декоратор">Декоратор</option>
+                                <option value="Артист">Артист</option>
+                                <option value="Ведущий">Ведущий</option>
+                                <option value="Видеограф">Видеограф</option>
+                                <option value="Визажист">Визажист</option>
+                                <option value="Организатор">Организатор</option>
+                                <option value="Площадка (Ресторан)">Площадка (Ресторан)</option>
+                                <option value="Свадебный салон">Свадебный салон</option>
+                                <option value="Стилист">Стилист</option>
+                                <option value="Фотограф">Фотограф</option>
+                            </select>
+                    </div>
+                    }
                     <div className={s.block}>
                         <p>Должность: <span>*</span> {job.length <= 1 && sended && <span><br />заполните обязательное поле *</span>}</p>
                         <input value={job} type="text" onChange={(e) => handleChange(e, setJob)} />
@@ -444,7 +468,7 @@ function CabinetPage() {
                             applications && applications.map((elem) =>
                                 <div className={s.application}>
                                     <p className={s.nom}>Номинация: {elem.application_data.nomination ? elem.application_data.nomination : ""}</p>
-                                    <p className={s.spec}>{elem.application_data.specialization ? elem.application_data.specialization : ""}</p>
+                                    {/* <p className={s.spec}>{elem.application_data.specialization ? elem.application_data.specialization : ""}</p> */}
                                     <button onClick={() => navigate(`/application/${elem.application_id}`)}>Изменить</button>
                                 </div>
                             )
