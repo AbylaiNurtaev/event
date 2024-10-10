@@ -38,16 +38,16 @@ function OpenedJoury() {
                             {/* <div className={s.nomination}>{user.nomination}</div> */}
                             <p className={s.soc}>Соцсети:</p>
                             {user.instagram && (
-                                <p className={s.socialMedia} onClick={() => window.location.href = user.instagram}>Instagram</p>
+                                <p className={s.socialMedia} onClick={() => window.location.href = user.instagram}>Социальная сеть 1</p>
                             )}
                             {user.vk && (
-                                <p className={s.socialMedia} onClick={() => window.location.href = user.vk}>Vk</p>
+                                <p className={s.socialMedia} onClick={() => window.location.href = user.vk}>Социальная сеть 2</p>
                             )}
                             {user.youtube && (
-                                <p className={s.socialMedia} onClick={() => window.location.href = user.youtube}>Youtube</p>
+                                <p className={s.socialMedia} onClick={() => window.location.href = user.youtube}>Социальная сеть 3</p>
                             )}
                             {user.tiktok && (
-                                <p className={s.socialMedia} onClick={() => window.location.href = user.tiktok}>Tiktok</p>
+                                <p className={s.socialMedia} onClick={() => window.location.href = user.tiktok}>Социальная сеть 4</p>
                             )}
                             <div className={s.about}>{user.about}</div>
                         </div>

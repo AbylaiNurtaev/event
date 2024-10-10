@@ -49,6 +49,7 @@ function ApplicationPage() {
                     setVideos(data.application_data.videos)
 
                     setAdditionalFields([])
+                    console.log("countOFPRJ", data.application_data.countOfProjects)
                     for (let i = 0; i < data.application_data.countOfProjects; i++) {
                         setCountProjects(prev => [{ key: "key" + i }, ...prev])
                         setAdditionalFields(prev => [{ key: "key" + i }, ...prev])
@@ -407,7 +408,10 @@ function ApplicationPage() {
         // Если необходимо сохранить изменения в original массиве
         console.log("infoCopy1", infoCopy1)
         setAdditionalFields(infoCopy1)
-        setCountProjects(infoCopy1)
+        console.log("countProjects", countProjects)
+        setCountProjects((prev) => prev.filter((_, idx) => idx !== index));
+
+
     }
 
     const handleSubmitDocuments = async () => {
@@ -788,7 +792,7 @@ function ApplicationPage() {
                         
                         
                         <div className={s.block}>
-                            <p>Ваши Имя и Фамилия: <span></span> {false && <span><br />заполните обязательное поле </span>}</p>
+                            <p>Имя/Название: <span></span> {false && <span><br />заполните обязательное поле </span>}</p>
                             <input type="text" value={fullName} onChange={(e) => handleChange(e, setFullName)} />
                         </div>
                     
@@ -855,19 +859,19 @@ function ApplicationPage() {
 
                 <div className={s.socialMedias}>
                     <div className={s.block}>
-                        <p>Ссылка на Instagram: </p>
+                        <p>Социальная сеть 1: </p>
                         <input value={instagram} onChange={(e) => handleChange(e, setInstagram)} type="text" />
                     </div>
                     <div className={s.block}>
-                        <p>Ссылка на Youtube: </p>
+                        <p>Социальная сеть 2: </p>
                         <input value={youtube} type="text" onChange={(e) => handleChange(e, setYoutube)} />
                     </div>
                     <div className={s.block}>
-                        <p>Ссылка на VK: </p>
+                        <p>Социальная сеть 3: </p>
                         <input value={vk} type="text" onChange={(e) => handleChange(e, setVk)} />
                     </div>
                     <div className={s.block}>
-                        <p>Ссылка на TikTok: </p>
+                        <p>Социальная сеть 4: </p>
                         <div className={s.saveBlock}>
                             <input value={tiktok} type="text" onChange={(e) => handleChange(e, setTiktok)} />
                         </div>
@@ -1083,7 +1087,7 @@ infoCopy.videos == true &&
                         <div className={s.additionalFields} key={index}>
 
                             <h1 className={s.title}>{infoCopy && infoCopy.nameTitle || "Проект"} {index + 1}<div className={s.delete} onClick={() => deleteAdditionalInf(index)}>Удалить</div></h1>
-                            <p className={s.parText} style={{marginTop: '20px'}}>{infoCopy && infoCopy.par}Описание ваших проектов</p>
+                            <p className={s.parText} style={{marginTop: '20px'}}>{infoCopy && infoCopy.par}</p>
 
                             {
                                 infoCopy && infoCopy.additionalFields.map((field, idx) => (
