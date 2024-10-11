@@ -13,9 +13,18 @@ function Applications() {
         axios.get('/getAllUsers')
             .then(res => res.data)
             .then(data => {
-                console.log(data);
-                setUsers(data);
-            });
+                let allNominations = data.map(user => 
+                    user.applications 
+                        ? user.applications.map((elem) => ({
+                            ...elem.application_data, // Копируем все данные из application_data
+                            userId: user._id, // Добавляем user._id как поле userId
+                            applicationId: elem.application_id // Добавляем application_id как поле applicationId
+                        })) 
+                        : null
+                );
+                console.log(allNominations.filter(nomination => nomination && nomination.length >= 1).flat());
+                setUsers(allNominations.filter(nomination => nomination && nomination.length >= 1).flat())});
+                
 
         axios.get('/nom')
             .then(res => res.data)
@@ -41,44 +50,26 @@ function Applications() {
                 {/* Display nominations */}
                 <div className={s.nominations}>
                     {nominations && nominations.map((nomination, index) => (
-                        <div className={s.nomination} key={index} onClick={() => handleNominationClick(index)}>
+                        <div className={s.nomination} style={{cursor: "pointer"}} key={index} onClick={() => handleNominationClick(index)}>
                             <p>{nomination}</p>
                             <img src="https://cdn-icons-png.flaticon.com/512/54/54785.png" alt="toggle" />
                         </div>
                     ))}
+
                     {openedNomination !== null && (
-                        <div className={s.nominations}>
-                            {users
-                                .filter(user =>
-                                    user.applications.some(app => app.application_data.nomination.includes(nominations[openedNomination]))
-                                ) // Filter users who applied for the selected nomination
-                                .map((user, userIndex) => (
-                                    <div key={userIndex}>
-                                        <h3>{user.fullName}</h3>
-                                        <div>
-                                            {user.applications.length === 0 ? (
-                                                <p>Нету поданных заявок</p>
-                                            ) : (
-                                                user.applications.map((app, appIndex) => (
-                                                    app.application_data.nomination.includes(nominations[openedNomination]) && (
-                                                        <div key={appIndex} className={s.container}>
-                                                            <p>{app.application_data.nomination}</p>
-                                                            <p>{app.application_data.fullName}</p>
-                                                            <button onClick={() => navigate(`/applicationChecking/${app.application_id}/${user._id}`)}>
-                                                                Посмотреть заявку
-                                                            </button>
-                                                        </div>
-                                                    )
-                                                ))
-                                            )}
-                                        </div>
-                                    </div>
-                                ))}
+                        <div className={s.container}>
+                            <img src="/images/Frame 3.svg" onClick={() => setOpenedNomination(null)} style={{cursor: "pointer"}} alt="" />
+                            <p>{nominations[openedNomination]}</p>
+                            {
+                                users.filter((elem) => elem.nomination.toLowerCase() == nominations[openedNomination].toLowerCase()).map((elem) =>
+                                <div className={s.nomination} style={{paddingBottom: "10px"}}>
+                                    <p style={{marginTop: "20px"}}>{elem.fullName}</p>
+                                    <button onClick={() => navigate(`/applicationChecking/${elem.applicationId}/${elem.userId}`)}>Посмотреть заявку</button>
+                                </div> )
+                            }
                         </div>
                     )}
                 </div>
-
-                {/* Display users based on opened nomination */}
             </div>
         </div>
     );

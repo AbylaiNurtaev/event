@@ -8,7 +8,7 @@ function AddJoury() {
   const [allJouries, setAllJouries] = useState([]);
   const [nominations, setNominations] = useState([]);
   const [selectedNominations, setSelectedNominations] = useState({}); // для хранения выбранных номинаций
-  const [activeIndex, setActiveIndex] = useState();
+  const [activeIndex, setActiveIndex] = useState(null);
 
   useEffect(() => {
     // Получение всех жюри
@@ -96,12 +96,17 @@ function AddJoury() {
         {allJouries && allJouries.map((elem, index) => (
           <div className={s.block} key={elem.email}>
             <div className={s.top}>
-              <p onClick={() => {activeIndex >= 0 ? setActiveIndex() : setActiveIndex(index)}}>{elem.name}</p>
+              <p onClick={() => {activeIndex != null ? setActiveIndex(null) : setActiveIndex(index)}}>{elem.name}</p>
               <p onClick={() => deleteJoury(elem.email)}>Удалить</p>
             </div>
 
-            <div className={s.bottom}>
+
+            <div className={s.bottom} style={ activeIndex != null ? {display: 'flex'} : {display: "none"}}>
+              <img src="/images/Frame 3.svg" onClick={() => setActiveIndex(null)} alt="" />
+              
               {nominations && activeIndex === index && nominations.map((nomination) => (
+                
+                
                 <div className={s.nominations} key={nomination}>
                   <input
                     type="checkbox"
@@ -110,12 +115,14 @@ function AddJoury() {
                   />
                   <p>{nomination}</p>
                 </div>
+                
               ))}
             </div>
-            {
+              {
                 nominations && activeIndex === index &&
-                <button onClick={() => saveNominations(elem.email)}>Сохранить номинации</button>
-            }
+                  <button onClick={() => saveNominations(elem.email)}>Сохранить номинации</button>
+              }
+
           </div>
         ))}
       </div>

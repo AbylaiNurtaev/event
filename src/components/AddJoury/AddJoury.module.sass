@@ -85,11 +85,27 @@
                     cursor: pointer
             
             .bottom
-                display: flex
+                display: none
                 flex-direction: column
 
                 justify-content: flex-start
                 align-items: flex-start
+
+                width: 700px
+                height: 500px
+
+                position: absolute
+                z-index: 100
+
+                border-radius: 5px
+                box-shadow: 0px 0px 39px -7px rgba(0,0,0,0.75)
+
+                top: 5%
+                background: white
+                padding: 40px 100px 100px 100px
+
+                overflow-y: scroll
+                padding-bottom: 30px
 
 
                 .nominations
@@ -102,6 +118,7 @@
                     
                     gap: 20px
                     height: 50px
+                    
 
                     input
                         width: 20px

@@ -13,45 +13,30 @@ function AboutPage() {
     const [peoples, setPeoples] = useState();
     const persons = [
         {
-            name: "Айгерим Сулейменова",
-            img: '/images/organizators/image (5).svg',
-            par: "Координатор мероприятий"
+            name: "Айгерим Магауова",
+            img: '/images/organizators/telegram-cloud-document-2-5202005573633071188.svg',
+            par: "Руководитель проекта"
         },
         {
-            name: "Мадина Касымова",
-            img: '/images/organizators/image (6).svg',
-            par: "Руководитель по работе с партнерами"
+            name: "Ирина Волкова",
+            img: '/images/organizators/telegram-cloud-document-2-5188467205355887716 (1).svg',
+            par: "Креативный продюссер"
         },
         {
-            name: "Данияр Ахметов",
-            img: '/images/organizators/image (7).svg',
-            par: "PR-менеджер"
+            name: "Алина Никифорова",
+            img: '/images/organizators/telegram-cloud-document-2-5202122757520773474 (1).svg',
+            par: "Руководитель SMM-отдела"
         },
         {
-            name: "Жанна Бекжанова",
-            img: '/images/organizators/image (8).svg',
-            par: "Дизайнер и арт-директор"
+            name: "Анна Крюкова",
+            img: '/images/organizators/telegram-cloud-document-2-5202122757520773492 (1).svg',
+            par: "Менеджер telegram-канала"
         },
         {
-            name: "Ермек Байжанов",
-            img: '/images/organizators/image (9).svg',
-            par: "Технический директор"
-        },
-        {
-            name: "Гаухар Тургунова",
-            img: '/images/organizators/image (10).svg',
-            par: "Менеджер по работе с клиентами"
-        },
-        {
-            name: "Алия Искакова",
-            img: '/images/organizators/image (11).svg',
-            par: "Специалист по маркетингу"
-        },
-        {
-            name: "Руслан Алимов",
-            img: '/images/organizators/image (12).svg',
-            par: "Куратор программы ивента"
-        },
+            name: "Кульжамбекова Карина",
+            img: '/images/organizators/telegram-cloud-document-2-5201814640861926161 (2).svg',
+            par: "SMM-менеджер"
+        }
     ]
 
     const [position, setPosition] = useState(0); // Начальное состояние позиции
@@ -363,13 +348,13 @@ function AboutPage() {
                     <h1 className={s.title}>ОРГАНИЗАТОРЫ</h1>
                     <div className={s.citation}>
                         <img src="/images/leftScobe.svg" alt="" />
-                        <p>Мы, организаторы премии WEDS, с особым вниманием подходим к каждому аспекту этого значимого события. Наша задача — создать атмосферу, где лучшие представители свадебной индустрии смогут блеснуть своим мастерством. Мы гордимся тем, что каждый год делаем церемонию по-настоящему запоминающейся, отражающей престиж и важность премии для всех участников.</p>
+                        <p>Команда WEDS — это люди, влюблённые в своё дело. Мы создаём события, которые вдохновляют, и развиваем индустрию, в основе которой лежит доверие</p>
                         <img src="/images/rightScobe.svg" alt="" />
                     </div>
                     <div className={s.mainPerson}>
-                        <img src="/images/kanat.svg" alt="" />
+                        <img src="/images/organizators/telegram-cloud-document-2-5204348302199378728@2x.png" alt="" />
                         <h5>КАНАТ АЯГАНОВ</h5>
-                        <p>Команда WEDS — это люди, влюблённые в своё дело. Мы создаём события, которые вдохновляют, и развиваем индустрию, в основе которой лежит доверие.                        </p>
+                        <p>Основатель WEDS</p>
                     </div>
                     <div className={s.persons}>
                         {
