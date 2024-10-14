@@ -51,12 +51,9 @@ function CabinetPage() {
                     axios.post('/auth/getUser', { userId: id, type: "portfolio" })
                     .then(res => res.data)
                     .then(data => {
-                        console.log("port", data.portfolio)
                         setSelectedFiles((prev) => [...prev, ...data.portfolio])
                     })
                 }
-
-            
             })
 
     }, [])
@@ -145,8 +142,6 @@ function CabinetPage() {
         })
         .then((res) => res.data)
         .then((data) => console.log(data))
-
-        console.log(fileIndex)
     };
 
     const deleteNewImages = (fileIndex) => {
@@ -196,8 +191,8 @@ function CabinetPage() {
                         'Content-Type': 'multipart/form-data', // Указываем, что это форма с файлами
                     }
                 });
+                window.location.href = window.location.href
                 alert("Данные успешно отправлены");
-                // window.location.href = window.location.href
                 console.log("Response data:", response.data);
             } catch (err) {
                 console.error("Ошибка во время запроса:", err.message);

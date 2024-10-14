@@ -41,23 +41,30 @@ function Header() {
     })
     }, [])
     
-    useEffect(() => {
-        axios.post('/auth/getUser', {userId: id, type: 'logo'})
-        .then((res) => res.data)
-        .then(data => setUser(data))
-    }, [id])
     const location = useLocation()
-
     useEffect(() => {
-        // console.log("Запрос")
-        axios.post('/auth/getUserByToken')
-            .then(res => res.data)
+        setTimeout(() => {
+            const id = localStorage.getItem('id')
+            axios.post('/auth/getUser', {userId: id, type: 'logo'})
+            .then((res) => res.data)
             .then(data => {
-                console.log("user", data)
+                console.log("dsds", data, id)
                 setUser(data)
-    })
-            .catch((err) => {console.log("header", err)})
+        })
+        }, 1000)
+
     }, [])
+
+    // useEffect(() => {
+    //     // console.log("Запрос")
+    //     axios.post('/auth/getUserByToken')
+    //         .then(res => res.data)
+    //         .then(data => {
+    //             console.log("user", data)
+    //             setUser(data)
+    // })
+    //         .catch((err) => {console.log("header", err)})
+    // }, [])
 
     return (<>
         <div className={s.container}>
