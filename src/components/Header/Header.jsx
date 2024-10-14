@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import s from './Header.module.sass'
 import { useLocation, useNavigate } from 'react-router-dom'
 import axios from '../../axios'
+import { type } from '@testing-library/user-event/dist/type'
 
 function Header() {
 
@@ -40,11 +41,11 @@ function Header() {
     })
     }, [])
     
-    // useEffect(() => {
-    //     axios.post('/auth/getUser', {userId: id})
-    //     .then((res) => res.data)
-    //     .then(data => console.log(data, id))
-    // }, [id])
+    useEffect(() => {
+        axios.post('/auth/getUser', {userId: id, type: 'logo'})
+        .then((res) => res.data)
+        .then(data => setUser(data))
+    }, [id])
     const location = useLocation()
 
     useEffect(() => {
@@ -52,10 +53,10 @@ function Header() {
         axios.post('/auth/getUserByToken')
             .then(res => res.data)
             .then(data => {
-                console.log(data)
+                console.log("user", data)
                 setUser(data)
     })
-            .catch((err) => {})
+            .catch((err) => {console.log("header", err)})
     }, [])
 
     return (<>
@@ -63,7 +64,8 @@ function Header() {
             <img src="/images/Logo.svg" onClick={() => navigate('/')} alt="logo" className={s.logo} />
             <p className={s.par}>Главная свадебная премия Казахстана</p>
             <div className={s.links}>
-                <p onClick={() => navigate('/about')} style={location && location.pathname == "/about" ? { color: '#f4444a' } : {}}>О премии</p>
+                <p onClick={() => navigate('/about')} style={location && location.pathname == "/about" ? { color: '#f4444a' } : {}}>О рейтинге</p>
+                <p onClick={() => navigate('/critery')} style={location && location.pathname == "/critery" ? { color: '#f4444a' } : {}}>Критерии</p>
                 <p onClick={() => navigate('/nominations')} style={location && location.pathname == "/nominations" ? { color: '#f4444a' } : {}}>Номинации</p>
                 <p onClick={() => navigate('/joury')} style={location && location.pathname == "/joury" ? { color: '#f4444a' } : {}}>Жюри</p>
                 <p onClick={scrollDown}>Вопросы и ответы</p>
@@ -126,7 +128,8 @@ function Header() {
                         }
 
                         <div className={s.links}>
-                            <p onClick={() => { navigate('/about'); setBurgerMenu(false) }} style={location && location.pathname == "/about" ? { color: '#f4444a' } : {}}>О премии</p>
+                            <p onClick={() => { navigate('/about'); setBurgerMenu(false) }} style={location && location.pathname == "/about" ? { color: '#f4444a' } : {}}>О рейтинге</p>
+                            <p onClick={() => { navigate('/critery'); setBurgerMenu(false) }} style={location && location.pathname == "/critery" ? { color: '#f4444a' } : {}}>Критерии</p>
                             <p onClick={() => { navigate('/nominations'); setBurgerMenu(false) }} style={location && location.pathname == "/nominations" ? { color: '#f4444a' } : {}}>Номинации</p>
                             <p onClick={() => { navigate('/joury'); setBurgerMenu(false) }} style={location && location.pathname == "/joury" ? { color: '#f4444a' } : {}}>Жюри</p>
                             <p onClick={scrollDownMobile}>Вопросы и ответы</p>

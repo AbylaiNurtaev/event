@@ -75,7 +75,6 @@ function AuthorizationPage() {
                 if (data.status === "VERIFIED") {
                     navigate(`/cabinet/${user._id}`)
                     setTimeout(() => {
-
                         window.location.href = window.location.href;
                     }, 1000)
                 } else {

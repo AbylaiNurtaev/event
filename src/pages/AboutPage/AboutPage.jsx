@@ -169,10 +169,10 @@ function AboutPage() {
             <div className={s.crumbs}>
                 <p onClick={() => navigate('/')}>Главная</p>
                 <p>|</p>
-                <p>О премии</p>
+                <p>О рейтинге</p>
             </div>
             <div className={s.about}>
-                <h1>О ПРЕМИИ</h1>
+                <h1>О РЕЙТИНГЕ</h1>
                 <p>Национальный рейтинг специалистов свадебного рынка Казахстана, основанный на оценках 100 ведущих экспертов в свадьбах и традиционной казахской культуре.</p>
             </div>
 
@@ -249,7 +249,7 @@ function AboutPage() {
             </div>
 
             <div className={s.redBlock}>
-                <div className={s.title}>Преимущества премии</div>
+                <div className={s.title}>Преимущества рейтинга</div>
                 <p className={s.par}>Усовершенствованная система номинаций, подачи заявок, критериев и оценки, формирования итогового рейтинга WEDS.
                     Прозрачность: заявки участников и итоговые оценки будут опубликованы на портале WEDS,
                     Отдельное внимание посвящено блоку номинаций, связанных с национальной культурой и традициями,
@@ -261,83 +261,7 @@ function AboutPage() {
             </div>
 
             <div className={s.criterion}>
-                <div className={s.title}>КРИТЕРИИ</div>
-                <p className={s.par}>Критерии для участия в премии WEDS помогают нам объективно оценить достижения и уровень профессионализма в свадебной индустрии. Они разработаны, чтобы подчеркнуть ключевые качества и достижения, которые отличают лучших специалистов и компании. Эти критерии позволяют нам не только выбрать победителей, но и продемонстрировать высокие стандарты, к которым стремится вся индустрия.</p>
-                <div className={s.row}>
-                    {categories && categories.map((category, index) => (
-                        <h5
-                            key={index}
-                            className={selectedCategory === category ? s.active : ''}
-                            onClick={() => setSelectedCategory(category)}
-                        >
-                            {category}
-                        </h5>
-                    ))}
-                </div>
 
-                <div className={s.blocks}>
-                    {filteredNominations && filteredNominations.map((elem, index) => (
-                        <div key={elem._id} className={s.block}>
-                            <h4 className={s.title}>{elem.nomination}</h4>
-                            <div className={s.list}>
-                                {elem.information && elem.information.map((elem, i) => (
-                                    <p key={i} className={s.par1}>- {elem.text}</p>
-                                ))}
-                            </div>
-                            <button onClick={() => togglePopup(index, elem.nomination)}>ПОДРОБНЕЕ</button>
-                            {openedPopupIndex === index && <div className={s.shadow}></div>}
-                            {openedPopupIndex === index && (
-                                <div className={s.popup}>
-                                    <div className={s.topSide}>
-                                        <div className={s.title}>{elem.nomination[0]}</div>
-                                        <div className={s.right}>
-                                            <button onClick={() => navigate('/application/new')}>ПОДАТЬ ЗАЯВКУ</button>
-                                            <img src="/images/Frame 3.svg" onClick={closePopup} alt="" />
-                                        </div>
-                                    </div>
-                                    <div className={s.topMobileSide}>
-                                        <div className={s.top}>
-                                            <div className={s.title}>{elem.nomination[0]}</div>
-                                            <img src="/images/Frame 3.svg" onClick={closePopup} alt="" />
-                                        </div>
-                                        <button onClick={() => navigate('/application/new')}>ПОДАТЬ ЗАЯВКУ</button>
-                                    </div>
-                                    <div className={s.mainSide}>
-                                        <div className={s.title}>Критерии и оценки</div>
-                                        <div className={s.information} style={{ marginTop: '40px' }}>
-                                            {elem.information && elem.information.map((item) =>
-                                                <div>— {item.text} — {item.percentage}</div>
-
-                                            )}
-                                            <p className={s.par} style={{ marginTop: '40px' }}>{elem.moreText}</p>
-                                        </div>
-                                        {
-                                            jouries && jouries.length >= 1 &&
-                                            <div className={s.title}>Оценивающие жюри</div>
-                                        }
-                                        <div className={s.peoples} id="peoples">
-                                            <div className={s.peoples}>
-                                                {jouries && jouries.map((elem, index) => (
-                                                    <div
-                                                        key={index}
-                                                        className={`${s.block} ${index === currentIndex ? s.active : ''}`}
-                                                        style={{ transform: `translateX(${(index - currentIndex) * 66.66}%)` }}
-                                                        onClick={() => navigate(`/joury/${elem._id}`)}
-                                                    >
-                                                        <img src={elem.avatarUrl} alt="" />
-                                                        <h4>{elem.name}</h4>
-                                                        <p>{elem.nomination}</p>
-                                                    </div>
-                                                ))}
-                                            </div>
-                                        </div>
-
-                                    </div>
-                                </div>
-                            )}
-                        </div>
-                    ))}
-                </div>
 
                 <div className={s.joury}>
                     <Joury></Joury>
@@ -372,14 +296,14 @@ function AboutPage() {
 
 
 
-            <div className={s.partners}>
+            {/* <div className={s.partners}>
                 <h1 className={s.title}>ПАРТНЕРЫ</h1>
                 <p className={s.par}>WEDS благодарит наших партнеров — лидеров свадебной индустрии, за поддержку и вклад в проведение ивента. Вместе мы создаем яркие и значимые события для всего сообщества.</p>
                 <img className={s.row} src="/images/row.svg" alt="" />
                 <div className={s.rowDiv}>
                     <img className={s.rowMobile} src="/images/row.svg" alt="" />
                 </div>
-            </div>
+            </div> */}
             <div className={s.questions}>
                 <Questions></Questions>
             </div>

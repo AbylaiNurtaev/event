@@ -46,7 +46,6 @@ function CabinetPage() {
                 setCity(data.city || "")
                 setAvatarSrc(data.avatar || '/images/male-placeholder-image.jpeg');
                 setApplications(data.applications)
-                console.log(data.portfolio)
                 if(data.portfolio.length > 0){
                     setIsNew(false)
                     axios.post('/auth/getUser', { userId: id, type: "portfolio" })
@@ -90,7 +89,22 @@ function CabinetPage() {
     const [localPortfolioFiles, setLocalPortfolioFiles] = useState([]);
     const [newFiles, setNewFiles] = useState([]);
 
+    useEffect(() => {
+        window.scroll({
+            top: 0,
+            behavior: "smooth"
+        });
 
+        axios.get('/nom')
+            .then((res) => res.data)
+            .then(data => {
+                const uniqueCategories = [...new Set(data.map(item => item.nomination[0]))];
+                setNominations(uniqueCategories);
+            })
+
+    }, []);
+
+    const [nominations, setNominations] = useState()
     const cities = [
         'Нур-Султан',
         'Алматы',
@@ -183,6 +197,7 @@ function CabinetPage() {
                     }
                 });
                 alert("Данные успешно отправлены");
+                // window.location.href = window.location.href
                 console.log("Response data:", response.data);
             } catch (err) {
                 console.error("Ошибка во время запроса:", err.message);
@@ -296,6 +311,7 @@ function CabinetPage() {
                             <img
                                 src={localFile ? URL.createObjectURL(localFile) : avatarSrc} // Локальный файл или серверный URL
                                 alt="Avatar"
+                                style={{border: '1px solid #1001'}}
                             />
                         </label>
                         <input
@@ -311,8 +327,22 @@ function CabinetPage() {
                         <input value={name} onChange={(e) => handleChange(e, setName)} type="text" />
                     </div>
                     <div className={s.block}>
-                        <p>Номинация: <span>*</span> {nomination && nomination.length <= 1 && sended && <span><br />заполните обязательное поле *</span>}</p>
-                        <input value={nomination} type="text" onChange={(e) => handleChange(e, setNomination)} />
+                        <p>Номинация: <span>*</span> {name.length <= 1 && sended && <span><br />заполните обязательное поле *</span>}</p>
+            
+                    {
+
+                        nominations &&
+                        <select value={nomination} onChange={(e) => handleChange(e, setNomination)}>
+                            <option value="" disabled selected>Выберите вашу номинацию</option>
+                            {
+                                [...nominations]
+                                    .sort((a, b) => a.localeCompare(b)) // Сортировка по алфавиту
+                                    .map((elem, index) => (
+                                        <option key={index} value={elem}>{elem}</option>
+                                    ))
+                            }
+                        </select>
+                    }
                     </div>
                     {
                         role && role == "joury" &&
@@ -338,7 +368,7 @@ function CabinetPage() {
                         <input value={job} type="text" onChange={(e) => handleChange(e, setJob)} />
                     </div>
                     <div className={s.block}>
-                        <p>Ваш Сайт: <span>*</span></p>
+                        <p>Ваш Сайт: <span></span></p>
                         <input type="text" value={sait} onChange={(e) => handleChange(e, setSait)} />
                     </div>
                     <div className={s.block}>

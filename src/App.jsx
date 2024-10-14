@@ -15,6 +15,7 @@ import GradingPage from './pages/GradingPage/GradingPage';
 import AdminApplication from './pages/AdminApplication/AdminApplication';
 import OpenedJoury from './pages/OpenedJoury/OpenedJoury';
 import AdminCheckApplication from './pages/AdminCheckApplication/AdminCheckApplication';
+import CriteryPage from './pages/CriteryPage/CriteryPage';
 function App() {
   return (
     <div className="App">
@@ -22,6 +23,7 @@ function App() {
         <Route path='/' element={<Layout/>}>
           <Route index element={<HomePage></HomePage>}></Route>
           <Route path='/about' element={<AboutPage/>}></Route>
+          <Route path='/critery' element={<CriteryPage/>}></Route>
           <Route path='/nominations' element={<Nominations/>}></Route>
           <Route path='/joury' element={<JouryPage/>}></Route>
           <Route path='/joury/:id' element={<OpenedJoury/>}></Route>

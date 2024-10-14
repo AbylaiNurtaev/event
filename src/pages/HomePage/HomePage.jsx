@@ -57,7 +57,7 @@ function HomePage() {
             {/* <h1 className={s.redTitle}>НОВЫЕ ТРЕНДЫ</h1> */}
 
             <div className={s.mobileLines}>
-                <img style={{width: "100%"}} src="/images/IMG.png" alt="" loading="lazy" />
+                <img style={{width: "100%"}} src="/images/IMG (1).png" alt="" loading="lazy" />
             </div>
 
 
@@ -76,10 +76,10 @@ function HomePage() {
 
             <div className={s.infoBlock}>
                 <div className={s.left}>
-                    <div className={s.title}>О ПРЕМИИ</div>
+                    <div className={s.title}>О РЕЙТИНГЕ</div>
                     <p className={s.par}>Мы — независимая премия, объединяющая свадебных профессионалов и формирующая стандарты индустрии. <br/><br/><br/>
                     Победителем может стать любая компания или частное лицо, предлагающие качественные свадебные услуги. Жюри, состоящее из признанных экспертов свадебного бизнеса, ежегодно обновляется. Участие в премии — это престиж для любого свадебного профессионала!</p>
-                    <button onClick={() => navigate('/about')}>ПОДРОБНЕЕ О ПРЕМИИ</button>
+                    <button onClick={() => navigate('/about')}>ПОДРОБНЕЕ О РЕЙТНИГЕ</button>
                 </div>
                 <div className={s.right}>
                     <div className={s.title}>РАСПИСАНИЕ</div>
@@ -104,7 +104,7 @@ function HomePage() {
             <img className={s.image} src="/images/image (4).svg" alt="" />
 
 
-            <div className={s.partners}>
+            {/* <div className={s.partners}>
                 <h1 className={s.title}>ПАРТНЕРЫ</h1>
                 <p className={s.par}>WEDS благодарит наших партнеров — лидеров свадебной индустрии, за поддержку и вклад в проведение ивента. Вместе мы создаем яркие и значимые события для всего сообщества.</p>
                 
@@ -114,7 +114,7 @@ function HomePage() {
                     <img className={s.mobileRow} src="/images/row.svg" alt="" />
                 </div>
                 
-            </div>
+            </div> */}
             
 
             <div className={s.joury}>
