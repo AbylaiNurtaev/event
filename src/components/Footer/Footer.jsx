@@ -10,6 +10,11 @@ function Footer() {
                 <p>|</p>
                 <p style={{cursor: "pointer"}} onClick={() => window.open("/documents/Политика_конфиденциальности_и_обработки_персональных_данных_docx.pdf", '_blank' )}>Политика конфиденциальности</p>
             </div>
+            <div className={s.top} style={{marginTop: '-10px'}}>
+                <p style={{cursor: "pointer"}} onClick={() => window.open("/documents/Оферта.pdf", '_blank' )}>Оферта</p>
+                <p>|</p>
+                <p style={{cursor: "pointer"}} onClick={() => window.open("/documents/Размещение на сайте.docx.pdf", '_blank' )}>Размещение на сайте</p>
+            </div>
             <p className={s.bottom}>©  Главная свадебная премия Казахстана «WEDS»</p>
         </div>
 

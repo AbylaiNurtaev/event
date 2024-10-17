@@ -22,6 +22,15 @@ function CriteryPage() {
         setOpenedPopupIndex(null);
     };
 
+    useEffect(() => {
+        // Фильтрация номинаций по выбранной категории
+        if (selectedCategory === 'Все') {
+            setFilteredNominations(nominations);
+        } else {
+            setFilteredNominations(nominations.filter(nomination => nomination.category.includes(selectedCategory)));
+        }
+    }, [selectedCategory, nominations]);
+
     
     useEffect(() => {
         window.scroll({

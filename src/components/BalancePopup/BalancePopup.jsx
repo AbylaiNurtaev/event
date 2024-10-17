@@ -19,7 +19,7 @@ BalancePopup() {
             <img style={{cursor: 'pointer'}} onClick={() => setClose(true)} src="/images/Frame 67.svg" alt="" />
         </div>
         <div className={s.par}>Чтобы подать заявку, пополните свой баланс.</div>
-        <button onClick={() => {navigate('/payment')}}>пополнить</button>
+        <button onClick={() => {navigate('/payment')}}>оплатить</button>
     </div>
     </>
   )

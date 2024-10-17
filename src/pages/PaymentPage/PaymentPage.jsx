@@ -78,27 +78,27 @@ function PaymentPage() {
   return (
     <div className={s.container}>
         <div className={s.innerContainer}>
-        <div className={s.title}>ПОПОЛНЕНИЕ БАЛАНСА</div>
+        <div className={s.title}>ОПЛАТИТЬ</div>
         <div className={s.packets}>
             <div className={s.packet}>
                 <div className={s.price}>100 000 ТЕНГЕ</div>
                 <div className={s.value}>1 номинация</div>
-                <button onClick={() => payment(10000000, 1)}>ПОПОЛНИТЬ</button>
+                <button onClick={() => payment(10000000, 1)}>ОПЛАТИТЬ</button>
             </div>
             <div className={s.packet}>
                 <div className={s.price}>180 000 ТЕНГЕ</div>
                 <div className={s.value}>2 номинация</div>
-                <button onClick={() => payment(18000000, 2)}>ПОПОЛНИТЬ</button>
+                <button onClick={() => payment(18000000, 2)}>ОПЛАТИТЬ</button>
             </div>
             <div className={s.packet}>
                 <div className={s.price}>225 000 ТЕНГЕ</div>
                 <div className={s.value}>3 номинация</div>
-                <button onClick={() => payment(22500000, 3)}>ПОПОЛНИТЬ</button>
+                <button onClick={() => payment(22500000, 3)}>ОПЛАТИТЬ</button>
             </div>
             <div className={s.packet}>
                 <div className={s.price}>320 000 ТЕНГЕ</div>
                 <div className={s.value}>4 номинация</div>
-                <button onClick={() => payment(32000000, 4)}>ПОПОЛНИТЬ</button>
+                <button onClick={() => payment(32000000, 4)}>ОПЛАТИТЬ</button>
             </div>
 
         </div>

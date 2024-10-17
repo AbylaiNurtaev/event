@@ -1,5 +1,5 @@
-import { React } from 'react'
-import {Route, Routes} from 'react-router-dom'
+import { React, useEffect, useState } from 'react'
+import {Route, Routes, useNavigate} from 'react-router-dom'
 import Layout from './components/Layout/Layout';
 import HomePage from './pages/HomePage/HomePage';
 import AboutPage from './pages/AboutPage/AboutPage';
@@ -17,8 +17,28 @@ import OpenedJoury from './pages/OpenedJoury/OpenedJoury';
 import AdminCheckApplication from './pages/AdminCheckApplication/AdminCheckApplication';
 import CriteryPage from './pages/CriteryPage/CriteryPage';
 function App() {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const savedAuth = localStorage.getItem('isAuthenticated');
+    if (savedAuth === 'true') {
+      setIsAuthenticated(true);
+    } else {
+      const pass = prompt('Введите пароль:');
+      if (pass === '2626') {
+        setIsAuthenticated(true);
+        localStorage.setItem('isAuthenticated', 'true');
+        
+      } else {
+        alert('Неверный пароль!');
+        navigate('/baf');
+      }
+    }
+  }, [navigate]);
   return (
     <div className="App">
+
       <Routes>
         <Route path='/' element={<Layout/>}>
           <Route index element={<HomePage></HomePage>}></Route>
